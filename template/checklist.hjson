@@ -31,6 +31,10 @@
             # AUDIT_POWERSHELL = powershell.exe
             # BATCH_EXEC = cmd.exe
             collection_cmd_type: CMD_EXEC
+            # Possible values: true | false
+            # true: checks can be remove
+            # false: checks must be defined
+            collect_only: false
             checks: [
               {
                 id: 1
