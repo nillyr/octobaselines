@@ -118,7 +118,7 @@
                 id: 1
                 description: All disks encrypted
                 type: AUDIT_POWERSHELL
-                cmd: "$volumes = Get-BitLockerVolume; $volumes | Format-List VolumeType, MountPoint, ProtectionStatus; If ($volumes | Where {$_.ProtectionStatus -ne 'On'}) { 'Some disks not encrypted.' } Else { 'All disks encrypted' }"
+                cmd: "$($volumes = Get-BitLockerVolume; If ($volumes | Where {$_.ProtectionStatus -ne 'On'}) { 'Some disks not encrypted.' } Else { 'All disks encrypted' })"
                 expected: "All disks encrypted"
                 verification_type: CHECK_EXACT
                 severity: medium
@@ -338,7 +338,7 @@
                 id: 1
                 description: All disks are formatted using NTFS
                 type: AUDIT_POWERSHELL
-                cmd: "$volumes = Get-WmiObject -Namespace root\\cimv2 -Class Win32_LogicalDisk | Select-Object -Property MediaType, FileSystem; If ($volumes | Where {$_.MediaType -eq '12' -And $_.FileSystem -ne 'NTFS'}) { 'Some disks not formatted using NTFS.' } Else { 'All disks are formatted using NTFS' }"
+                cmd: "$($volumes = Get-WmiObject -Namespace root\\cimv2 -Class Win32_LogicalDisk | Select-Object -Property MediaType, FileSystem; If ($volumes | Where {$_.MediaType -eq '12' -And $_.FileSystem -ne 'NTFS'}) { 'Some disks not formatted using NTFS.' } Else { 'All disks are formatted using NTFS' })"
                 expected: "All disks are formatted using NTFS"
                 verification_type: CHECK_EXACT
                 severity: high
@@ -398,7 +398,7 @@
                 id: 1
                 description: Accounts must be configured to require password expiration
                 type: AUDIT_POWERSHELL
-                cmd: "$users = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND PasswordExpires='False'\" | Measure-Object | Select-Object -Property Count; If ($users | Where { $_.Count -ne '0'}) { 'Failed' } Else { 'Success' }"
+                cmd: "$($users = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND PasswordExpires='False'\" | Measure-Object | Select-Object -Property Count; If ($users | Where { $_.Count -ne '0'}) { 'Failed' } Else { 'Success' })"
                 expected: "Success"
                 verification_type: CHECK_EXACT
                 severity: medium
@@ -743,7 +743,7 @@
       },
       {
         id: 9
-        name: Software - Services and Scheduled tasks
+        name: Software - Services - Tasks
         checkpoints: [
           {
             id: 1
@@ -959,7 +959,7 @@
                 id: 1
                 description: All profiles are enabled
                 type: AUDIT_POWERSHELL
-                cmd: "$profiles = Get-NetFirewallProfile | Select Enabled; If ($profiles | where {$_.Enabled -eq 'False'}) { 'False' } Else { 'True' }"
+                cmd: "$($profiles = Get-NetFirewallProfile | Select Enabled; If ($profiles | where {$_.Enabled -eq 'False'}) { 'False' } Else { 'True' })"
                 expected: "True"
                 verification_type: CHECK_EXACT
                 severity: medium
