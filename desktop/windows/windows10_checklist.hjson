@@ -12,7 +12,7 @@
             id: 1
             title: Boot options
             description: Checking the boot options
-            collection_cmd: "bcdedit.exe /enum | Out-File -FilePath boot_options.txt"
+            collection_cmd: "bcdedit.exe /enum | Out-File -Encoding utf8 -Append -FilePath boot_options.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -21,7 +21,7 @@
                 description: Display Boot Menu
                 type: AUDIT_POWERSHELL
                 cmd: "bcdedit.exe /enum \"{bootmgr}\""
-                expected: "^displaybootmenu\\s*no$|(^(?!displaybootmenu)$)"
+                expected: "displaybootmenu\\s*no|((?!displaybootmenu))"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -34,7 +34,7 @@
                 description: Boot Status Policy
                 type: AUDIT_POWERSHELL
                 cmd: "bcdedit.exe /enum \"{current}\""
-                expected: "^bootstatuspolicy\\s*ignoreallfailure$|(^(?!bootstatuspolicy)$)"
+                expected: "bootstatuspolicy\\s*ignoreallfailure|((?!bootstatuspolicy))"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -47,7 +47,7 @@
                 description: Data Execution Prevention (DEP)
                 type: AUDIT_POWERSHELL
                 cmd: "bcdedit.exe /enum \"{current}\" | Select-string 'nx'"
-                expected: "^nx[\\s]*(OptOut|AlwaysOn)$"
+                expected: "nx[\\s]*(OptOut|AlwaysOn)"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -60,7 +60,7 @@
                 description: (Direct Memory Access) DMA Protection
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\Kernel DMA Protection\" /v \"DeviceEnumerationPolicy\""
-                expected: "^\\s*DeviceEnumerationPolicy\\s*REG_DWORD\\s*0$"
+                expected: "\\s*DeviceEnumerationPolicy\\s*REG_DWORD\\s*0"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -87,7 +87,7 @@
             id: 2
             title: Structured Exception Handling Overwrite Protection (SEHOP)
             description: Checking Structured Exception Handling Overwrite Protection (SEHOP)
-            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel\" | Out-File -FilePath sehop.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel\" | Out-File -Encoding utf8 -Append -FilePath sehop.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -96,7 +96,7 @@
                 description: SEHOP is turned on
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel\" /v \"DisableExceptionChainValidation\""
-                expected: "^\\s*DriverLoadPolicy\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*DriverLoadPolicy\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -110,7 +110,7 @@
             id: 3
             title: Bitlocker status
             description: Checking the status of Bitlocker
-            collection_cmd: "manage-bde -status | Out-File -FilePath bitlocker_status.txt"
+            collection_cmd: "manage-bde -status | Out-File -Encoding utf8 -Append -FilePath bitlocker_status.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -118,8 +118,8 @@
                 id: 1
                 description: All disks encrypted
                 type: AUDIT_POWERSHELL
-                cmd: "$($volumes = Get-BitLockerVolume; If ($volumes | Where {$_.ProtectionStatus -ne 'On'}) { 'Some disks not encrypted.' } Else { 'All disks encrypted' })"
-                expected: "All disks encrypted"
+                cmd: "$($volumes = Get-BitLockerVolume; If ($volumes | Where {$_.ProtectionStatus -ne 'On'}) { 'Some disks are not encrypted' } Else { 'All disks are encrypted' })"
+                expected: "All disks are encrypted"
                 verification_type: CHECK_EXACT
                 severity: medium
                 recommandation_on_failed:
@@ -133,7 +133,7 @@
             id: 4
             title: Bitlocker configuration
             description: Verify disk encryption
-            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" | Out-File -FilePath bitlocker_conf.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" | Out-File -Encoding utf8 -Append -FilePath bitlocker_conf.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -142,7 +142,7 @@
                 description: Bitlocker PIN for pre-boot authentication (UseAdvancedStartup)
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"UseAdvancedStartup\""
-                expected: "^\\s*UseAdvancedStartup\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*UseAdvancedStartup\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -155,7 +155,7 @@
                 description: Bitlocker PIN for pre-boot authentication (UseTPMPIN)
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"UseTPMPIN\""
-                expected: "^\\s*UseTPMPIN\\s*REG_DWORD\\s*0x(1|2)$"
+                expected: "\\s*UseTPMPIN\\s*REG_DWORD\\s*0x(1|2)"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -168,7 +168,7 @@
                 description: Bitlocker PIN for pre-boot authentication (UseTPMKeyPIN)
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"UseTPMKeyPIN\""
-                expected: "^\\s*UseTPMKeyPIN\\s*REG_DWORD\\s*0x(1|2)$"
+                expected: "\\s*UseTPMKeyPIN\\s*REG_DWORD\\s*0x(1|2)"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -180,8 +180,8 @@
                 id: 4
                 description: Lenght of Bitlocker PIN (MinimumPIN)
                 type: AUDIT_POWERSHELL
-                cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"UseTPMKeyPIN\""
-                expected: "^\\s*MinimumPIN\\s*REG_DWORD\\s*0x((?!0-5)$|([6-9]|[a-fA-F]|[1-9][0-9a-fA-F]+))$"
+                cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"MinimumPIN\""
+                expected: "\\s*MinimumPIN\\s*REG_DWORD\\s*0x((?!0-5)$|([6-9]|[a-fA-F]|[1-9][0-9a-fA-F]+))"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -198,7 +198,7 @@
             '''
             Ensure that Early Launch Antimalware - Boot-Start Driver Initialization policy is set to enforce "Good, unknown and bad but critical" (preventing "bad").
             '''
-            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Policies\\EarlyLaunch\" /v \"DriverLoadPolicy\" | Out-File -FilePath early_launch.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Policies\\EarlyLaunch\" /v \"DriverLoadPolicy\" | Out-File -Encoding utf8 -Append -FilePath early_launch.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -207,7 +207,7 @@
                 description: Driver load policy
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Policies\\EarlyLaunch\" /v \"DriverLoadPolicy\""
-                expected: "^\\s*DriverLoadPolicy\\s*REG_DWORD\\s*0x(1|3|8)$"
+                expected: "\\s*DriverLoadPolicy\\s*REG_DWORD\\s*0x(1|3|8)"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -227,7 +227,7 @@
             id: 1
             title: System information
             description: Retrieving information from the system in use
-            collection_cmd: "systeminfo.exe | Out-File -FilePath systeminfo.txt"
+            collection_cmd: "systeminfo.exe | Out-File -Encoding utf8 -Append -FilePath systeminfo.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -238,7 +238,7 @@
             '''
             This checkpoint verifies the use of an up-to-date and maintained version of Windows 10.
             '''
-            collection_cmd: "systeminfo.exe | Out-File -FilePath systeminfo.txt"
+            collection_cmd: "systeminfo.exe | Out-File -Encoding utf8 -Append -FilePath systeminfo.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -260,7 +260,7 @@
                 description: Use of the enterprise version
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Microsoft\\Windows Nt\\Currentversion\" /v \"ProductName\""
-                expected: "Entreprise"
+                expected: "Enterprise|Entreprise"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -274,7 +274,7 @@
             id: 3
             title: Security Updates
             description: Verification of the installation of security updates
-            collection_cmd: "WMIC.exe qfe list full /format:csv | Out-File -FilePath updates_list.csv"
+            collection_cmd: "WMIC.exe qfe list full /format:csv | Out-File -Encoding utf8 -Append -FilePath updates_list.csv"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -282,7 +282,7 @@
             id: 4
             title: Windows Update Settings Part.1
             description: Verification of the installation of security updates
-            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\" | Out-File -Append -FilePath updates_registry_options.txt"
+            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\" | Out-File -Encoding utf8 -Append -FilePath updates_registry_options.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -290,7 +290,7 @@
             id: 5
             title: Windows Update Settings Part.2
             description: Verification of the installation of security updates
-            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\" | Out-File -Append -FilePath updates_registry_options.txt"
+            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\" | Out-File -Encoding utf8 -Append -FilePath updates_registry_options.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -301,7 +301,7 @@
             '''
             Verifies that the workstation is included in the domain so that it can be managed globally.
             '''
-            collection_cmd: "reg.exe query \"HLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\" | Out-File -FilePath domaine_tcpip.txt"
+            collection_cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\" | Out-File -Encoding utf8 -Append -FilePath domaine_tcpip.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -309,7 +309,7 @@
                 id: 1
                 description: The workstation is included in a domain
                 type: AUDIT_POWERSHELL
-                cmd: "reg.exe query \"HLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\" /v \"Domain\""
+                cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\" /v \"Domain\""
                 expected: "\\s*Domain\\s*REG_SZ\\s*.+"
                 verification_type: CHECK_REGEX
                 severity: high
@@ -330,7 +330,7 @@
             id: 1
             title: Logical volumes
             description: Local volumes must be formatted using NTFS.
-            collection_cmd: "Get-WmiObject -Namespace root\\cimv2 -Class Win32_LogicalDisk | Select-Object -Property * | Out-File -FilePath logical_disk.txt"
+            collection_cmd: "Get-WmiObject -Namespace root\\cimv2 -Class Win32_LogicalDisk | Select-Object -Property * | Out-File -Encoding utf8 -Append -FilePath logical_disk.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -353,7 +353,7 @@
             id: 2
             title: Peripherals Policy
             description: Autoplay must be disabled for all drives
-            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\policies\\Explorer\" | Out-File -FilePath peripheral_policy.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\policies\\Explorer\" | Out-File -Encoding utf8 -Append -FilePath peripheral_policy.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -363,7 +363,7 @@
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\policies\\Explorer\" /v \"NoDriveTypeAutoRun\""
                 expected: "\\s*NoDriveTypeAutoRun\\s*REG_DWORD\\s*ff"
-                verification_type: CHECK_EXACT
+                verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
                 '''
@@ -382,7 +382,7 @@
             id: 1
             title: Whoami
             description: Whoami
-            collection_cmd: "whoami /all | Out-File -FilePath whoami.txt"
+            collection_cmd: "whoami /all | Out-File -Encoding utf8 -Append -FilePath whoami.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -390,7 +390,7 @@
             id: 2
             title: Local users
             description: List local users of the workstation
-            collection_cmd: "Get-WmiObject -Namespace root\\cimv2 -Class Win32_UserAccount | Select-Object -Property * | Out-File -FilePath local_users.txt"
+            collection_cmd: "Get-WmiObject -Namespace root\\cimv2 -Class Win32_UserAccount | Select-Object -Property * | Out-File -Encoding utf8 -Append -FilePath local_users.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -411,7 +411,7 @@
                 id: 2
                 description: Administrator account is disabled or renamed
                 type: AUDIT_POWERSHELL
-                cmd: "$adm = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND SID LIKE '%500'\" If ($adm | Where { $_.Name -in 'Administrator', 'Administrateur'}) { 'Failed' } Else { 'Success' }"
+                cmd: "$($adm = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND SID LIKE '%500'\"; If ($adm | Where { $_.Name -in 'Administrator', 'Administrateur'}) { 'Failed' } Else { 'Success' })"
                 expected: "Success"
                 verification_type: CHECK_EXACT
                 severity: medium
@@ -424,7 +424,7 @@
                 id: 3
                 description: Guest account is disabled or renamed
                 type: AUDIT_POWERSHELL
-                cmd: "$guest = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND SID LIKE '%501'\" If ($guest | Where { $_.Name -in 'Guest', 'Invité'}) { 'Failed' } Else { 'Success' }"
+                cmd: "$($guest = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND SID LIKE '%501'\"; If ($guest | Where { $_.Name -in 'Guest', 'Invité'}) { 'Failed' } Else { 'Success' })"
                 expected: "Success"
                 verification_type: CHECK_EXACT
                 severity: medium
@@ -439,7 +439,7 @@
             id: 3
             title: Local groups
             description: List local groups of the workstation
-            collection_cmd: "Get-WmiObject -Namespace root\\cimv2 -Class Win32_Group -Filter \"LocalAccount='True'\" | Select-Object -Property * | Out-File -FilePath local_groups.txt"
+            collection_cmd: "Get-WmiObject -Namespace root\\cimv2 -Class Win32_Group -Filter \"LocalAccount='True'\" | Select-Object -Property * | Out-File -Encoding utf8 -Append -FilePath local_groups.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -447,7 +447,7 @@
             id: 4
             title: Administrator local groups
             description: Evaluation of the legitimacy of the accounts in the local group of administrators
-            collection_cmd: "Get-LocalGroupMember -SID 'S-1-5-32-544' | Out-File -FilePath admin_local_group_members.txt"
+            collection_cmd: "Get-LocalGroupMember -SID 'S-1-5-32-544' | Out-File -Encoding utf8 -Append -FilePath admin_local_group_members.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -461,7 +461,7 @@
             id: 1
             title: Battery power setting
             description: Checking the power parameters
-            collection_cmd: "powercfg.exe -q | Out-File -FilePath powercfg.txt"
+            collection_cmd: "powercfg.exe -q | Out-File -Encoding utf8 -Append -FilePath powercfg.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -469,7 +469,7 @@
             id: 2
             title: Lock screen personalization
             description: Checking the lock screen personalization
-            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization\" | Out-File -FilePath lock_screen_personalization.txt"
+            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization\" | Out-File -Encoding utf8 -Append -FilePath lock_screen_personalization.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -505,7 +505,7 @@
             id: 3
             title: Cached logon session
             description: Caching of logon credentials must be limited
-            collection_cmd: "reg.exe query \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" | Out-File -FilePath winlogon.txt"
+            collection_cmd: "reg.exe query \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" | Out-File -Encoding utf8 -Append -FilePath winlogon.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -556,7 +556,7 @@
             id: 1
             title: Local password policy
             description: Local password policy
-            collection_cmd: "net accounts | Out-File -FilePath local_passpol.txt"
+            collection_cmd: "net accounts | Out-File -Encoding utf8 -Append -FilePath local_passpol.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -564,7 +564,7 @@
             id: 2
             title: Domain password policy
             description: Domain password policy
-            collection_cmd: "net accounts /domain | Out-File -FilePath domain_passpol.txt"
+            collection_cmd: "net accounts /domain | Out-File -Encoding utf8 -Append -FilePath domain_passpol.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -572,7 +572,7 @@
             id: 3
             title: LAPS
             description: Verifies that LAPS is installed on the workstation
-            collection_cmd: "Get-ChildItem 'C:\\Program Files\\LAPS\\CSE\\Admpwd.dll' | Out-File -FilePath laps.txt"
+            collection_cmd: "Get-ChildItem 'C:\\Program Files\\LAPS\\CSE\\Admpwd.dll' | Out-File -Encoding utf8 -Append -FilePath laps.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -583,7 +583,7 @@
             '''
             When the WDigest Authentication protocol is enabled, plain text passwords are stored in the Local Security Authority Subsystem Service (LSASS).
             '''
-            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\Wdigest\" | Out-File -FilePath wdigest.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\Wdigest\" | Out-File -Encoding utf8 -Append -FilePath wdigest.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -592,7 +592,7 @@
                 description: WDigest Authentication is disabled
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\Wdigest\" /v \"UseLogonCredential\""
-                expected: "^\\s*UseLogonCredential\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*UseLogonCredential\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -609,7 +609,7 @@
             '''
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet nunc varius dolor fermentum pulvinar. Proin dignissim semper condimentum. Nam quis maximus elit.
             '''
-            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" | Out-File -FilePath lsa.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" | Out-File -Encoding utf8 -Append -FilePath lsa.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -618,7 +618,7 @@
                 description: Storage of the LAN Manager hash of passwords is prevented
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"NoLMHash\""
-                expected: "^\\s*NoLMHash\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*NoLMHash\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -631,7 +631,7 @@
                 description: LanMan authentication level
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"LmCompatibilityLevel\""
-                expected: "^\\s*LmCompatibilityLevel\\s*REG_DWORD\\s*0x5$"
+                expected: "\\s*LmCompatibilityLevel\\s*REG_DWORD\\s*0x5"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -648,7 +648,7 @@
             '''
             Requests sent on the secure channel are authenticated, and sensitive information (such as passwords) is encrypted, but not all information is encrypted.
             '''
-            collection_cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Netlogon\\Parameters\" | Out-File -FilePath secure_channel.txt"
+            collection_cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Netlogon\\Parameters\" | Out-File -Encoding utf8 -Append -FilePath secure_channel.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -657,7 +657,7 @@
                 description: Outgoing secure channel traffic must be encrypted when possible
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Netlogon\\Parameters\" /v \"SealSecureChannel\""
-                expected: "^\\s*SealSecureChannel\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*SealSecureChannel\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -670,7 +670,7 @@
                 description: Outgoing secure channel traffic must be encrypted or signed
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Netlogon\\Parameters\" /v \"RequireSignOrSeal\""
-                expected: "^\\s*RequireSignOrSeal\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*RequireSignOrSeal\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -693,7 +693,7 @@
             '''
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet nunc varius dolor fermentum pulvinar. Proin dignissim semper condimentum. Nam quis maximus elit.
             '''
-            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" | Out-File -FilePath lsa.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" | Out-File -Encoding utf8 -Append -FilePath lsa.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -702,7 +702,7 @@
                 description: Anonymous enumeration of SAM accounts is not allowed
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"RestrictAnonymousSAM\""
-                expected: "^\\s*RestrictAnonymousSAM\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*RestrictAnonymousSAM\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -715,7 +715,7 @@
                 description: Anonymous enumeration of shares is restricted
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"RestrictAnonymous\""
-                expected: "^\\s*RestrictAnonymous\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*RestrictAnonymous\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -728,7 +728,7 @@
                 description: Anonymous users do not have the same rights as the Everyone group
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"EveryoneIncludesAnonymous\""
-                expected: "^\\s*EveryoneIncludesAnonymous\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*EveryoneIncludesAnonymous\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -752,7 +752,7 @@
             '''
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet nunc varius dolor fermentum pulvinar. Proin dignissim semper condimentum. Nam quis maximus elit.
             '''
-            collection_cmd: "wmic.exe product list full /format:csv | Out-File -FilePath products.csv"
+            collection_cmd: "wmic.exe product list full /format:csv | Out-File -Encoding utf8 -Append -FilePath products.csv"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -763,7 +763,7 @@
             '''
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet nunc varius dolor fermentum pulvinar. Proin dignissim semper condimentum. Nam quis maximus elit.
             '''
-            collection_cmd: "wmic.exe service list full | Out-File -FilePath service.txt"
+            collection_cmd: "wmic.exe service list full | Out-File -Encoding utf8 -Append -FilePath service.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -774,7 +774,7 @@
             '''
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet nunc varius dolor fermentum pulvinar. Proin dignissim semper condimentum. Nam quis maximus elit.
             '''
-            collection_cmd: "tasklist.exe | Out-File -FilePath tasklist.txt"
+            collection_cmd: "tasklist.exe | Out-File -Encoding utf8 -Append -FilePath tasklist.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -785,7 +785,7 @@
             '''
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sit amet nunc varius dolor fermentum pulvinar. Proin dignissim semper condimentum. Nam quis maximus elit.
             '''
-            collection_cmd: "schtasks.exe /query /fo xml | Out-File -FilePath scheduled_tasks.xml"
+            collection_cmd: "schtasks.exe /query /xml | Out-File -Encoding utf8 -Append -FilePath scheduled_tasks.xml"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -799,7 +799,7 @@
             id: 1
             title: Network configuration
             description: Displays all current TCP/IP network configuration values
-            collection_cmd: "ipconfig.exe /all | Out-File -FilePath ipconfig.txt"
+            collection_cmd: "ipconfig.exe /all | Out-File -Encoding utf8 -Append -FilePath ipconfig.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -807,7 +807,7 @@
             id: 2
             title: Network shares
             description: List network shares
-            collection_cmd: "net.exe share | Out-File -FilePath share.txt"
+            collection_cmd: "net.exe share | Out-File -Encoding utf8 -Append -FilePath share.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -815,7 +815,7 @@
             id: 3
             title: Network connections
             description: Displays all active connections
-            collection_cmd: "netstat.exe -anb | Out-File -FilePath netstat.txt"
+            collection_cmd: "netstat.exe -anb | Out-File -Encoding utf8 -Append -FilePath netstat.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -823,7 +823,7 @@
             id: 4
             title: Time synchronization
             description: Displays the NTP configuration
-            collection_cmd: "w32tm.exe /query /status | Out-File -FilePath ntp.txt"
+            collection_cmd: "w32tm.exe /query /status | Out-File -Encoding utf8 -Append -FilePath ntp.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -831,7 +831,7 @@
             id: 5
             title: Proxy settings
             description: Displays the proxy configuration
-            collection_cmd: "reg.exe query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" | Out-File -FilePath proxy.txt"
+            collection_cmd: "reg.exe query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" | Out-File -Encoding utf8 -Append -FilePath proxy.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -839,7 +839,7 @@
             id: 6
             title: Proxy settings (WPAD)
             description: Displays the proxy configuration
-            collection_cmd: "reg.exe query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Wpad\" | Out-File -FilePath proxy_wpad.txt"
+            collection_cmd: "reg.exe query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Wpad\" | Out-File -Encoding utf8 -Append -FilePath proxy_wpad.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -847,7 +847,7 @@
             id: 7
             title: SMB Client
             description: Displays the SMB configuration - Client side
-            collection_cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" | Out-File -FilePath smb_client.txt"
+            collection_cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" | Out-File -Encoding utf8 -Append -FilePath smb_client.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -856,7 +856,7 @@
                 description: The Windows SMB client perform SMB packet signing
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" /v \"RequireSecuritySignature\""
-                expected: "^\\s*RequireSecuritySignature\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*RequireSecuritySignature\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -869,7 +869,7 @@
                 description: Unencrypted passwords are not sent to third-party SMB Servers
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" /v \"EnablePlainTextPassword\""
-                expected: "^\\s*EnablePlainTextPassword\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*EnablePlainTextPassword\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -882,7 +882,7 @@
                 description: SMBv1 protocol is disabled
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" /v \"SMB1\""
-                expected: "^\\s*SMB1\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*SMB1\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -896,7 +896,7 @@
             id: 8
             title: SMB Server
             description: Displays the SMB configuration - Server side
-            collection_cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" | Out-File -FilePath smb_server.txt"
+            collection_cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" | Out-File -Encoding utf8 -Append -FilePath smb_server.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -905,7 +905,7 @@
                 description: The Windows SMB server perform SMB packet signing
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" /v \"RequireSecuritySignature\""
-                expected: "^\\s*RequireSecuritySignature\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*RequireSecuritySignature\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -918,7 +918,7 @@
                 description: Anonymous access to Named Pipes and Shares is restricted
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" /v \"RestrictNullSessAccess\""
-                expected: "^\\s*RestrictNullSessAccess\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*RestrictNullSessAccess\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -931,7 +931,7 @@
                 description: SMBv1 protocol is disabled
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" /v \"SMB1\""
-                expected: "^\\s*SMB1\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*SMB1\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -951,7 +951,7 @@
             id: 1
             title: Firewall is enabled
             description: Checks that the system firewall is active
-            collection_cmd: "netsh.exe advfirewall show allprofiles | Out-File -FilePath firewall_profile.txt"
+            collection_cmd: "netsh.exe advfirewall show allprofiles | Out-File -Encoding utf8 -Append -FilePath firewall_profile.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -974,7 +974,7 @@
             id: 2
             title: Inbound Rules
             description: Dumps the active inbound rules for analyzis
-            collection_cmd: "Get-NetFirewallRule | where-object {$_.direction -eq 'Inbound' -And $_.enabled -eq 'true'} | Out-File -FilePath inbound_rules.txt"
+            collection_cmd: "Get-NetFirewallRule | where-object {$_.direction -eq 'Inbound' -And $_.enabled -eq 'true'} | Out-File -Encoding utf8 -Append -FilePath inbound_rules.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -988,7 +988,7 @@
             id: 1
             title: Audit policy
             description: Dumps the audit policy for analyzis
-            collection_cmd: "auditpol.exe /get /category:* | Out-File -FilePath audit_policy.txt"
+            collection_cmd: "auditpol.exe /get /category:* | Out-File -Encoding utf8 -Append -FilePath audit_policy.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
@@ -996,7 +996,7 @@
             id: 2
             title: Application event log
             description: Dumps the application event log for analyzis
-            collection_cmd: "wevtutil.exe get-log Application | Out-File -FilePath log_application.txt"
+            collection_cmd: "wevtutil.exe get-log Application | Out-File -Encoding utf8 -Append -FilePath log_application.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -1005,7 +1005,7 @@
                 description: Application event log size
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\Application\" /v \"MaxSize\""
-                expected: "^\\s*MaxSize\\s*REG_DWORD\\s*(?![0-3][0-2][0-7][0-6][0-7]$)([0-9]{5,11})$"
+                expected: "\\s*MaxSize\\s*REG_DWORD\\s*(?![0-3][0-2][0-7][0-6][0-7]$)([0-9]{5,11})"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -1019,7 +1019,7 @@
             id: 3
             title: Security event log
             description: Dumps the application event log for analyzis
-            collection_cmd: "wevtutil.exe get-log Security | Out-File -FilePath log_security.txt"
+            collection_cmd: "wevtutil.exe get-log Security | Out-File -Encoding utf8 -Append -FilePath log_security.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -1028,7 +1028,7 @@
                 description: Security event log size
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\Security\" /v \"MaxSize\""
-                expected: "^\\s*MaxSize\\s*REG_DWORD\\s*(?![0-1]0[0-2][0-3][0-9]{3}$)([0-9]{7,11})$"
+                expected: "\\s*MaxSize\\s*REG_DWORD\\s*(?![0-1]0[0-2][0-3][0-9]{3}$)([0-9]{7,11})"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -1042,7 +1042,7 @@
             id: 4
             title: System event log
             description: Dumps the application event log for analyzis
-            collection_cmd: "wevtutil.exe get-log System | Out-File -FilePath log_system.txt"
+            collection_cmd: "wevtutil.exe get-log System | Out-File -Encoding utf8 -Append -FilePath log_system.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -1051,7 +1051,7 @@
                 description: System event log size
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\System\" /v \"MaxSize\""
-                expected: "^\\s*MaxSize\\s*REG_DWORD\\s*(?![0-3][0-2][0-7][0-6][0-7]$)([0-9]{5,11})$"
+                expected: "\\s*MaxSize\\s*REG_DWORD\\s*(?![0-3][0-2][0-7][0-6][0-7]$)([0-9]{5,11})"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -1071,7 +1071,7 @@
             id: 1
             title: WinRM Client
             description: Displays the WinRM configuration - Client side
-            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Client\" | Out-File -FilePath winrm_client.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Client\" | Out-File -Encoding utf8 -Append -FilePath winrm_client.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -1080,7 +1080,7 @@
                 description: WinRM client do not use Basic authentication
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Client\" /v \"AllowBasic\""
-                expected: "^\\s*AllowBasic\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*AllowBasic\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -1094,7 +1094,7 @@
             id: 2
             title: WinRM Service
             description: Displays the WinRM configuration - Service side
-            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Service\" | Out-File -FilePath winrm_client.txt"
+            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Service\" | Out-File -Encoding utf8 -Append -FilePath winrm_client.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -1103,7 +1103,7 @@
                 description: WinRM service do not use Basic authentication
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Service\" /v \"AllowBasic\""
-                expected: "^\\s*AllowBasic\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*AllowBasic\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -1117,7 +1117,7 @@
             id: 3
             title: Remote Desktop
             description: Displays the Remote Desktop configuration
-            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" | Out-File -FilePath remote_desktop.txt"
+            collection_cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" | Out-File -Encoding utf8 -Append -FilePath remote_desktop.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: false
             checks: [
@@ -1126,7 +1126,7 @@
                 description: Solicited Remote Assistance is not allowed
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fAllowToGetHelp\""
-                expected: "^\\s*fAllowToGetHelp\\s*REG_DWORD\\s*0x0$"
+                expected: "\\s*fAllowToGetHelp\\s*REG_DWORD\\s*0x0"
                 verification_type: CHECK_REGEX
                 severity: high
                 recommandation_on_failed:
@@ -1139,7 +1139,7 @@
                 description: Passwords are not saved in the Remote Desktop Client
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"DisablePasswordSaving\""
-                expected: "^\\s*DisablePasswordSaving\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*DisablePasswordSaving\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -1152,7 +1152,7 @@
                 description: Local drives are prevented from sharing with Remote Desktop Session Hosts
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fDisableCdm\""
-                expected: "^\\s*fDisableCdm\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*fDisableCdm\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -1165,7 +1165,7 @@
                 description: Remote Desktop Services always prompt a client for passwords upon connection
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fPromptForPassword\""
-                expected: "^\\s*fPromptForPassword\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*fPromptForPassword\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -1178,7 +1178,7 @@
                 description: The Remote Desktop Session Host require secure RPC communications
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fEncryptRPCTraffic\""
-                expected: "^\\s*fEncryptRPCTraffic\\s*REG_DWORD\\s*0x1$"
+                expected: "\\s*fEncryptRPCTraffic\\s*REG_DWORD\\s*0x1"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
@@ -1191,7 +1191,7 @@
                 description: Remote Desktop Services is configured with the client connection encryption set to the required level
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"MinEncryptionLevel\""
-                expected: "^\\s*MinEncryptionLevel\\s*REG_DWORD\\s*0x3$"
+                expected: "\\s*MinEncryptionLevel\\s*REG_DWORD\\s*0x3"
                 verification_type: CHECK_REGEX
                 severity: medium
                 recommandation_on_failed:
