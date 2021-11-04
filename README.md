@@ -11,10 +11,18 @@ Submodule of the octoreconf project.
 
 See [octoreconf](https://github.com/Nillyr/octoreconf "octoreconf") for the usage instructions.
 
+## Maintainer
+
+- [Nicolas GRELLETY](https://github.com/Nillyr)
+
 ## Authors
 
 - [Nicolas GRELLETY](https://github.com/Nillyr)
 
-## Copyright
+## Copyright and license
+
+Copyright (c) 2021 Nicolas GRELLETY
+
+This software is licensed under GNU GPLv3 license. See `LICENSE` file in the root folder of the project.
 
 - Icons made by [Freepik](https://www.freepik.com "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
