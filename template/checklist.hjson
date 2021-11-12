@@ -56,6 +56,7 @@
                 *  - high
                 *  - medium
                 *  - low
+                *  - info
                 */
                 severity: high
                 recommandation_on_failed:
