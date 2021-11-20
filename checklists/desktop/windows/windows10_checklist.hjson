@@ -21,7 +21,7 @@
             checks: [
               {
                 id: 1
-                description: Display Boot Menu
+                title: Display Boot Menu
                 type: AUDIT_POWERSHELL
                 cmd: "bcdedit.exe /enum \"{bootmgr}\""
                 expected: "displaybootmenu\\s*no|((?!displaybootmenu))"
@@ -34,7 +34,7 @@
               },
               {
                 id: 2
-                description: Boot Status Policy
+                title: Boot Status Policy
                 type: AUDIT_POWERSHELL
                 cmd: "bcdedit.exe /enum \"{current}\""
                 expected: "bootstatuspolicy\\s*ignoreallfailure|((?!bootstatuspolicy))"
@@ -47,7 +47,7 @@
               },
               {
                 id: 3
-                description: Data Execution Prevention (DEP)
+                title: Data Execution Prevention (DEP)
                 type: AUDIT_POWERSHELL
                 cmd: "bcdedit.exe /enum \"{current}\" | Select-string 'nx'"
                 expected: "nx[\\s]*(OptOut|AlwaysOn)"
@@ -60,7 +60,7 @@
               },
               {
                 id: 4
-                description: (Direct Memory Access) DMA Protection
+                title: (Direct Memory Access) DMA Protection
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\Kernel DMA Protection\" /v \"DeviceEnumerationPolicy\""
                 expected: "\\s*DeviceEnumerationPolicy\\s*REG_DWORD\\s*0"
@@ -73,7 +73,7 @@
               },
               {
                 id: 5
-                description: Credential Guard is running on domain-joined systems
+                title: Credential Guard is running on domain-joined systems
                 type: AUDIT_POWERSHELL
                 cmd: "(Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\\Microsoft\\Windows\\DeviceGuard).RequiredSecurityProperties"
                 expected: "1"
@@ -96,7 +96,7 @@
             checks: [
               {
                 id: 1
-                description: SEHOP is turned on
+                title: SEHOP is turned on
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel\" /v \"DisableExceptionChainValidation\""
                 expected: "\\s*DriverLoadPolicy\\s*REG_DWORD\\s*0x0"
@@ -119,7 +119,7 @@
             checks: [
                 {
                 id: 1
-                description: All disks encrypted
+                title: All disks encrypted
                 type: AUDIT_POWERSHELL
                 cmd: "$($volumes = Get-BitLockerVolume; If ($volumes | Where {$_.ProtectionStatus -ne 'On'}) { 'Some disks are not encrypted' } Else { 'All disks are encrypted' })"
                 expected: "All disks are encrypted"
@@ -142,7 +142,7 @@
             checks: [
               {
                 id: 1
-                description: Bitlocker PIN for pre-boot authentication (UseAdvancedStartup)
+                title: Bitlocker PIN for pre-boot authentication (UseAdvancedStartup)
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"UseAdvancedStartup\""
                 expected: "\\s*UseAdvancedStartup\\s*REG_DWORD\\s*0x1"
@@ -155,7 +155,7 @@
               },
               {
                 id: 2
-                description: Bitlocker PIN for pre-boot authentication (UseTPMPIN)
+                title: Bitlocker PIN for pre-boot authentication (UseTPMPIN)
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"UseTPMPIN\""
                 expected: "\\s*UseTPMPIN\\s*REG_DWORD\\s*0x(1|2)"
@@ -168,7 +168,7 @@
               },
               {
                 id: 3
-                description: Bitlocker PIN for pre-boot authentication (UseTPMKeyPIN)
+                title: Bitlocker PIN for pre-boot authentication (UseTPMKeyPIN)
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"UseTPMKeyPIN\""
                 expected: "\\s*UseTPMKeyPIN\\s*REG_DWORD\\s*0x(1|2)"
@@ -181,7 +181,7 @@
               },
               {
                 id: 4
-                description: Lenght of Bitlocker PIN (MinimumPIN)
+                title: Lenght of Bitlocker PIN (MinimumPIN)
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\FVE\" /v \"MinimumPIN\""
                 expected: "\\s*MinimumPIN\\s*REG_DWORD\\s*0x((?!0-5)$|([6-9]|[a-fA-F]|[1-9][0-9a-fA-F]+))"
@@ -207,7 +207,7 @@
             checks: [
               {
                 id: 1
-                description: Driver load policy
+                title: Driver load policy
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Policies\\EarlyLaunch\" /v \"DriverLoadPolicy\""
                 expected: "\\s*DriverLoadPolicy\\s*REG_DWORD\\s*0x(1|3|8)"
@@ -247,7 +247,7 @@
             checks: [
               {
                 id: 1
-                description: Use of Windows 10
+                title: Use of Windows 10
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Microsoft\\Windows Nt\\Currentversion\" /v \"ProductName\""
                 expected: "Windows\\s10"
@@ -260,7 +260,7 @@
               },
               {
                 id: 2
-                description: Use of the enterprise version
+                title: Use of the enterprise version
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Microsoft\\Windows Nt\\Currentversion\" /v \"ProductName\""
                 expected: "Enterprise|Entreprise"
@@ -310,7 +310,7 @@
             checks: [
               {
                 id: 1
-                description: The workstation is included in a domain
+                title: The workstation is included in a domain
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\" /v \"Domain\""
                 expected: "\\s*Domain\\s*REG_SZ\\s*.+"
@@ -339,7 +339,7 @@
             checks: [
                 {
                 id: 1
-                description: All disks are formatted using NTFS
+                title: All disks are formatted using NTFS
                 type: AUDIT_POWERSHELL
                 cmd: "$($volumes = Get-WmiObject -Namespace root\\cimv2 -Class Win32_LogicalDisk | Select-Object -Property MediaType, FileSystem; If ($volumes | Where {$_.MediaType -eq '12' -And $_.FileSystem -ne 'NTFS'}) { 'Some disks not formatted using NTFS.' } Else { 'All disks are formatted using NTFS' })"
                 expected: "All disks are formatted using NTFS"
@@ -362,7 +362,7 @@
             checks: [
               {
                 id: 1
-                description: Autoplay is disabled for all drives
+                title: Autoplay is disabled for all drives
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\policies\\Explorer\" /v \"NoDriveTypeAutoRun\""
                 expected: "\\s*NoDriveTypeAutoRun\\s*REG_DWORD\\s*ff"
@@ -399,7 +399,7 @@
             checks: [
               {
                 id: 1
-                description: Accounts must be configured to require password expiration
+                title: Accounts must be configured to require password expiration
                 type: AUDIT_POWERSHELL
                 cmd: "$($users = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND PasswordExpires='False'\" | Measure-Object | Select-Object -Property Count; If ($users | Where { $_.Count -ne '0'}) { 'Failed' } Else { 'Success' })"
                 expected: "Success"
@@ -412,7 +412,7 @@
               },
               {
                 id: 2
-                description: Administrator account is disabled or renamed
+                title: Administrator account is disabled or renamed
                 type: AUDIT_POWERSHELL
                 cmd: "$($adm = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND SID LIKE '%500'\"; If ($adm | Where { $_.Name -in 'Administrator', 'Administrateur'}) { 'Failed' } Else { 'Success' })"
                 expected: "Success"
@@ -425,7 +425,7 @@
               },
               {
                 id: 3
-                description: Guest account is disabled or renamed
+                title: Guest account is disabled or renamed
                 type: AUDIT_POWERSHELL
                 cmd: "$($guest = Get-WmiObject -Namespace root\\cimv2 -Query \"SELECT * FROM Win32_UserAccount WHERE LocalAccount='True' AND Disabled='False' AND SID LIKE '%501'\"; If ($guest | Where { $_.Name -in 'Guest', 'Invité'}) { 'Failed' } Else { 'Success' })"
                 expected: "Success"
@@ -478,7 +478,7 @@
             checks: [
               {
                 id: 1
-                description: Display of slide shows on the lock screen
+                title: Display of slide shows on the lock screen
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization\" /v \"NoLockScreenSlideshow\""
                 expected: "\\s*NoLockScreenSlideshow\\s*REG_DWORD\\s*1"
@@ -491,7 +491,7 @@
               },
               {
                 id: 2
-                description: Camera access from the lock screen is disabled
+                title: Camera access from the lock screen is disabled
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization\" /v \"NoLockScreenCamera\""
                 expected: "\\s*NoLockScreenCamera\\s*REG_DWORD\\s*1"
@@ -514,7 +514,7 @@
             checks: [
               {
                 id: 1
-                description: Number of cached logon sessions
+                title: Number of cached logon sessions
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" /v \"CachedLogonsCount\""
                 expected: "\\s*CachedLogonsCount\\s*REG_SZ\\s*[0..2]"
@@ -592,7 +592,7 @@
             checks: [
               {
                 id: 1
-                description: WDigest Authentication is disabled
+                title: WDigest Authentication is disabled
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\Wdigest\" /v \"UseLogonCredential\""
                 expected: "\\s*UseLogonCredential\\s*REG_DWORD\\s*0x0"
@@ -618,7 +618,7 @@
             checks: [
               {
                 id: 1
-                description: Storage of the LAN Manager hash of passwords is prevented
+                title: Storage of the LAN Manager hash of passwords is prevented
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"NoLMHash\""
                 expected: "\\s*NoLMHash\\s*REG_DWORD\\s*0x1"
@@ -631,7 +631,7 @@
               },
               {
                 id: 2
-                description: LanMan authentication level
+                title: LanMan authentication level
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"LmCompatibilityLevel\""
                 expected: "\\s*LmCompatibilityLevel\\s*REG_DWORD\\s*0x5"
@@ -657,7 +657,7 @@
             checks: [
               {
                 id: 1
-                description: Outgoing secure channel traffic must be encrypted when possible
+                title: Outgoing secure channel traffic must be encrypted when possible
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Netlogon\\Parameters\" /v \"SealSecureChannel\""
                 expected: "\\s*SealSecureChannel\\s*REG_DWORD\\s*0x1"
@@ -670,7 +670,7 @@
               },
               {
                 id: 2
-                description: Outgoing secure channel traffic must be encrypted or signed
+                title: Outgoing secure channel traffic must be encrypted or signed
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\CurrentControlSet\\Services\\Netlogon\\Parameters\" /v \"RequireSignOrSeal\""
                 expected: "\\s*RequireSignOrSeal\\s*REG_DWORD\\s*0x1"
@@ -702,7 +702,7 @@
             checks: [
               {
                 id: 1
-                description: Anonymous enumeration of SAM accounts is not allowed
+                title: Anonymous enumeration of SAM accounts is not allowed
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"RestrictAnonymousSAM\""
                 expected: "\\s*RestrictAnonymousSAM\\s*REG_DWORD\\s*0x1"
@@ -715,7 +715,7 @@
               },
               {
                 id: 2
-                description: Anonymous enumeration of shares is restricted
+                title: Anonymous enumeration of shares is restricted
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"RestrictAnonymous\""
                 expected: "\\s*RestrictAnonymous\\s*REG_DWORD\\s*0x1"
@@ -728,7 +728,7 @@
               },
               {
                 id: 3
-                description: Anonymous users do not have the same rights as the Everyone group
+                title: Anonymous users do not have the same rights as the Everyone group
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa\" /v \"EveryoneIncludesAnonymous\""
                 expected: "\\s*EveryoneIncludesAnonymous\\s*REG_DWORD\\s*0x0"
@@ -856,7 +856,7 @@
             checks: [
               {
                 id: 1
-                description: The Windows SMB client perform SMB packet signing
+                title: The Windows SMB client perform SMB packet signing
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" /v \"RequireSecuritySignature\""
                 expected: "\\s*RequireSecuritySignature\\s*REG_DWORD\\s*0x1"
@@ -869,7 +869,7 @@
               },
               {
                 id: 2
-                description: Unencrypted passwords are not sent to third-party SMB Servers
+                title: Unencrypted passwords are not sent to third-party SMB Servers
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" /v \"EnablePlainTextPassword\""
                 expected: "\\s*EnablePlainTextPassword\\s*REG_DWORD\\s*0x0"
@@ -882,7 +882,7 @@
               },
               {
                 id: 3
-                description: SMBv1 protocol is disabled
+                title: SMBv1 protocol is disabled
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanworkstation\\Parameters\" /v \"SMB1\""
                 expected: "\\s*SMB1\\s*REG_DWORD\\s*0x0"
@@ -905,7 +905,7 @@
             checks: [
               {
                 id: 1
-                description: The Windows SMB server perform SMB packet signing
+                title: The Windows SMB server perform SMB packet signing
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" /v \"RequireSecuritySignature\""
                 expected: "\\s*RequireSecuritySignature\\s*REG_DWORD\\s*0x1"
@@ -918,7 +918,7 @@
               },
               {
                 id: 2
-                description: Anonymous access to Named Pipes and Shares is restricted
+                title: Anonymous access to Named Pipes and Shares is restricted
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" /v \"RestrictNullSessAccess\""
                 expected: "\\s*RestrictNullSessAccess\\s*REG_DWORD\\s*0x1"
@@ -931,7 +931,7 @@
               },
               {
                 id: 3
-                description: SMBv1 protocol is disabled
+                title: SMBv1 protocol is disabled
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\System\\Currentcontrolset\\Services\\Lanmanserver\\Parameters\" /v \"SMB1\""
                 expected: "\\s*SMB1\\s*REG_DWORD\\s*0x0"
@@ -960,7 +960,7 @@
             checks: [
               {
                 id: 1
-                description: All profiles are enabled
+                title: All profiles are enabled
                 type: AUDIT_POWERSHELL
                 cmd: "$($profiles = Get-NetFirewallProfile | Select Enabled; If ($profiles | where {$_.Enabled -eq 'False'}) { 'False' } Else { 'True' })"
                 expected: "True"
@@ -1005,7 +1005,7 @@
             checks: [
               {
                 id: 1
-                description: Application event log size
+                title: Application event log size
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\Application\" /v \"MaxSize\""
                 expected: "\\s*MaxSize\\s*REG_DWORD\\s*(?![0-3][0-2][0-7][0-6][0-7]$)([0-9]{5,11})"
@@ -1028,7 +1028,7 @@
             checks: [
               {
                 id: 1
-                description: Security event log size
+                title: Security event log size
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\Security\" /v \"MaxSize\""
                 expected: "\\s*MaxSize\\s*REG_DWORD\\s*(?![0-1]0[0-2][0-3][0-9]{3}$)([0-9]{7,11})"
@@ -1051,7 +1051,7 @@
             checks: [
               {
                 id: 1
-                description: System event log size
+                title: System event log size
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\EventLog\\System\" /v \"MaxSize\""
                 expected: "\\s*MaxSize\\s*REG_DWORD\\s*(?![0-3][0-2][0-7][0-6][0-7]$)([0-9]{5,11})"
@@ -1080,7 +1080,7 @@
             checks: [
               {
                 id: 1
-                description: WinRM client do not use Basic authentication
+                title: WinRM client do not use Basic authentication
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Client\" /v \"AllowBasic\""
                 expected: "\\s*AllowBasic\\s*REG_DWORD\\s*0x0"
@@ -1103,7 +1103,7 @@
             checks: [
               {
                 id: 1
-                description: WinRM service do not use Basic authentication
+                title: WinRM service do not use Basic authentication
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Service\" /v \"AllowBasic\""
                 expected: "\\s*AllowBasic\\s*REG_DWORD\\s*0x0"
@@ -1126,7 +1126,7 @@
             checks: [
               {
                 id: 1
-                description: Solicited Remote Assistance is not allowed
+                title: Solicited Remote Assistance is not allowed
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fAllowToGetHelp\""
                 expected: "\\s*fAllowToGetHelp\\s*REG_DWORD\\s*0x0"
@@ -1139,7 +1139,7 @@
               },
               {
                 id: 2
-                description: Passwords are not saved in the Remote Desktop Client
+                title: Passwords are not saved in the Remote Desktop Client
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"DisablePasswordSaving\""
                 expected: "\\s*DisablePasswordSaving\\s*REG_DWORD\\s*0x1"
@@ -1152,7 +1152,7 @@
               },
               {
                 id: 3
-                description: Local drives are prevented from sharing with Remote Desktop Session Hosts
+                title: Local drives are prevented from sharing with Remote Desktop Session Hosts
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fDisableCdm\""
                 expected: "\\s*fDisableCdm\\s*REG_DWORD\\s*0x1"
@@ -1165,7 +1165,7 @@
               },
               {
                 id: 4
-                description: Remote Desktop Services always prompt a client for passwords upon connection
+                title: Remote Desktop Services always prompt a client for passwords upon connection
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fPromptForPassword\""
                 expected: "\\s*fPromptForPassword\\s*REG_DWORD\\s*0x1"
@@ -1178,7 +1178,7 @@
               },
               {
                 id: 5
-                description: The Remote Desktop Session Host require secure RPC communications
+                title: The Remote Desktop Session Host require secure RPC communications
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"fEncryptRPCTraffic\""
                 expected: "\\s*fEncryptRPCTraffic\\s*REG_DWORD\\s*0x1"
@@ -1191,7 +1191,7 @@
               },
               {
                 id: 6
-                description: Remote Desktop Services is configured with the client connection encryption set to the required level
+                title: Remote Desktop Services is configured with the client connection encryption set to the required level
                 type: AUDIT_POWERSHELL
                 cmd: "reg.exe query \"HKLM\\Software\\Policies\\Microsoft\\Windows Nt\\Terminal Services\" /v \"MinEncryptionLevel\""
                 expected: "\\s*MinEncryptionLevel\\s*REG_DWORD\\s*0x3"
