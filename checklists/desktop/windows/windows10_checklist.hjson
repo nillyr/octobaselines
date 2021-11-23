@@ -1850,6 +1850,68 @@
                 '''
               }
             ]
+          },
+          {
+            id: 4
+            title: Exploit Protection mitigations
+            description:
+            '''
+            Exploit protection in Windows 10 provides a means of enabling additional mitigations against potential threats at the system and application level. Without these additional application protections, Windows 10 may be subject to various exploits.
+            '''
+            collection_cmd: "Get-ProcessMitigation | Out-File -Encoding utf8 -Append -FilePath process_mitigation.txt"
+            collection_cmd_type: AUDIT_POWERSHELL
+            collect_only: true
+          },
+          {
+            id: 5
+            title: The Windows Explorer Preview pane must be disabled for Windows 10
+            description:
+            '''
+            A known vulnerability in Windows 10 could allow the execution of malicious code by either opening a compromised document or viewing it in the Windows Preview pane. Organizations must disable the Windows Preview pane and Windows Detail pane.
+            '''
+            collection_cmd: "reg.exe query \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\" | Out-File -Encoding utf8 -Append -FilePath explorer.txt"
+            collection_cmd_type: AUDIT_POWERSHELL
+            collect_only: false
+            checks: [
+              {
+                id: 1
+                title: The Windows Explorer Preview pane must be disabled for Windows 10 (NoPreviewPane)
+                description:
+                '''
+                A known vulnerability in Windows 10 could allow the execution of malicious code by either opening a compromised document or viewing it in the Windows Preview pane. Organizations must disable the Windows Preview pane and Windows Detail pane.
+                '''
+                type: AUDIT_POWERSHELL
+                cmd: "reg.exe query \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\" /v \"NoPreviewPane\""
+                expected: "\\s*NoPreviewPane\\s*REG_DWORD\\s*0x1"
+                verification_type: CHECK_REGEX
+                severity: medium
+                recommendation_on_failed:
+                '''
+                Ensure the following settings are configured for Windows 10 locally or applied through group policy.
+
+                Configure the policy value for <x>User Configuration >> Administrative Templates >> Windows Components >> File Explorer >> Explorer Frame Pane "Turn off Preview Pane"</x> to <x>"Enabled"</x>.
+                '''
+              },
+              {
+                id: 2
+                title: The Windows Explorer Preview pane must be disabled for Windows 10 (NoReadingPane)
+                description:
+                '''
+                A known vulnerability in Windows 10 could allow the execution of malicious code by either opening a compromised document or viewing it in the Windows Preview pane. Organizations must disable the Windows Preview pane and Windows Detail pane.
+                '''
+                type: AUDIT_POWERSHELL
+                cmd: "reg.exe query \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\" /v \"NoReadingPane\""
+                expected: "\\s*NoReadingPane\\s*REG_DWORD\\s*0x1"
+                verification_type: CHECK_REGEX
+                severity: medium
+                recommendation_on_failed:
+                '''
+                Ensure the following settings are configured for Windows 10 locally or applied through group policy.
+
+                Configure the policy value for <x>User Configuration >> Administrative Templates >> Windows Components >> File Explorer >> Explorer Frame Pane "Turn on or off details pane"</x> to <x>"Enabled"</x> and <x>"Configure details pane"</x> to <x>"Always hide"</x>.
+                '''
+              }
+            ]
           }
         ]
       }
