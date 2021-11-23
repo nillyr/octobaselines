@@ -1222,7 +1222,7 @@
             Or they are not installed and the keys NoWarningNoElevationOnInstall and UpdatePromptSettings must be set to 0 or not defined. The July update must also be present and no changes in GPOs must be present (Point And Print Restrictions)
             '''
             reference: https://support.microsoft.com/en-us/topic/kb5005652-manage-new-point-and-print-default-driver-installation-behavior-cve-2021-34481-873642bf-2634-49c5-a23b-6d8e9a302872
-            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint\" /v \"AlwaysInstallElevated\" | Out-File -Encoding utf8 -Append -FilePath updates_list.csv"
+            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint\" /v \"AlwaysInstallElevated\" | Out-File -Encoding utf8 -Append -FilePath point_and_print.txt"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
           },
