@@ -322,6 +322,7 @@
             id: 3
             title: Security Updates
             description: Verification of the installation of security updates
+            reference: https://support.microsoft.com/en-us/topic/windows-10-update-history-857b8ccb-71e4-49e5-b3f6-7073197d98fb
             collection_cmd: "WMIC.exe qfe list full /format:csv | Out-File -Encoding utf8 -Append -FilePath updates_list.csv"
             collection_cmd_type: AUDIT_POWERSHELL
             collect_only: true
@@ -738,7 +739,7 @@
                 Storing passwords using reversible encryption is essentially the same as storing clear-text versions of the passwords. For this reason, this policy must never be enabled.
                 '''
                 type: AUDIT_POWERSHELL
-                cmd: "secedit.exe /export /cfg delete_me_security_policies.txt; Select-String -Path delete_me_security_policies.txt -Pattern \"ClearTextPassword\""
+                cmd: "Select-String -Path $basedir\\Policies\\security_policies.txt -Pattern \"ClearTextPassword\""
                 expected: ".*ClearTextPassword\\s=\\s0"
                 verification_type: CHECK_REGEX
                 severity: high
@@ -755,7 +756,7 @@
                 Inappropriate granting of user rights can provide system, administrative, and other high level capabilities. Accounts with the "Debug Programs" user right can attach a debugger to any process or to the kernel, providing complete access to sensitive and critical operating system components. This right is given to Administrators in the default configuration.
                 '''
                 type: AUDIT_POWERSHELL
-                cmd: "secedit.exe /export /cfg delete_me_security_policies.txt; Select-String -Path delete_me_security_policies.txt -Pattern \"SeDebugPrivilege\""
+                cmd: "Select-String -Path $basedir\\Policies\\security_policies.txt -Pattern \"SeDebugPrivilege\""
                 expected: ".*SeDebugPrivilege\\s=\\s.*\\-544"
                 verification_type: CHECK_REGEX
                 severity: high
@@ -772,7 +773,7 @@
                 Inappropriate granting of user rights can provide system, administrative, and other high level capabilities. The "Create a token object" user right allows a process to create an access token. This could be used to provide elevated rights and compromise a system.
                 '''
                 type: AUDIT_POWERSHELL
-                cmd: "secedit.exe /export /cfg delete_me_security_policies.txt; Select-String -Path delete_me_security_policies.txt -Pattern \"SeCreateTokenPrivilege\""
+                cmd: "Select-String -Path $basedir\\Policies\\security_policies.txt -Pattern \"SeCreateTokenPrivilege\""
                 expected: ""
                 verification_type: CHECK_EXACT
                 severity: high
@@ -791,7 +792,7 @@
                 Accounts with the <x>"Act as part of the operating system"</x> user right can assume the identity of any user and gain access to resources that user is authorized to access.  Any accounts with this right can take complete control of a system.
                 '''
                 type: AUDIT_POWERSHELL
-                cmd: "secedit.exe /export /cfg delete_me_security_policies.txt; Select-String -Path delete_me_security_policies.txt -Pattern \"SeTcbPrivilege\""
+                cmd: "Select-String -Path $basedir\\Policies\\security_policies.txt -Pattern \"SeTcbPrivilege\""
                 expected: ""
                 verification_type: CHECK_EXACT
                 severity: high
@@ -1211,6 +1212,22 @@
           },
           {
             id: 6
+            title: <x>PrintNightmare</x>
+            description:
+            '''
+            Check PointAndPrint keys to assess the workstation's vulnerability to PrintNightmare (CVE-2021-34527)
+
+            Either the updates of August and later are installed. In which case, the RestrictDriverInstallationToAdministrators key must be set to 1 or not set.
+
+            Or they are not installed and the keys NoWarningNoElevationOnInstall and UpdatePromptSettings must be set to 0 or not defined. The July update must also be present and no changes in GPOs must be present (Point And Print Restrictions)
+            '''
+            reference: https://support.microsoft.com/en-us/topic/kb5005652-manage-new-point-and-print-default-driver-installation-behavior-cve-2021-34481-873642bf-2634-49c5-a23b-6d8e9a302872
+            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Printers\\PointAndPrint\" /v \"AlwaysInstallElevated\" | Out-File -Encoding utf8 -Append -FilePath updates_list.csv"
+            collection_cmd_type: AUDIT_POWERSHELL
+            collect_only: true
+          },
+          {
+            id: 7
             title: The Windows Installer Always install with elevated privileges must be disabled
             description:
             '''
@@ -1240,7 +1257,7 @@
             ]
           },
           {
-            id: 7
+            id: 8
             title: <x>Services ACLs</x>
             description:
             '''
