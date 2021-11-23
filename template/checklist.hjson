@@ -43,7 +43,8 @@
             checks: [
               {
                 id: 1
-                description: A short description
+                title: A short title
+                description: A description
                 type: CMD_EXEC
                 # example (macOS - SIP): /usr/bin/csrutil status | tee status.log | grep enabled
                 cmd: "your_command"
@@ -63,7 +64,7 @@
                 *  - low
                 */
                 severity: high
-                recommandation_on_failed:
+                recommendation_on_failed:
                 '''
                 When the outcome is not what was expected, it is possible to print a recommendation.
                 The recommendation may contain, among other things, the command for correction.
