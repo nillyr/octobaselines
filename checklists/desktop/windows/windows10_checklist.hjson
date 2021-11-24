@@ -682,6 +682,36 @@
           },
           {
             id: 3
+            title: The machine inactivity limit must be set to 15 minutes
+            description:
+            '''
+            Unattended systems are susceptible to unauthorized use and should be locked when unattended.
+            '''
+            collection_cmd: "reg.exe query \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\" | Out-File -Encoding utf8 -Append -FilePath lock_screen.txt"
+            collection_cmd_type: AUDIT_POWERSHELL
+            collect_only: false
+            checks: [
+              {
+                id: 1
+                title: The machine inactivity limit must be set to 15 minutes
+                description:
+                '''
+                Unattended systems are susceptible to unauthorized use and should be locked when unattended. The screen saver should be set at a maximum of 15 minutes and be password protected. This protects critical and sensitive data from exposure to unauthorized personnel with physical access to the computer.
+                '''
+                type: AUDIT_POWERSHELL
+                cmd: "reg.exe query \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\" /v \"InactivityTimeoutSecs\""
+                expected: "\\s*InactivityTimeoutSecs\\s*REG_DWORD\\s*0x([1-9]|[1-8]\\d{1,2}|900)\b"
+                verification_type: CHECK_REGEX
+                severity: medium
+                recommendation_on_failed:
+                '''
+                Configure the policy value for <x>Computer Configuration >> Windows Settings >> Security Settings >> Local Policies >> Security Options >> "Interactive logon: Machine inactivity limit"</x> to "900 seconds" or less, excluding "0" which is effectively disabled.
+                '''
+              }
+            ]
+          },
+          {
+            id: 4
             title: Cached logon session
             description: Caching of logon credentials must be limited
             collection_cmd: "reg.exe query \"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\" | Out-File -Encoding utf8 -Append -FilePath winlogon.txt"
@@ -1045,7 +1075,7 @@
                 title: The Application event log must prevent access by non-privileged accounts
                 description:
                 '''
-                Maintaining an audit trail of system activity logs can help identify configuration errors, troubleshoot service disruptions, and analyze compromises that have occurred, as well as detect attacks. Audit logs are necessary to provide a trail of evidence in case the system or network is compromised. The Application event log may be  susceptible to tampering if proper permissions are not applied.
+                Maintaining an audit trail of system activity logs can help identify configuration errors, troubleshoot service disruptions, and analyze compromises that have occurred, as well as detect attacks. Audit logs are necessary to provide a trail of evidence in case the system or network is compromised. The Application event log may be susceptible to tampering if proper permissions are not applied.
                 '''
                 type: AUDIT_POWERSHELL
                 cmd: "$($f=$env:systemroot + '\\System32\\winevt\\Logs\\Application.evtx'; $acls = (icacls $f); $status = 'Passed'; ForEach ($acl in $acls) { If(!$acl) { continue } ElseIf ($acl -like '*NT AUTHORITY\\SYSTEM:*(F)' -Or $acl -like '*AUTORITE NT\\Syst*me:*(F)') { continue } ElseIf ($acl -like '*BUILTIN\\Administrators:*(F)' -Or $acl -like '*BUILTIN\\Administrateurs:*(F)') { continue } ElseIf ($acl -like '*NT SERVICE\\EventLog:*(F)') { continue } ElseIf ($acl -like 'Successfully processed*' -Or $acl -like '*fichiers correctement*') { continue } $status = 'Failed' }; $acls; '' ; $status)"
