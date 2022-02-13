@@ -155,3 +155,7 @@ cython_debug/
 .DS_Store
 Thumbs.db
 
+# Work in progress folder
+__WIP_*/
+__wip_*/
+
