@@ -5,11 +5,11 @@
   <br/><br/>
 </p>
 
-Submodule of the octoreconf project.
+Submodule of the octoconf project.
 
 ## Usage
 
-See [octoreconf](https://github.com/Nillyr/octoreconf "octoreconf") for the usage instructions.
+See [octoconf](https://github.com/Nillyr/octoconf "octoconf") for the usage instructions.
 
 ## Maintainer
 
