@@ -1,0 +1,70 @@
+- id: 1
+  name: A category name
+  checkpoints:
+  - id: 1
+    title: A checkpoint title
+    description: >
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    collection_cmd: whoami > whoami.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: a random title
+      description: >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      reference: your-reference
+      type: CMD_EXEC
+      cmd: whoami
+      expected: .*
+      verification_type: CHECK_REGEX
+      severity: high
+      recommendation_on_failed: >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      see_also: https://www.your-reference.com/
+- id: 2
+  name: An other category name
+  checkpoints:
+  - id: 1
+    title: An other checkpoint title
+    description: >
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    collection_cmd: date > date.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: an other random title
+      description: >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      reference: your-reference
+      type: CMD_EXEC
+      cmd: date
+      expected: .*
+      verification_type: CHECK_REGEX
+      severity: high
+      recommendation_on_failed: >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      see_also: https://www.your-reference.com/
+    - id: 2 
+      title: an other random title (again)
+      description: >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      reference: your-reference
+      type: CMD_EXEC
+      cmd: date
+      expected: .*
+      verification_type: CHECK_REGEX
+      severity: high
+      recommendation_on_failed: >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      see_also: https://www.your-reference.com/
+
