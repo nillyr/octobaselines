@@ -1,0 +1,6 @@
+# Vérification des services en cours d'éxécution
+# Configuration SSH + timeout
+# Vérification des protocoles désactivés (telnet, ftp, etc.)
+
+- id: 6
+  name: FIXME

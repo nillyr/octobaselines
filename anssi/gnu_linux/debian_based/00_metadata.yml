@@ -1,0 +1,24 @@
+- id: 1
+  name: Information système
+  checkpoints:
+  - id: 1
+    title: Distribution en cours d'utilisation
+    description: >
+      Récupération des informations concernant la distribution installée.
+    collection_cmd: lsb_release -a > distribution_information.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+  - id: 2
+    title: Version du noyau et architecture
+    description: >
+      Récupération des informations système.
+    collection_cmd: uname -a > system_information.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+  - id: 3
+    title: Information sur le BIOS
+    description: >
+      Récupération des informations relative au BIOS.
+    collection_cmd: for keyword in system-manufacturer system-product-name bios-release-date bios-version; do echo "$keyword = " $(sudo dmidecode -s $keyword) >> smbios_information.txt; done
+    collection_cmd_type: CMD_EXEC
+    collect_only: true

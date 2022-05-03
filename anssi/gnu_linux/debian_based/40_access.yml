@@ -1,0 +1,6 @@
+# Permissions sur les fichiers
+# check les setuid/setguid
+# droits de modif sur les crons
+# configuration selinux/apparmor
+# umask
+# configuration sudo
