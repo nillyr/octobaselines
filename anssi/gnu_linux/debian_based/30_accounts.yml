@@ -1,4 +1,5 @@
-# comptes utilisateurs
-# mots de passe et politiques de mdp
-# vérification des droits
-# vérification des lastlogs
+# TODO :
+# - Comptes utilisateurs
+# - Mots de passe et politiques de mdp
+# - Vérification des droits
+# - Vérification des lastlogs (comptes dormants)

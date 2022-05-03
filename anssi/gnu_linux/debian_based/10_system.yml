@@ -1425,6 +1425,20 @@
         FIXME_RECO
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.8
+    - id: 3
+      title: Service unattended-upgrades actif
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: systemctl show unattended-upgrades.service -p UnitFileState | grep -q enabled && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.8
   - id: 5
     title: Paquets installés
     description: >

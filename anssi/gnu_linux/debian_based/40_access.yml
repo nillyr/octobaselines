@@ -1,6 +1,7 @@
-# Permissions sur les fichiers
-# check les setuid/setguid
-# droits de modif sur les crons
-# configuration selinux/apparmor
-# umask
-# configuration sudo
+# TODO :
+#  - Permissions sur les fichiers
+#  - Check les setuid/setguid (voir recommandation R38)
+#  - Vérification des droits de modification sur les crons
+#  - Configuration selinux/apparmor
+#  - Configuration de la valeur du umask
+#  - Configuration sudo

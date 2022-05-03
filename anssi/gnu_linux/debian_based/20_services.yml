@@ -1,6 +1,424 @@
-# Vérification des services en cours d'éxécution
-# Configuration SSH + timeout
-# Vérification des protocoles désactivés (telnet, ftp, etc.)
-
+# TODO:
+#  - Configuration du service SSH
+#  - Configuration Réseau
+#  - Configuration pare-feu (actif, quel service, politique, présence d'une règle pour chaque service en écoute)
 - id: 6
-  name: FIXME
+  name: Services
+  checkpoints:
+  - id: 1
+    title: Services en cours d'éxécution
+    description: >
+      Seuls les serivces strictement nécessaires doivent être actifs afin de réduire la surface d'attaque disponible.
+    collection_cmd: systemctl --all > services.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+  - id: 2
+    title: Désactivation des services non nécessaires ou non recommandés
+    description: >
+      Les services non nécessaires ou non recommandés dont ceux ne prenant pas en compte une couche de cryptographie doivent être désactivés.
+
+      En fonction du contexte, les résultats peuvent remonter des faux positifs.
+    collect_only: false
+    checks:
+    - id: 1
+      title: Avahi Server
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show avahi-daemon.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 2
+      title: Service bureautique CUPS
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show cups.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 3
+      title: Serveur DHCP
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show dhcp-server.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 4
+      title: Serveur LDAP
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show slapd.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 5
+      title: Serveur NFS - Part 1
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show nfs-server.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 6
+      title: Serveur NFS - Part 2
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show rpcbind.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 7
+      title: Serveur NFS - Part 3
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show portmap.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 8
+      title: Serveur NFS - Part 4
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show rpc.statd.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 9
+      title: Serveur DNS
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show bind9.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 10
+      title: Serveur FTP
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show vsftpd.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 11
+      title: Serveur HTTP (apache)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show apache.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 12
+      title: Serveur HTTP (apache2)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show apache2.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 13
+      title: Serveur HTTP (nginx)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show nginx.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 14
+      title: Serveur HTTP (lighttpd)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 15
+      title: Serveur HTTP (lighttpd)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 16
+      title: Service d'emails
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show dovecot.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 17
+      title: Samba
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show smbd.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 18
+      title: Serveur Proxy HTTP (squid)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show squid.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 19
+      title: Serveur SNMP
+      description: >
+        FIXME
+        Lorsque le serveur est un serveur SNMP, ce dernier doit être configuré afin de ne pas accépter la version 1 de SNMP.
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show snmpd.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 20
+      title: Rsync
+      description: >
+        FIXME
+        Les communications ne sont pas chiffrées.
+      type: CMD_EXEC
+      cmd: "[[ $(systemctl show rsync.service -p UnitFileState | grep -v enable) ]] && echo 1"
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 21
+      title: Le service mail est configuré pour n'accepter que les mails de la boucle locale
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: ss -lntu | grep -E ':25\s' | grep -E -v '\s(127.0.0.1|::1):25\s' || echo 1
+      expected: 1
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.48
+    - id: 22
+      title: Client RSH non installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: dpkg -s rsh-client 2>/dev/null | wc -l
+      expected: 0
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 23
+      title: Client Talk non installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: dpkg -s talk 2>/dev/null | wc -l
+      expected: 0
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 24
+      title: Client Telnet non installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: dpkg -s telnet 2>/dev/null | wc -l
+      expected: 0
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 25
+      title: Client LDAP non installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: dpkg -s ldap-utils 2>/dev/null | wc -l
+      expected: 0
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+  - id: 3
+    title: Configuration du service SSH
+    description: >
+      Le service SSH peut permettre l'administration de l'équipement. Le renforcement de sa configuration permet de limiter les risques d'accès illégitimes.
+    collection_cmd: cat /etc/ssh/sshd_config > ssh_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Fichier de configuration modifiable par l'utilisateur root uniquement
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: stat -c "%A:%u:%g" /etc/ssh/sshd_config | grep -q -E "\-rw-(r|-)--(r|-)--:0:0" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+
