@@ -398,6 +398,36 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 26
+      title: Xinetd non installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: dpkg -s xinetd 2>/dev/null | wc -l
+      expected: 0
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 27
+      title: Openbsd-inetd non installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: dpkg -s openbsd-inetd 2>/dev/null | wc -l
+      expected: 0
+      verification_type: CHECK_EXAC
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
   - id: 3
     title: Configuration du service SSH
     description: >
@@ -421,4 +451,383 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-
+    - id: 2
+      title: Permissions correctes sur les clés privées du serveur
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: find /etc/ssh -xdev -type f -name "ssh_host_*_key" -exec stat -c "%A:%u:%g" {} \; | xargs -I {} echo {} | grep -v -E "\-rw-------:0:0" || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 3
+      title: Permissions correctes sur les clés publiques du serveur
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: find /etc/ssh -xdev -type f -name "ssh_host_*_key.pub" -exec stat -c "%A:%u:%g" {} \; | xargs -I {} echo {} | grep -v -E "\-rw-(r|-)--(r|-)--:0:0" || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 4
+      title: Utilisation de la version 2 du protocole
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Ei '^\s*protocol\s+(1|1\s*,\s*2|2\s*,\s*1)\s*' || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 4
+      title: Niveau de journalisation adéquat
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Ei '^\s*protocol\s+(1|1\s*,\s*2|2\s*,\s*1)\s*' || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 5
+      title: Désactivation de X11Forwarding
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^x11forwarding\sno$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 6
+      title: Nombre de tentatives maximal inférieur ou égal à 4
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "maxauthtries\s*[1-4]" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 7
+      title: Paramètre IgnoreRhosts actif
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "ignorerhosts\s*yes" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 8
+      title: Paramètre HostbasedAuthentication désactivé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "hostbasedauthentication\s*no" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 9
+      title: Connexion en tant que root bloqué
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "permitrootlogin\s*no" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 10
+      title: Connexion sans mot de passe bloqué
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "permitemptypasswords\s*no" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 11
+      title: Utilisation des variables d'environnement de l'utilisateur bloqué
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "permituserenvironment\s*no" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 12
+      title: Utilisation de suites de chiffrement robustes
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*ciphers\s+(\S+,)*(3des-cbc|aes128-cbc|aes192-cbc|aes256-cbc|arcfour|arcfour128|arcfour256|blowfish-cbc|cast128-cbc|rijndael-cbc@lysator\.liu\.se)(,\S+)*\s*$" || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+        https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
+    - id: 13
+      title: Utilisation de suites de chiffrement robustes (FIPS 140-2)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*ciphers\s+(\S+,)*(3des-cbc|aes128-cbc|aes192-cbc|aes256-cbc|aes128-gcm@openssh\.com|aes256-gcm@openssh\.com|arcfour|arcfour128|arcfour256|blowfish-cbc|cast128-cbc|rijndael-cbc@lysator\.liu\.se|chacha20-poly1305@openssh\.com)(,\S+)*\s*$" || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+        https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
+    - id: 14
+      title: Utilisation d'un mode d'intégrité HMAC conforme
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*macs\s+(\S+,)*(hmac-md5|hmac-md5-96|hmac-ripemd160|hmac-sha1|hmac-sha1-96|umac-64@openssh\.com|hmac-md5-etm@openssh\.com|hmac-md5-96-etm@openssh\.com|hmac-ripemd160-etm@openssh\.com|hmac-sha1-etm@openssh\.com|hmac-sha1-96-etm@openssh\.com|umac-64-etm@openssh\.com|umac-128-etm@openssh\.com)(,\S+)*\s*$" || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+        https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
+    - id: 15
+      title: Utilisation d'algorithmes d'échanges de clés sécurisés
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*kexalgorithms\s+(\S+,)*(diffie-hellman-group1-sha1|diffie-hellman-group14-sha1|diffie-hellman-group-exchange-sha1)(,\S+)*\s*$" || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+        https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
+    - id: 16
+      title: Utilisation d'algorithmes d'échanges de clés sécurisés (FIPS 140-2)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*kexalgorithms\s+(\S+,)*(diffie-hellman-group1-sha1|diffie-hellman-group14-sha1|diffie-hellman-group-exchange-sha1|curve25519-sha256|curve25519-sha256@libssh\.org)(,\S+)*\s*$" || echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+        https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
+    - id: 17
+      title: Temps d'inactivité avant expiration de la session défini (ClientAliveInterval)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^clientaliveinterval\s+([1-9]|[1-9][0-9]|[1-2][0-9][0-9]|300)$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 18
+      title: Temps d'inactivité avant expiration de la session défini (ClientAliveCountMax)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^clientalivecountmax\s+[0-3]$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 19
+      title: Le paramètre LoginGraceTime est défini à au plus une minute
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^logingracetime\s+([0-9]|[1-5][0-9]|60)$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 20
+      title: L'accès au serveur SSH est restreint à une certaine population d'utilisateurs
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^(allowusers|allowgroups|denyusers|denygroups)\s(\S+).*$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 21
+      title: Utilisation de la PAM
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*usepam\s+yes$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 22
+      title: Le serveur SSH ne peut pas être utilisé comme tunnel
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*allowtcpforwarding\s+no$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 23
+      title: Le paramètre MaxStartups est défini
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*maxstartups\s+(10|[1-9])\:(30|[1-2][0-9]|[1-9])\:(60|[1-5][0-9]|[1-9])\s*$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 24
+      title: Le paramètre MaxSessions est défini
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: sshd -T | grep -Eq "^\s*maxsessions\s+([0-9]|10)$" && echo 1
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+    - id: 25
+      title: L'authentifaction est basée uniquement sur les clés asymétriques
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: '[[ ! $(sshd -T | grep -Eq "^\s*pubkeyauthentication\s+yes$") || ! $(sshd -T | grep -Eq "^\s*passwordauthentication\s+no$") ]] && echo 1'
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
