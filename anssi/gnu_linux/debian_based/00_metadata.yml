@@ -19,6 +19,6 @@
     title: Information sur le BIOS
     description: >
       Récupération des informations relative au BIOS.
-    collection_cmd: for keyword in system-manufacturer system-product-name bios-release-date bios-version; do echo "$keyword = " $(sudo dmidecode -s $keyword) >> smbios_information.txt; done
+    collection_cmd: for keyword in system-manufacturer system-product-name bios-release-date bios-version; do echo "$keyword = " $(dmidecode -s $keyword) >> smbios_information.txt; done
     collection_cmd_type: CMD_EXEC
     collect_only: true

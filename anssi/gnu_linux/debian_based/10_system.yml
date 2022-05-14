@@ -1,4 +1,4 @@
-- id: 2
+- id: 1
   name: Configuration matérielle
   checkpoints:
   - id: 1
@@ -14,7 +14,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: arch | egrep -q "x86_64|amd64|aarch64" && echo 1
+      cmd: PASSING=0; arch | grep -Eq "x86_64|amd64|aarch64" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -35,7 +35,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: grep -q aes /proc/cpuinfo && echo 1
+      cmd: PASSING=0; grep -q aes /proc/cpuinfo && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -56,7 +56,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: grep -q nosmap /proc/cmdline || echo 1
+      cmd: PASSING=0; grep -q nosmap /proc/cmdline || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -69,7 +69,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: grep -q nosmep /proc/cmdline || echo 1
+      cmd: PASSING=0; grep -q nosmep /proc/cmdline || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -81,7 +81,7 @@
     title: Activation du service IOMMU
     description: >
       Les fonctions SMAP & SMEP ne doivent pas être désactivées.
-    collection_cmd: sudo dmesg | grep -e DMAR -e IOMMU > iommu.txt
+    collection_cmd: dmesg | grep -e DMAR -e IOMMU > iommu.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 5
@@ -95,7 +95,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: dmesg | grep "Execute Disable" | grep -v active || echo 1
+      cmd: PASSING=0; dmesg | grep "Execute Disable" | grep -v active || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -107,7 +107,7 @@
     title: Contrôle d'accès au menu de configuration - Part 1
     description: >
       L'accès au BIOS doit être protégé par mot de passe.
-    collection_cmd: egrep -e "superusers|password" /etc/grub.d/* > bootloader_superusers.txt
+    collection_cmd: grep -E "superusers|password" /etc/grub.d/* > bootloader_superusers.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -116,7 +116,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: grep -q "^set superusers" /etc/grub.d/* && echo 1
+      cmd: PASSING=0; grep -Eq "^set superusers" /etc/grub.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -130,7 +130,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: grep -q "^password_pbkdf2" /etc/grub.d/* && echo 1
+      cmd: PASSING=0; grep -q "^password_pbkdf2" /etc/grub.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -144,7 +144,7 @@
     title: Contrôle d'accès au menu de configuration - Part 2
     description: >
       L'accès au BIOS doit être protégé par mot de passe.
-    collection_cmd: egrep "menuentry\s|CLASS=" /etc/grub.d/* > bootloader_restrictions.txt
+    collection_cmd: grep -E "menuentry\s|CLASS=" /etc/grub.d/* > bootloader_restrictions.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -153,7 +153,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: egrep -q ".*--users\s" /etc/grub.d/* && echo 1
+      cmd: PASSING=0; grep -Eq ".*--users\s" /etc/grub.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -163,7 +163,7 @@
         https://sleeplessbeastie.eu/2015/01/06/how-to-password-protect-grub-entries/
         https://www.gnu.org/software/grub/manual/grub/grub.html#Security
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.17
-- id: 3
+- id: 2
   name: Configuration système
   checkpoints:
   - id: 1
@@ -175,11 +175,11 @@
     collect_only: false
     checks:
     - id: 1
-      title: Point de montage boot (nosuid)
+      title: Partion séparée pour /srv
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: mount | grep "on /boot " | grep -q -v nosuid || echo 1
+      cmd: PASSING=0; mount | grep -Eq ".*on\s+/srv\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -188,11 +188,11 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 2
-      title: Point de montage boot (nodev)
+      title: Partion séparée pour /home
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: mount | grep "on /boot " | grep -q -v nodev || echo 1
+      cmd: PASSING=0; mount | grep -Eq ".*on\s+/home\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -201,11 +201,11 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 3
-      title: Point de montage boot (noexec)
+      title: Partion séparée pour /tmp
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: mount | grep "on /boot " | grep -q -v noexec || echo 1
+      cmd: PASSING=0; mount | grep -Eq ".*on\s+/tmp\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -214,24 +214,24 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 4
-      title: Point de montage boot (noauto)
+      title: Partion séparée pour /var
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: mount | grep "on /boot " | grep -q -v noauto || echo 1
+      cmd: PASSING=0; mount | grep -Eq ".*on\s+/var\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: intermediate
       recommendation_on_failed: >
         FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.13
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 5
-      title: Point de montage opt (nosuid)
+      title: Partion séparée pour /var/log
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: mount | grep "on /opt " | grep -q -v nosuid || echo 1
+      cmd: PASSING=0; mount | grep -Eq ".*on\s+/var/log\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -240,258 +240,11 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 6
-      title: Point de montage opt (nodev)
+      title: Partion séparée pour /var/tmp
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: mount | grep "on /opt " | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 7
-      title: Point de montage tmp (nosuid)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /tmp " | grep -q -v nosuid || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 8
-      title: Point de montage tmp (nodev)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /tmp " | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 9
-      title: Point de montage tmp (noexec)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /tmp " | grep -q -v noexec || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 10
-      title: Point de montage srv (nosuid)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /srv " | grep -q -v nosuid || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 11
-      title: Point de montage srv (nodev)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /srv " | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 12
-      title: Point de montage home (nosuid)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /home " | grep -q -v nosuid || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 13
-      title: Point de montage home (nodev)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /home " | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 14
-      title: Point de montage home (noexec)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /home " | grep -q -v noexec || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 15
-      title: Point de montage proc (hidepid)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /proc " | grep -q -v "hidepid=2" || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 16
-      title: Point de montage usr (nodev)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /usr" | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 17
-      title: Point de montage var (nosuid)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var " | grep -q -v nosuid || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 18
-      title: Point de montage var (nodev)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var " | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 19
-      title: Point de montage var (noexec)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var " | grep -q -v noexec || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 20
-      title: Point de montage /var/log (nosuid)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var/log " | grep -q -v nosuid || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 21
-      title: Point de montage /var/log (nodev)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var/log " | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 22
-      title: Point de montage /var/log (noexec)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var/log " | grep -q -v noexec || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 24
-      title: Point de montage /var/tmp (nosuid)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var/tmp " | grep -q -v nosuid || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 25
-      title: Point de montage /var/tmp (nodev)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var/tmp " | grep -q -v nodev || echo 1
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 26
-      title: Point de montage /var/tmp (noexec)
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: mount | grep "on /var/tmp " | grep -q -v noexec || echo 1
+      cmd: PASSING=0; mount | grep -Eq ".*on\s+/var/tmp\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -500,6 +253,339 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
   - id: 2
+    title: Partitionnement - options de montage
+    description: >
+      L'utilisation du partionnement permet de protéger de d'isoler les différents composants du système de fichiers.
+    collection_cmd: mount > mount.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Point de montage boot - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 2
+      title: Point de montage boot - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 3
+      title: Point de montage boot - noexec
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v noexec || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 4
+      title: Point de montage boot - noauto
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v noauto || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.13
+    - id: 5
+      title: Point de montage opt - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /opt " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 6
+      title: Point de montage opt - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /opt " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 7
+      title: Point de montage tmp - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /tmp " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 8
+      title: Point de montage tmp - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /tmp " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 9
+      title: Point de montage tmp - noexec
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /tmp " | grep -q -v noexec || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 10
+      title: Point de montage srv - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /srv " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 11
+      title: Point de montage srv - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /srv " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 12
+      title: Point de montage home - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /home " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 13
+      title: Point de montage home - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /home " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 14
+      title: Point de montage home - noexec
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /home " | grep -q -v noexec || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 15
+      title: Point de montage proc - hidepid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /proc " | grep -q -v "hidepid=2" || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 16
+      title: Point de montage usr - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /usr" | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 17
+      title: Point de montage var - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 18
+      title: Point de montage var - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 19
+      title: Point de montage var - noexec
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var " | grep -q -v noexec || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 20
+      title: Point de montage /var/log - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var/log " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 21
+      title: Point de montage /var/log - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var/log " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 22
+      title: Point de montage /var/log - noexec
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var/log " | grep -q -v noexec || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 24
+      title: Point de montage /var/tmp - nosuid
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var/tmp " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 25
+      title: Point de montage /var/tmp - nodev
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var/tmp " | grep -q -v nodev || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+    - id: 26
+      title: Point de montage /var/tmp - noexec
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; mount | grep "on /var/tmp " | grep -q -v noexec || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
+  - id: 3
     title: Systèmes de fichiers non nécessaires
     description: >
       La désactivation des systèmes de fichiers non nécessaires participe à la réduction de la surface d'attaque.
@@ -510,7 +596,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ $(modprobe -n -v freevxfs) == */bin/true* && -z $(lsmod | grep freevxfs) ]] && echo 1"
+      cmd: "PASSING=0; [[ $(modprobe -n -v freevxfs) == */bin/true* && -z $(lsmod | grep freevxfs) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -523,7 +609,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ $(modprobe -n -v jffs2) == */bin/true* && -z $(lsmod | grep jffs2) ]] && echo 1"
+      cmd: "PASSING=0; [[ $(modprobe -n -v jffs2) == */bin/true* && -z $(lsmod | grep jffs2) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -536,7 +622,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ $(modprobe -n -v hfs) == */bin/true* && -z $(lsmod | grep hfs) ]] && echo 1"
+      cmd: "PASSING=0; [[ $(modprobe -n -v hfs) == */bin/true* && -z $(lsmod | grep hfs) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -549,7 +635,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ $(modprobe -n -v hfsplus) == */bin/true* && -z $(lsmod | grep hfsplus) ]] && echo 1"
+      cmd: "PASSING=0; [[ $(modprobe -n -v hfsplus) == */bin/true* && -z $(lsmod | grep hfsplus) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -562,7 +648,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ $(modprobe -n -v squashfs) == */bin/true* && -z $(lsmod | grep squashfs) ]] && echo 1"
+      cmd: "PASSING=0; [[ $(modprobe -n -v squashfs) == */bin/true* && -z $(lsmod | grep squashfs) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -575,7 +661,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ $(modprobe -n -v udf) == */bin/true* && -z $(lsmod | grep udf) ]] && echo 1"
+      cmd: "PASSING=0; [[ $(modprobe -n -v udf) == */bin/true* && -z $(lsmod | grep udf) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -583,7 +669,7 @@
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
-  - id: 3
+  - id: 4
     title: Montage de périphérique
     description: >
       La désactivation du montage automatique participe à la réduction de la surface d'attaque.
@@ -594,7 +680,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ ! $(dpkg -s autofs 2>&1 | grep -q 'is not installed') || ! $(systemctl show autofs.service -p UnitFileState | grep -v enabled) ]] && echo 1"
+      cmd: "PASSING=0; [[ ! $(dpkg -s autofs 2>&1 | grep -q 'is not installed') || ! $(systemctl show autofs.service -p UnitFileState | grep -v enabled) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -607,7 +693,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: "[[ $(modprobe -n -v usb-storage) == */bin/true* && -z $(lsmod | grep usb-storage) ]] && echo 1"
+      cmd: "PASSING=0; [[ $(modprobe -n -v usb-storage) == */bin/true* && -z $(lsmod | grep usb-storage) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -615,7 +701,7 @@
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
-- id: 4
+- id: 3
   name: Configuration système - sysctl
   checkpoints:
   - id: 1
@@ -632,7 +718,7 @@
     collect_only: false
     checks:
     - id: 1
-      title: Pas de routage entre les interfaces
+      title: Pas de routage entre les interfaces - net.ipv4.ip_forward
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -647,7 +733,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 2
-      title: Filtrage par chemin inverse - Part 1
+      title: Filtrage par chemin inverse - net.ipv4.conf.all.rp_filter
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -662,7 +748,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 3
-      title: Filtrage par chemin inverse - Part 2
+      title: Filtrage par chemin inverse - net.ipv4.conf.default.rp_filter
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -677,7 +763,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 4
-      title: Ne pas envoyer de redirections ICMP - Part 1
+      title: Ne pas envoyer de redirections ICMP - net.ipv4.conf.all.send_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -692,7 +778,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 5
-      title: Ne pas envoyer de redirections ICMP - Part 2
+      title: Ne pas envoyer de redirections ICMP - net.ipv4.conf.default.send_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -707,7 +793,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 6
-      title: Refuser les paquets de source routing - Part 1
+      title: Refuser les paquets de source routing - net.ipv4.conf.all.accept_source_route
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -722,7 +808,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 7
-      title: Refuser les paquets de source routing - Part 2
+      title: Refuser les paquets de source routing - net.ipv4.conf.default.accept_source_route
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -737,7 +823,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 8
-      title: Ne pas accepter les ICMP de type redirect - Part 1
+      title: Ne pas accepter les ICMP de type redirect - net.ipv4.conf.all.accept_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -752,7 +838,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 9
-      title: Ne pas accepter les ICMP de type redirect - Part 2
+      title: Ne pas accepter les ICMP de type redirect - net.ipv4.conf.all.secure_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -767,7 +853,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 10
-      title: Ne pas accepter les ICMP de type redirect - Part 3
+      title: Ne pas accepter les ICMP de type redirect - net.ipv4.conf.default.accept_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -782,7 +868,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 11
-      title: Ne pas accepter les ICMP de type redirect - Part 4
+      title: Ne pas accepter les ICMP de type redirect - net.ipv4.conf.default.secure_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -797,7 +883,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 12
-      title: Loguer les paquets ayant des IPs anormales
+      title: Loguer les paquets ayant des IPs anormales - net.ipv4.conf.all.log_martians
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -812,7 +898,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 13
-      title: RFC 1337
+      title: RFC 1337 - net.ipv4.tcp_rfc1337
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -827,7 +913,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 14
-      title: Ignorer les réponses non conformes à la RFC 1122
+      title: Ignorer les réponses non conformes à la RFC 1122 - net.ipv4.icmp_ignore_bogus_error_responses
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -842,7 +928,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 15
-      title: Augmenter la plage pour les ports éphémères
+      title: Augmenter la plage pour les ports éphémères - net.ipv4.ip_local_port_range
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -857,7 +943,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 16
-      title: Utiliser les SYN cookies
+      title: Utiliser les SYN cookies - net.ipv4.tcp_syncookies
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -872,7 +958,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 17
-      title: Désactiver IPv6
+      title: Désactiver IPv6 - net.ipv6.conf.all.disable_ipv6
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -887,7 +973,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 18
-      title: Désactiver le support des "router solicitations" - Part 1
+      title: Désactiver le support des "router solicitations" - net.ipv6.conf.all.router_solicitations
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -902,7 +988,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 19
-      title: Désactiver le support des "router solicitations" - Part 2
+      title: Désactiver le support des "router solicitations" - net.ipv6.conf.default.router_solicitations
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -917,7 +1003,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 20
-      title: Ne pas accepter les "router preferences" par "router advertisements" - Part 1
+      title: Ne pas accepter les "router preferences" par "router advertisements" - net.ipv6.conf.all.accept_ra_rtr_pref
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -932,7 +1018,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 21
-      title: Ne pas accepter les "router preferences" par "router advertisements" - Part 2
+      title: Ne pas accepter les "router preferences" par "router advertisements" - net.ipv6.conf.default.accept_ra_rtr_pref
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -947,7 +1033,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 22
-      title: Pas de configuration auto des prefix par "router advertisements" - Part 1
+      title: Pas de configuration auto des prefix par "router advertisements" - net.ipv6.conf.all.accept_ra_pinfo
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -962,7 +1048,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 23
-      title: Pas de configuration auto des prefix par "router advertisements" - Part 2
+      title: Pas de configuration auto des prefix par "router advertisements" - net.ipv6.conf.default.accept_ra_pinfo
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -977,7 +1063,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 24
-      title: Pas d'apprentissage du routeur par défaut par "router advertisements" - Part 1
+      title: Pas d'apprentissage du routeur par défaut par "router advertisements" - net.ipv6.conf.all.accept_ra_defrtr
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -992,7 +1078,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 25
-      title: Pas d'apprentissage du routeur par défaut par "router advertisements" - Part 2
+      title: Pas d'apprentissage du routeur par défaut par "router advertisements" - net.ipv6.conf.default.accept_ra_defrtr
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1007,7 +1093,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 26
-      title: Pas de configuration auto des adresses à partir des "router advertisements" - Part 1
+      title: Pas de configuration auto des adresses à partir des "router advertisements" - net.ipv6.conf.all.autoconf
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1022,7 +1108,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 27
-      title: Pas de configuration auto des adresses à partir des "router advertisements" - Part 2
+      title: Pas de configuration auto des adresses à partir des "router advertisements" - net.ipv6.conf.default.autoconf
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1037,7 +1123,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 28
-      title: Ne pas accepter les ICMP de type redirect - Part 1
+      title: Ne pas accepter les ICMP de type redirect - net.ipv6.conf.all.accept_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1052,7 +1138,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 29
-      title: Ne pas accepter les ICMP de type redirect - Part 2
+      title: Ne pas accepter les ICMP de type redirect - net.ipv6.conf.default.accept_redirects
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1067,7 +1153,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 30
-      title: Refuser les packets de source routing - Part 1
+      title: Refuser les packets de source routing - net.ipv6.conf.all.accept_source_route
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1082,7 +1168,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 31
-      title: Refuser les packets de source routing - Part 2
+      title: Refuser les packets de source routing - net.ipv6.conf.default.accept_source_route
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1097,7 +1183,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 32
-      title: Nombre maximal d'adresses autoconfigurées par interface - Part 1
+      title: Nombre maximal d'adresses autoconfigurées par interface - net.ipv6.conf.all.max_addresses
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1112,7 +1198,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 33
-      title: Nombre maximal d'adresses autoconfigurées par interface - Part 2
+      title: Nombre maximal d'adresses autoconfigurées par interface - net.ipv6.conf.default.max_addresses
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1133,7 +1219,7 @@
     collect_only: false
     checks:
     - id: 1
-      title: Désactivation des sysrq
+      title: Désactivation des sysrq - kernel.sysrq
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1149,7 +1235,7 @@
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/
         https://www.linuxtricks.fr/wiki/sysrq-ou-les-touches-magiques
     - id: 2
-      title: Exécutables setuid non dumpable (coredump)
+      title: Exécutables setuid non dumpable (coredump) - fs.suid_dumpable
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1164,7 +1250,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/fs.rst
     - id: 3
-      title: Blocage du déréférencement des liens - Part 1
+      title: Blocage du déréférencement des liens - fs.protected_symlinks
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1179,7 +1265,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/fs.rst
     - id: 4
-      title: Blocage du déréférencement des liens - Part 2
+      title: Blocage du déréférencement des liens - fs.protected_hardlinks
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1194,7 +1280,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/fs.rst
     - id: 5
-      title: Activation de l'ASLR
+      title: Activation de l'ASLR - kernel.randomize_va_space
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1209,7 +1295,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/kernel.rst
     - id: 6
-      title: Interdiction de mapper de la mémoire dans les adresses basses
+      title: Interdiction de mapper de la mémoire dans les adresses basses - vm.mmap_min_addr
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1224,7 +1310,22 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/vm.rst
     - id: 7
-      title: Restriction d'exposition des adresses noyau
+      title: Espace de choix plus grand pour les valeurs de PID - kernel.pid_max
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: sysctl -n kernel.pid_max
+      expected: 65536
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
+        https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/kernel.rst
+    - id: 8
+      title: Obfuscation des adresses mémoire kernel - kernel.kptr_restrict
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1238,8 +1339,8 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/kernel.rst
-    - id: 8
-      title: Restriction d'accès au buffer dmesg
+    - id: 9
+      title: Restriction d'accès au buffer dmesg - kernel.dmesg_restrict
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1253,8 +1354,8 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/kernel.rst
-    - id: 9
-      title: Perf - paranoid
+    - id: 10
+      title: Restreint l'utilisation du sous système perf - kernel.perf_event_paranoid
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1268,8 +1369,8 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/kernel.rst
-    - id: 10
-      title: Perf - sample rate
+    - id: 11
+      title: Restreint l'utilisation du sous système perf - kernel.perf_event_max_sample_rate
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1283,8 +1384,8 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.23
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/sysctl/kernel.rst
-    - id: 11
-      title: Perf - CPU time
+    - id: 12
+      title: Restreint l'utilisation du sous système perf - kernel.perf_cpu_time_max_percent
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1306,7 +1407,7 @@
     collect_only: false
     checks:
     - id: 1
-      title: Désactivation du chargement de nouveaux modules
+      title: Désactivation du chargement de nouveaux modules - kernel.modules_disabled
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1321,7 +1422,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.24
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/
     - id: 2
-      title: Périmètre de débogage ptrace (standard)
+      title: Périmètre de débogage ptrace - kernel.yama.ptrace_scope
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1337,7 +1438,7 @@
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/
         https://linux-audit.com/protect-ptrace-processes-kernel-yama-ptrace_scope/
     - id: 3
-      title: Périmètre de débogage ptrace (élevé)
+      title: Périmètre de débogage ptrace - kernel.yama.ptrace_scope
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -1352,7 +1453,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.25
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/
         https://linux-audit.com/protect-ptrace-processes-kernel-yama-ptrace_scope/
-- id: 5
+- id: 4
   name: Logiciels
   checkpoints:
   - id: 1
@@ -1385,7 +1486,7 @@
     title: Redémarrage requis
     description: >
       Certaines mises à jour demandent un redémarrage du système. Un redémarrage régulier est recommandé.
-    collection_cmd: "[[ -f /var/run/reboot-required ]] && echo 1 > is_reboot_required.txt"
+    collection_cmd: "[[ -f /var/run/reboot-required ]] && echo true > is_reboot_required.txt"
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 4
@@ -1393,7 +1494,10 @@
     description: >
       Le paquet 'unattended-upgrades' peut permettre l'installation des mises à jour de sécurité de manière automatique.
       La configuration de ce dernier peut également permettre le redémarrage automatique de l'équipement. Cela doit être fait en fonction du contexte. Lorsque le redémarrage automatique ne peut être effectué, un redémarrage manuel doit intervenir.
-    collection_cmd: cat /etc/apt/apt.conf.d/50unattended-upgrades /etc/apt/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/10periodic >> unattended-upgrades_config.txt
+    collection_cmd: >
+      cat /etc/apt/apt.conf.d/50unattended-upgrades > unattended-upgrades.txt;
+      cat /etc/apt/apt.conf.d/20auto-upgrades > auto-upgrades.txt;
+      cat /etc/apt/apt.conf.d/10periodic > periodic.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -1402,7 +1506,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: grep -q '^\s*\"${distro_id}.*\-security\";' /etc/apt/apt.conf.d/50unattended-upgrades && echo 1
+      cmd: PASSING=0; grep -q '^\s*\"${distro_id}.*\-security\";' /etc/apt/apt.conf.d/50unattended-upgrades && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -1416,7 +1520,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: grep -q '^APT\:\:Periodic\:\:Unattended-Upgrade' /etc/apt/apt.conf.d/20auto-upgrades && echo 1
+      cmd: PASSING=0; grep -q '^APT\:\:Periodic\:\:Unattended-Upgrade' /etc/apt/apt.conf.d/20auto-upgrades && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -1430,7 +1534,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: systemctl show unattended-upgrades.service -p UnitFileState | grep -q enabled && echo 1
+      cmd: PASSING=0; systemctl show unattended-upgrades.service -p UnitFileState | grep -q enabled && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
