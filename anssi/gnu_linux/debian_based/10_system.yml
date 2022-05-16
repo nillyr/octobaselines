@@ -78,7 +78,7 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2015/03/NP_ConfigMateriel.pdf#subsection.3.4
   - id: 4
-    title: Activation du service IOMMU
+    title: Activation du service IOMMU (manuel)
     description: >
       Les fonctions SMAP & SMEP ne doivent pas être désactivées.
     collection_cmd: dmesg | grep -e DMAR -e IOMMU > iommu.txt
@@ -719,7 +719,7 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
   - id: 5
-    title: Espace disque suffisant
+    title: Espace disque suffisant (manuel)
     description: >
       L'absence d'espace disque suffisant peut impliquer un risque d'indisponibilité à court terme.
     collection_cmd: df -h > .txt
@@ -729,7 +729,7 @@
   name: Configuration système - sysctl
   checkpoints:
   - id: 1
-    title: Paramétrage sysctl
+    title: Paramétrage sysctl (manuel)
     description: >
       FIXME.
     collection_cmd: sysctl -a > variables_sysctl.txt
@@ -1496,7 +1496,7 @@
   name: Logiciels
   checkpoints:
   - id: 1
-    title: Dépôts de logiciels (sources)
+    title: Dépôts de logiciels (manuel)
     description: >
       Afin de limiter la surface d'attaque, seuls les composants strictement nécessaires au service rendu par l'équipement doivent être installés.
       Les composants installés doivent correctement être sélectionnés depuis des sources fiables.
@@ -1505,11 +1505,11 @@
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.14
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.15
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.16
-    collection_cmd: cat /etc/apt/sources.list /etc/apt/sources.list.d/* >> apt_sources_list.txt
+    collection_cmd: find /etc/apt/ -type f \( -name *.list -o -name *.sources \) -exec ls -ailL {} \; -exec cat {} \; > sources_list.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 2
-    title: Dépôts de logiciels (clés gpg)
+    title: Dépôts de logiciels (clés gpg) (manuel)
     description: >
       Afin de limiter la surface d'attaque, seuls les composants strictement nécessaires au service rendu par l'équipement doivent être installés.
       Les composants installés doivent correctement être sélectionnés depuis des sources fiables.
@@ -1522,7 +1522,7 @@
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 3
-    title: Redémarrage requis
+    title: Redémarrage requis (manuel)
     description: >
       Certaines mises à jour demandent un redémarrage du système. Un redémarrage régulier est recommandé.
     collection_cmd: "[ -f /var/run/reboot-required ] && echo true > is_reboot_required.txt"
@@ -1583,7 +1583,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.8
   - id: 5
-    title: Paquets installés
+    title: Paquets installés (manuel)
     description: >
       Afin de limiter la surface d'attaque, seuls les composants strictement nécessaires au service rendu par l'équipement doivent être installés.
     collection_cmd: dpkg-query -l > packages_list.txt

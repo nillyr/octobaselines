@@ -1,11 +1,10 @@
 # TODO:
-#  - Configuration Réseau (configuration ntp, configuration dns, DHCP désactivé)
 #  - Configuration pare-feu (iptables/ufw, actif, politique par défaut, pour chaque service en écoute)
 - id: 1
   name: Configuration réseau
   checkpoints:
   - id: 1
-    title: Configuration des interfaces
+    title: Configuration des interfaces (manuel)
     description: >
       Récupération de la configuration actuelle des interfaces réseau pour une analyse manuelle complémentaire.
     collection_cmd: >
@@ -35,3 +34,103 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.2
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
+  - id: 3
+    title: Configuration DNS (manuel)
+    description: >
+      La résolution de noms doit être réalisée à partir de serveurs de confiance en interne.
+    collection_cmd: >
+      cat /etc/resolv.conf
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+  - id: 4
+    title: Synchronisation NTP - systemd-timesyncd
+    description: >
+      Pour de nombreuses raisons, l'équipement doit être synchronisé avec une source de temps fiable. Cela est d'autant plus utile lors de la corrélation des évènements. La synchronisation peut être effectuée via les services (liste non exhaustive) :
+      * systemd-timesyncd
+      * chrony
+    collection_cmd: >
+      timedatectl status > systemd_timesyncd_status.txt;
+      cat /etc/systemd/timesyncd.conf > systemd_timesyncd_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Service systemd-timesyncd actif
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: 'PASSING=0; [[ $(systemctl show systemd-timesyncd.service -p UnitFileState | grep -q enabled) ]] || PASSING=1; echo $PASSING'
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
+    - id: 2
+      title: Les serveurs NTP sont définis
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: 'PASSING=0; cat /etc/systemd/timesyncd.conf | grep -Eq "^NTP=.*$" && PASSING=1; echo $PASSING'
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
+    - id: 3
+      title: Les serveurs NTP en fallback sont définis
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: 'PASSING=0; cat /etc/systemd/timesyncd.conf | grep -Eq "^FallbackNTP=.*$" && PASSING=1; echo $PASSING'
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
+  - id: 5
+    title: Synchronisation NTP - chrony
+    description: >
+      Pour de nombreuses raisons, l'équipement doit être synchronisé avec une source de temps fiable. Cela est d'autant plus utile lors de la corrélation des évènements. La synchronisation peut être effectuée via les services (liste non exhaustive) :
+      * systemd-timesyncd
+      * chrony
+    collection_cmd: cat /etc/chrony/chrony.conf > chrony_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Service chrony actif
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: 'PASSING=0; [[ $(systemctl show chronyd.service -p UnitFileState | grep -q enabled) ]] || PASSING=1; echo $PASSING'
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
+    - id: 2
+      title: Les serveurs NTP sont définis
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: 'PASSING=0; cat /etc/chrony/chrony.conf | grep -Eq "^(server|pool)\s+.*$" && echo 1 && PASSING=1; echo $PASSING'
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
