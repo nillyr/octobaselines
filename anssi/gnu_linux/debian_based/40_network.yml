@@ -1,29 +1,31 @@
 # TODO:
-#  - Configuration Réseau (stack ipv6 désactivée, configuration ntp, configuration dns, DHCP désactivé)
+#  - Configuration Réseau (configuration ntp, configuration dns, DHCP désactivé)
 #  - Configuration pare-feu (iptables/ufw, actif, politique par défaut, pour chaque service en écoute)
 - id: 1
   name: Configuration réseau
   checkpoints:
   - id: 1
-    title: FIXME
+    title: Configuration des interfaces
     description: >
-      FIXME
+      Récupération de la configuration actuelle des interfaces réseau pour une analyse manuelle complémentaire.
     collection_cmd: >
-      FIXME
+      find /etc/netplan/ -type f -name *.yaml -exec ls -ailL {} \; -exec cat {} \; > netplan.txt;
+      cat /etc/network/interfaces > network_interfaces.txt;
+      ip a > ip_a.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 2
-    title: FIXNE
+    title: Désactivation de la pile IPv6
     description: >
-      FIXME
+      Si non utilisée, la pile IPv6 doit être désactivée. Cela vient en complément des tests de la section sysctl.
     collect_only: false
     checks:
     - id: 1
-      title: FIXME
+      title: La pile IPv6 est désactivée
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: FIXME
+      cmd: '[ -e /boot/grub2/grub.cfg ] && GRUB_CONFIG_FILE=/boot/grub2/grub.cfg || GRUB_CONFIG_FILE=/boot/grub/grub.cfg; PASSING=0; grep -Eq "^\s*linux\s+.*ipv6\.disable=1" "${GRUB_CONFIG_FILE}" && PASSING=1; echo $PASSING'
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -31,4 +33,5 @@
       recommendation_on_failed: >
         FIXME
       see_also: >
-        FIXME
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.2
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
