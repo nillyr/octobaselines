@@ -104,10 +104,10 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2015/03/NP_ConfigMateriel.pdf#subsection.4.4
   - id: 6
-    title: Contrôle d'accès au menu de configuration - Part 1
+    title: Contrôle d'accès au menu de configuration
     description: >
-      L'accès au BIOS doit être protégé par mot de passe.
-    collection_cmd: grep -E "superusers|password" /etc/grub.d/* > bootloader_superusers.txt
+      L'accès au BIOS doit être protégé par un mot de passe.
+    collection_cmd: '[ -e /boot/grub2/grub.cfg ] && GRUB_CONFIG_FILE=/boot/grub2/grub.cfg || GRUB_CONFIG_FILE=/boot/grub/grub.cfg; cat "${GRUB_CONFIG_FILE}" > grub_config_file.txt'
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -116,53 +116,49 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^set superusers" /etc/grub.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^set superusers" "${GRUB_CONFIG_FILE}" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
       level: reinforced
       recommendation_on_failed: >
         FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.17
+        https://www.gnu.org/software/grub/manual/grub/grub.html#Security
         https://sleeplessbeastie.eu/2015/01/06/how-to-password-protect-grub-entries/
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.17
     - id: 2
       title: Les mots de passe ne sont pas en clair
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -q "^password_pbkdf2" /etc/grub.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^password_pbkdf2" "${GRUB_CONFIG_FILE}" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
       level: reinforced
       recommendation_on_failed: >
         FIXME_RECO
-        https://sleeplessbeastie.eu/2015/01/06/how-to-password-protect-grub-entries/
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.17
         https://www.gnu.org/software/grub/manual/grub/grub.html#Security
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.17
-  - id: 7
-    title: Contrôle d'accès au menu de configuration - Part 2
-    description: >
-      L'accès au BIOS doit être protégé par mot de passe.
-    collection_cmd: grep -E "menuentry\s|CLASS=" /etc/grub.d/* > bootloader_restrictions.txt
-    collection_cmd_type: CMD_EXEC
-    collect_only: false
-    checks:
-    - id: 1
+        https://sleeplessbeastie.eu/2015/01/06/how-to-password-protect-grub-entries/
+    - id: 3
       title: Un contrôle d'accès est défini
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq ".*--users\s" /etc/grub.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq ".*--users\s" "${GRUB_CONFIG_FILE}" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
       level: reinforced
       recommendation_on_failed: >
         FIXME_RECO
-        https://sleeplessbeastie.eu/2015/01/06/how-to-password-protect-grub-entries/
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.17
         https://www.gnu.org/software/grub/manual/grub/grub.html#Security
-      see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.17
+        https://sleeplessbeastie.eu/2015/01/06/how-to-password-protect-grub-entries/
 - id: 2
   name: Configuration système
   checkpoints:
@@ -1486,7 +1482,7 @@
     title: Redémarrage requis
     description: >
       Certaines mises à jour demandent un redémarrage du système. Un redémarrage régulier est recommandé.
-    collection_cmd: "[[ -f /var/run/reboot-required ]] && echo true > is_reboot_required.txt"
+    collection_cmd: "[ -f /var/run/reboot-required ] && echo true > is_reboot_required.txt"
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 4

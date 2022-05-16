@@ -1,5 +1,4 @@
 # TODO:
-#  - Configuration du service SSH
 #  - Configuration Réseau
 #  - Configuration pare-feu (actif, quel service, politique, présence d'une règle pour chaque service en écoute)
 - id: 1
@@ -27,7 +26,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show avahi-daemon.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show avahi-daemon.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -42,7 +41,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show cups.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show cups.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -57,7 +56,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show dhcp-server.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show dhcp-server.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -72,7 +71,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show slapd.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show slapd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -87,7 +86,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show nfs-server.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show nfs-server.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -102,7 +101,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show rpcbind.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show rpcbind.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -117,7 +116,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show portmap.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show portmap.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -132,7 +131,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show rpc.statd.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show rpc.statd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -147,7 +146,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show bind9.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show bind9.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -162,7 +161,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show vsftpd.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show vsftpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -177,7 +176,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show apache.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show apache.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -192,7 +191,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show apache2.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show apache2.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -207,7 +206,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show nginx.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show nginx.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -222,7 +221,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -237,7 +236,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -252,7 +251,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show dovecot.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show dovecot.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -267,7 +266,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show smbd.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show smbd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -282,7 +281,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show squid.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show squid.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -298,7 +297,7 @@
         FIXME
         Lorsque le serveur est un serveur SNMP, ce dernier doit être configuré afin de ne pas accépter la version 1 de SNMP.
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show snmpd.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show snmpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -314,7 +313,7 @@
         FIXME
         Les communications ne sont pas chiffrées.
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ $(systemctl show rsync.service -p UnitFileState | grep -v enable) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ $(systemctl show rsync.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
