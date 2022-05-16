@@ -8,7 +8,7 @@
     description: >
       Récupération de la configuration actuelle des interfaces réseau pour une analyse manuelle complémentaire.
     collection_cmd: >
-      find /etc/netplan/ -type f -name *.yaml -exec ls -ailL {} \; -exec cat {} \; > netplan.txt;
+      find /etc/netplan/ -type f \( -name *.yaml -o -name *.yml \) -exec ls -ailL {} \; -exec cat {} \; > netplan.txt;
       cat /etc/network/interfaces > network_interfaces.txt;
       ip a > ip_a.txt
     collection_cmd_type: CMD_EXEC
