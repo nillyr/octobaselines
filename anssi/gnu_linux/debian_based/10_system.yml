@@ -265,7 +265,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -278,7 +278,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -291,7 +291,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v noexec || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -304,7 +304,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /boot " | grep -q -v noauto || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*noauto(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -317,7 +317,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /opt " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/opt\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -330,7 +330,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /opt " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/opt\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -343,7 +343,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /tmp " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/tmp\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -356,7 +356,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /tmp " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/tmp\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -369,7 +369,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /tmp " | grep -q -v noexec || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/tmp\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -382,7 +382,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /srv " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/srv\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -395,7 +395,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /srv " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/srv\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -408,7 +408,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /home " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/home\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -421,7 +421,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /home " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/home\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -434,7 +434,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /home " | grep -q -v noexec || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/home\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -447,7 +447,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /proc " | grep -q -v "hidepid=2" || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/proc\s.*\((\S+,)*hidepid=2(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -460,7 +460,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /usr" | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/usr\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -473,7 +473,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -486,7 +486,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -499,7 +499,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var " | grep -q -v noexec || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -512,7 +512,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var/log " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var/log\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -525,7 +525,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var/log " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var/log\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -538,7 +538,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var/log " | grep -q -v noexec || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var/log\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -551,7 +551,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var/tmp " | grep -q -v nosuid || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var/tmp\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -564,7 +564,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var/tmp " | grep -q -v nodev || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var/tmp\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -577,7 +577,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; mount | grep "on /var/tmp " | grep -q -v noexec || PASSING=1; echo $PASSING
+      cmd: PASSING=0; mount | grep -Eq ".*on\s/var/tmp\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -1506,7 +1506,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -q '^\s*\"${distro_id}.*\-security\";' /etc/apt/apt.conf.d/50unattended-upgrades && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq '^\s*\"${distro_id}.*\-security\";' /etc/apt/apt.conf.d/50unattended-upgrades && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -1520,7 +1520,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -q '^APT\:\:Periodic\:\:Unattended-Upgrade' /etc/apt/apt.conf.d/20auto-upgrades && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq '^APT\:\:Periodic\:\:Unattended-Upgrade' /etc/apt/apt.conf.d/20auto-upgrades && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
