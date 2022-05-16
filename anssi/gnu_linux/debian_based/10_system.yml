@@ -104,6 +104,27 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2015/03/NP_ConfigMateriel.pdf#subsection.4.4
   - id: 6
+    title: Surveillance du système de fichiers
+    description: >
+      La vérification de l'intégrité du système de fichiers peut aider à détecter ou à prévenir les modifications illégitimes.
+    collect_only: false
+    checks:
+    - id: 1
+      title: Le paquet AIDE doit être installé
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; dpkg -s aide 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: elevated
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.51
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.52
+  - id: 7
     title: Contrôle d'accès au menu de configuration
     description: >
       L'accès au BIOS doit être protégé par un mot de passe.
@@ -697,6 +718,13 @@
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+  - id: 5
+    title: Espace disque suffisant
+    description: >
+      L'absence d'espace disque suffisant peut impliquer un risque d'indisponibilité à court terme.
+    collection_cmd: df -h > .txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
 - id: 3
   name: Configuration système - sysctl
   checkpoints:
@@ -969,6 +997,21 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
     - id: 18
+      title: Désactiver IPv6 - net.ipv6.conf.default.disable_ipv6
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: sysctl -n net.ipv6.conf.default.disable_ipv6
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
+        https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
+    - id: 19
       title: Désactiver le support des "router solicitations" - net.ipv6.conf.all.router_solicitations
       description: >
         FIXME_DESCRIPTION
@@ -983,7 +1026,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 19
+    - id: 20
       title: Désactiver le support des "router solicitations" - net.ipv6.conf.default.router_solicitations
       description: >
         FIXME_DESCRIPTION
@@ -998,7 +1041,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 20
+    - id: 21
       title: Ne pas accepter les "router preferences" par "router advertisements" - net.ipv6.conf.all.accept_ra_rtr_pref
       description: >
         FIXME_DESCRIPTION
@@ -1013,7 +1056,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 21
+    - id: 22
       title: Ne pas accepter les "router preferences" par "router advertisements" - net.ipv6.conf.default.accept_ra_rtr_pref
       description: >
         FIXME_DESCRIPTION
@@ -1028,7 +1071,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 22
+    - id: 23
       title: Pas de configuration auto des prefix par "router advertisements" - net.ipv6.conf.all.accept_ra_pinfo
       description: >
         FIXME_DESCRIPTION
@@ -1043,7 +1086,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 23
+    - id: 24
       title: Pas de configuration auto des prefix par "router advertisements" - net.ipv6.conf.default.accept_ra_pinfo
       description: >
         FIXME_DESCRIPTION
@@ -1058,7 +1101,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 24
+    - id: 25
       title: Pas d'apprentissage du routeur par défaut par "router advertisements" - net.ipv6.conf.all.accept_ra_defrtr
       description: >
         FIXME_DESCRIPTION
@@ -1073,7 +1116,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 25
+    - id: 26
       title: Pas d'apprentissage du routeur par défaut par "router advertisements" - net.ipv6.conf.default.accept_ra_defrtr
       description: >
         FIXME_DESCRIPTION
@@ -1088,7 +1131,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 26
+    - id: 27
       title: Pas de configuration auto des adresses à partir des "router advertisements" - net.ipv6.conf.all.autoconf
       description: >
         FIXME_DESCRIPTION
@@ -1103,7 +1146,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 27
+    - id: 28
       title: Pas de configuration auto des adresses à partir des "router advertisements" - net.ipv6.conf.default.autoconf
       description: >
         FIXME_DESCRIPTION
@@ -1118,7 +1161,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 28
+    - id: 29
       title: Ne pas accepter les ICMP de type redirect - net.ipv6.conf.all.accept_redirects
       description: >
         FIXME_DESCRIPTION
@@ -1133,7 +1176,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 29
+    - id: 30
       title: Ne pas accepter les ICMP de type redirect - net.ipv6.conf.default.accept_redirects
       description: >
         FIXME_DESCRIPTION
@@ -1148,7 +1191,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 30
+    - id: 31
       title: Refuser les packets de source routing - net.ipv6.conf.all.accept_source_route
       description: >
         FIXME_DESCRIPTION
@@ -1163,7 +1206,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 31
+    - id: 32
       title: Refuser les packets de source routing - net.ipv6.conf.default.accept_source_route
       description: >
         FIXME_DESCRIPTION
@@ -1178,7 +1221,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 32
+    - id: 33
       title: Nombre maximal d'adresses autoconfigurées par interface - net.ipv6.conf.all.max_addresses
       description: >
         FIXME_DESCRIPTION
@@ -1193,7 +1236,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.22
         https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/networking/ip-sysctl.rst
-    - id: 33
+    - id: 34
       title: Nombre maximal d'adresses autoconfigurées par interface - net.ipv6.conf.default.max_addresses
       description: >
         FIXME_DESCRIPTION

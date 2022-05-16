@@ -1,5 +1,7 @@
 # TODO :
 # - Comptes utilisateurs
 # - Mots de passe et politiques de mdp
+# - Présence de comptes sans mot de passe
+# - PAM nullok, chiffrement (kerberos/mysql/ldap)
 # - Vérification des droits
 # - Vérification des lastlogs (comptes dormants)

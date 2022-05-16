@@ -1,13 +1,10 @@
-# TODO:
-#  - Configuration Réseau
-#  - Configuration pare-feu (actif, quel service, politique, présence d'une règle pour chaque service en écoute)
 - id: 1
   name: Services
   checkpoints:
   - id: 1
     title: Services en cours d'éxécution
     description: >
-      Seuls les serivces strictement nécessaires doivent être actifs afin de réduire la surface d'attaque disponible.
+      Seuls les services strictement nécessaires doivent être actifs afin de réduire la surface d'attaque disponible.
     collection_cmd: >
       service --status-all > services_1.txt;
       systemctl --all > services_2.txt
@@ -232,21 +229,6 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 15
-      title: Serveur HTTP (lighttpd)
-      description: >
-        FIXME
-      type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: minimal
-      recommendation_on_failed: >
-        FIXME
-      see_also: >
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 16
       title: Service d'emails
       description: >
         FIXME
@@ -261,7 +243,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 17
+    - id: 16
       title: Samba
       description: >
         FIXME
@@ -276,7 +258,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 18
+    - id: 17
       title: Serveur Proxy HTTP (squid)
       description: >
         FIXME
@@ -291,7 +273,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 19
+    - id: 18
       title: Serveur SNMP
       description: >
         FIXME
@@ -307,7 +289,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 20
+    - id: 19
       title: Rsync
       description: >
         FIXME
@@ -323,7 +305,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 21
+    - id: 20
       title: Le service mail est configuré pour n'accepter que les mails de la boucle locale
       description: >
         FIXME
@@ -339,7 +321,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.48
-    - id: 22
+    - id: 21
       title: Client RSH non installé
       description: >
         FIXME
@@ -347,14 +329,14 @@
       cmd: dpkg -s rsh-client 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
+      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 23
+    - id: 22
       title: Client Talk non installé
       description: >
         FIXME
@@ -369,7 +351,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 24
+    - id: 23
       title: Client Telnet non installé
       description: >
         FIXME
@@ -377,14 +359,14 @@
       cmd: dpkg -s telnet 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
+      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 25
+    - id: 24
       title: Client LDAP non installé
       description: >
         FIXME
@@ -399,7 +381,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 26
+    - id: 25
       title: Xinetd non installé
       description: >
         FIXME
@@ -414,7 +396,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
-    - id: 27
+    - id: 26
       title: Openbsd-inetd non installé
       description: >
         FIXME
@@ -429,6 +411,97 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+    - id: 27
+      title: La séquence Ctrl-Alt-Delete est désactivée
+      description: >
+        Si la séquence Ctrl-Alt-Delete est réalisée, cela peut entrainer un risque de perte de disponibilité à court terme. Il est recommandé de désactiver cette séquence.
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ $(systemctl show ctrl-alt-del.target -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+- id: 2
+  name: Services réseau
+  checkpoints:
+  - id: 1
+    title: Services en écoute sur le réseau
+    description: >
+      Seuls les services strictement nécessaires doivent être en écoute sur le réseau afin de réduire la surface d'attaque disponible.
+    collection_cmd: ss -tunlp > net_services_en_ecoute.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+  - id: 2
+    title: Configuration du service SNMP
+    description: >
+      Le serveur SNMP ne doit pas être actif. Si cela est néanmoins nécessaire alors la version 3 est à privilégier.
+    collection_cmd: >
+      cat /etc/snmp/snmpd.conf > snmpd_conf.txt
+      cat /etc/snmp/snmp.conf > snmp_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: La version 3 doit être utilisée
+      description: >
+        Les versions v1 et v2c ne permettant pas le chiffrement des données transmisent sur le réseau.
+      type: CMD_EXEC
+      cmd: PASSING=0; cat /etc/snmp/snmpd.conf | grep -Eq "^\s*r(o|w)community.*" || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://blog.cedrictemple.net/341-configuration-avancee-de-snmp-sur-linux-snmpv3/
+    - id: 2
+      title: La version 2c doit être utilisée
+      description: >
+        Les versions 2c lorsqu'il n'est pas possible d'utiliser la version 3.
+      type: CMD_EXEC
+      cmd: PASSING=0; cat /etc/snmp/snmp.conf | grep -Eq "^\s*defVersion\s+2c" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.systutorials.com/docs/linux/man/5-snmp.conf/
+    - id: 3
+      title: La version 1 doit être désactivée
+      description: >
+        Les versions 2c lorsqu'il n'est pas possible d'utiliser la version 3.
+      type: CMD_EXEC
+      cmd: PASSING=0; cat /etc/snmp/snmp.conf | grep -Eq "^\s*disableSNMPv1\s+(1|yes|true)" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.systutorials.com/docs/linux/man/5-snmp.conf/
+    - id: 4
+      title: Communautées non triviales
+      description: >
+        Les versions 2c lorsqu'il n'est pas possible d'utiliser la version 3.
+      type: CMD_EXEC
+      cmd: PASSING=0; cat /etc/snmp/snmpd.conf | grep -Eq "^\s*r(o|w)community.*(public|private)" || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.systutorials.com/docs/linux/man/5-snmp.conf/
   - id: 3
     title: Configuration du service SSH
     description: >
