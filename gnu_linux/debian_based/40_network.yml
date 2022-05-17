@@ -276,20 +276,6 @@
       see_also: >
         FIXME
     - id: 2
-      title: IPv6 - La boucle locale accepte le traffic - incoming
-      description: >
-        FIXME
-      type: CMD_EXEC
-      cmd: PASSING=0; ufw status verbose | grep -Eq "^Anywhere\s+\(v6\)\s+on\s+lo\s+ALLOW\s+IN\s+Anywhere\s+\(v6\)\s*$" && PASSING=1; echo $PASSING
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: high
-      level: minimal
-      recommendation_on_failed: >
-        FIXME
-      see_also: >
-        FIXME
-    - id: 3
       title: IPv4 - La boucle locale accepte le traffic - outgoing
       description: >
         FIXME
@@ -303,12 +289,26 @@
         FIXME
       see_also: >
         FIXME
-    - id: 4
-      title: IPv6 - La boucle locale accepte le traffic - outgoing
+    - id: 3
+      title: IPv4 - Tout traffic venant d'autres interfaces est refusé
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; ufw status verbose | grep -Eq "^Anywhere\s+\(v6\)\s+ALLOW\s+OUT\s+Anywhere\s+\(v6\)\s+on\s+lo\s*$" && PASSING=1; echo $PASSING
+      cmd: PASSING=0; ufw status verbose | grep -Eq "^Anywhere\s+DENY\s+IN\s+127\.0\.0\.0/8\s*$" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
+    - id: 4
+      title: IPv6 - La boucle locale accepte le traffic - incoming
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; ufw status verbose | grep -Eq "^Anywhere\s+\(v6\)\s+on\s+lo\s+ALLOW\s+IN\s+Anywhere\s+\(v6\)\s*$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -318,11 +318,11 @@
       see_also: >
         FIXME
     - id: 5
-      title: IPv4 - Tout traffic venant d'autres interfaces est refusé
+      title: IPv6 - La boucle locale accepte le traffic - outgoing
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; ufw status verbose | grep -Eq "^Anywhere\s+DENY\s+IN\s+127\.0\.0\.0/8\s*$" && PASSING=1; echo $PASSING
+      cmd: PASSING=0; ufw status verbose | grep -Eq "^Anywhere\s+\(v6\)\s+ALLOW\s+OUT\s+Anywhere\s+\(v6\)\s+on\s+lo\s*$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
