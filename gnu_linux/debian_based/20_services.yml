@@ -23,7 +23,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show avahi-daemon.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show avahi-daemon.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -38,7 +38,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show cups.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show cups.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -53,7 +53,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show dhcp-server.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show dhcp-server.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -68,7 +68,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show slapd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show slapd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -83,7 +83,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show nfs-server.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show nfs-server.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -98,7 +98,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show rpcbind.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show rpcbind.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -113,7 +113,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show portmap.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show portmap.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -128,7 +128,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show rpc.statd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show rpc.statd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -143,7 +143,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show bind9.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show bind9.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -158,7 +158,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show vsftpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show vsftpd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -173,7 +173,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show apache.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show apache.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -188,7 +188,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show apache2.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show apache2.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -203,7 +203,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show nginx.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show nginx.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -218,7 +218,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show lighttpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show lighttpd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -233,7 +233,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show dovecot.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show dovecot.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -248,7 +248,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show smbd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show smbd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -263,7 +263,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show squid.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show squid.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -279,7 +279,7 @@
         FIXME
         Lorsque le serveur est un serveur SNMP, ce dernier doit être configuré afin de ne pas accépter la version 1 de SNMP.
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show snmpd.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show snmpd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -295,7 +295,7 @@
         FIXME
         Les communications ne sont pas chiffrées.
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show rsync.service -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show rsync.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -416,7 +416,7 @@
       description: >
         Si la séquence Ctrl-Alt-Delete est réalisée, cela peut entrainer un risque de perte de disponibilité à court terme. Il est recommandé de désactiver cette séquence.
       type: CMD_EXEC
-      cmd: "PASSING=0; [ $(systemctl show ctrl-alt-del.target -p UnitFileState | grep -v enable) ] && PASSING=1; echo $PASSING"
+      cmd: PASSING=0; systemctl show ctrl-alt-del.target -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -441,7 +441,7 @@
     description: >
       Le serveur SNMP ne doit pas être actif. Si cela est néanmoins nécessaire alors la version 3 est à privilégier.
     collection_cmd: >
-      cat /etc/snmp/snmpd.conf > snmpd_conf.txt
+      cat /etc/snmp/snmpd.conf > snmpd_conf.txt;
       cat /etc/snmp/snmp.conf > snmp_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
@@ -489,7 +489,7 @@
       see_also: >
         https://www.systutorials.com/docs/linux/man/5-snmp.conf/
     - id: 4
-      title: Communautées non triviales
+      title: Communautés non triviales
       description: >
         Les versions 2c lorsqu'il n'est pas possible d'utiliser la version 3.
       type: CMD_EXEC
@@ -506,7 +506,9 @@
     title: Configuration du service SSH
     description: >
       Le service SSH peut permettre l'administration de l'équipement. Le renforcement de sa configuration permet de limiter les risques d'accès illégitimes.
-    collection_cmd: cat /etc/ssh/sshd_config > sshd_conf.txt; sshd -T > sshd_running_conf.txt
+    collection_cmd: >
+      cat /etc/ssh/sshd_config > sshd_conf.txt;
+      sshd -T > sshd_running_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -570,7 +572,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 4
+    - id: 5
       title: Niveau de journalisation adéquat - LogLevel
       description: >
         FIXME
@@ -585,7 +587,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 5
+    - id: 6
       title: Désactivation de X11Forwarding - X11Forwarding
       description: >
         FIXME
@@ -600,7 +602,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 6
+    - id: 7
       title: Nombre de tentatives maximal inférieur ou égal à 4 - MaxAuthTries
       description: >
         FIXME
@@ -615,7 +617,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 7
+    - id: 8
       title: Paramètre IgnoreRhosts actif - IgnoreRhosts
       description: >
         FIXME
@@ -630,7 +632,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 8
+    - id: 9
       title: Paramètre HostbasedAuthentication désactivé - HostbasedAuthentication
       description: >
         FIXME
@@ -645,7 +647,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 9
+    - id: 10
       title: Connexion en tant que root bloqué - PermitRootLogin
       description: >
         FIXME
@@ -660,7 +662,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 10
+    - id: 11
       title: Connexion sans mot de passe bloqué - PermitEmptyPasswords
       description: >
         FIXME
@@ -675,7 +677,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 11
+    - id: 12
       title: Utilisation des variables d'environnement de l'utilisateur bloqué - PermitUserEnvironment
       description: >
         FIXME
@@ -690,7 +692,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 12
+    - id: 13
       title: Utilisation de suites de chiffrement robustes - Ciphers
       description: >
         FIXME
@@ -706,7 +708,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
         https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
-    - id: 13
+    - id: 14
       title: Utilisation de suites de chiffrement robustes (FIPS 140-2) - Ciphers
       description: >
         FIXME
@@ -722,7 +724,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
         https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
-    - id: 14
+    - id: 15
       title: Utilisation d'un mode d'intégrité HMAC conforme - MACs
       description: >
         FIXME
@@ -738,7 +740,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
         https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
-    - id: 15
+    - id: 16
       title: Utilisation d'algorithmes d'échanges de clés sécurisés - KexAlgorithms
       description: >
         FIXME
@@ -754,7 +756,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
         https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
-    - id: 16
+    - id: 17
       title: Utilisation d'algorithmes d'échanges de clés sécurisés (FIPS 140-2) - KexAlgorithms
       description: >
         FIXME
@@ -770,7 +772,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
         https://www.ssi.gouv.fr/uploads/2014/11/RGS_v-2-0_B1.pdf
-    - id: 17
+    - id: 18
       title: Temps d'inactivité avant expiration de la session défini - ClientAliveInterval
       description: >
         FIXME
@@ -785,7 +787,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 18
+    - id: 19
       title: Temps d'inactivité avant expiration de la session défini - ClientAliveCountMax
       description: >
         FIXME
@@ -800,7 +802,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 19
+    - id: 20
       title: Le paramètre LoginGraceTime est défini à au plus une minute - LoginGraceTime
       description: >
         FIXME
@@ -815,7 +817,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 20
+    - id: 21
       title: L'accès au serveur SSH est restreint à une certaine population d'utilisateurs - AllowUsers, AllowGroups, DenyUsers, DenyGroups
       description: >
         FIXME
@@ -830,7 +832,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 21
+    - id: 22
       title: Utilisation de la PAM - UsePAM
       description: >
         FIXME
@@ -845,7 +847,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 22
+    - id: 23
       title: Le serveur SSH ne peut pas être utilisé comme tunnel - AllowTcpForwarding
       description: >
         FIXME
@@ -860,7 +862,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 23
+    - id: 24
       title: Le paramètre MaxStartups est défini - MaxStartups
       description: >
         FIXME
@@ -875,7 +877,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 24
+    - id: 25
       title: Le paramètre MaxSessions est défini - MaxSessions
       description: >
         FIXME
@@ -890,8 +892,8 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-    - id: 25
-      title: L'authentifaction est basée uniquement sur les clés asymétriques - PubkeyAuthentication
+    - id: 26
+      title: L'authentification est basée uniquement sur les clés asymétriques - PubkeyAuthentication
       description: >
         FIXME
       type: CMD_EXEC

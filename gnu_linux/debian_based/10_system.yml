@@ -186,13 +186,13 @@
   - id: 1
     title: Partitionnement
     description: >
-      L'utilisation du partionnement permet de protéger de d'isoler les différents composants du système de fichiers.
+      L'utilisation du partitionnementnement permet de protéger de d'isoler les différents composants du système de fichiers.
     collection_cmd: mount > mount.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
     - id: 1
-      title: Partion séparée pour /srv
+      title: Partition séparée pour /srv
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -205,7 +205,7 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 2
-      title: Partion séparée pour /home
+      title: Partition séparée pour /home
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -218,7 +218,7 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 3
-      title: Partion séparée pour /tmp
+      title: Partition séparée pour /tmp
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -231,7 +231,7 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 4
-      title: Partion séparée pour /var
+      title: Partition séparée pour /var
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -244,7 +244,7 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 5
-      title: Partion séparée pour /var/log
+      title: Partition séparée pour /var/log
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -257,7 +257,7 @@
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
     - id: 6
-      title: Partion séparée pour /var/tmp
+      title: Partition séparée pour /var/tmp
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -272,9 +272,7 @@
   - id: 2
     title: Partitionnement - options de montage
     description: >
-      L'utilisation du partionnement permet de protéger de d'isoler les différents composants du système de fichiers.
-    collection_cmd: mount > mount.txt
-    collection_cmd_type: CMD_EXEC
+      L'utilisation du partitionnementnement permet de protéger de d'isoler les différents composants du système de fichiers.
     collect_only: false
     checks:
     - id: 1
@@ -563,7 +561,7 @@
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 24
+    - id: 23
       title: Point de montage /var/tmp - nosuid
       description: >
         FIXME_DESCRIPTION
@@ -576,7 +574,7 @@
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 25
+    - id: 24
       title: Point de montage /var/tmp - nodev
       description: >
         FIXME_DESCRIPTION
@@ -589,7 +587,7 @@
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
-    - id: 26
+    - id: 25
       title: Point de montage /var/tmp - noexec
       description: >
         FIXME_DESCRIPTION
@@ -722,7 +720,7 @@
     title: Espace disque suffisant (manuel)
     description: >
       L'absence d'espace disque suffisant peut impliquer un risque d'indisponibilité à court terme.
-    collection_cmd: df -h > .txt
+    collection_cmd: df -h > df.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
 - id: 3
