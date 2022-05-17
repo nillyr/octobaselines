@@ -1,7 +1,201 @@
 # TODO :
-# - Comptes utilisateurs
-# - Mots de passe et politiques de mdp
-# - Présence de comptes sans mot de passe
-# - PAM nullok, chiffrement (kerberos/mysql/ldap)
-# - Vérification des droits
-# - Vérification des lastlogs (comptes dormants)
+# - Comptes utilisateurs, connexion, délais, comptes de services, /home par user, shell user (voir 6.3), comptes inactifs
+
+- id: 1
+  name: Pluggable Authentication Module
+  checkpoints:
+  - id: 1
+    title: Critères communs
+    description: >
+      FIXME
+    collect_only: false
+    checks:
+    - id: 1
+      title: La création d'un mot de passe vide n'est pas possible
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^[^#](\S+\s*)*nullok" /etc/pam.d/* || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+    - id: 2
+      title: Tous les utilisateurs ont un mot de passe
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(awk -F: '!$2 {print $1}' /etc/shadow) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+    - id: 3
+      title: L'algorithme de hashage est sécurisé
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*sha512\s*(\S+\s*)*(\s+#.*)?$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+  - id: 2
+    title: Politique de mots de passe
+    description: >
+      FIXME
+    collection_cmd: >
+      find /etc/pam.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > pam_all_config.txt;
+      find /etc/security/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > pam_security_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Longueur d'au moins 10 caractères
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+minlen=[1-9][0-9]{1,}" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+    - id: 2
+      title: Présence d'au moins un caractère minuscule
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+lcredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+    - id: 3
+      title: Présence d'au moins un caractère majuscule
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+ucredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+    - id: 4
+      title: Présence d'au moins un caractère spécial
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+ocredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+    - id: 5
+      title: Présence d'au moins un nombre
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+dcredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+    - id: 6
+      title: Vérification depuis un dictionnaire
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+dictpath=" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+    - id: 7
+      title: Politique applicable depuis l'utilisateur root
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+enforce_for_root" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+    - id: 8
+      title: Vérouillage temporaire des comptes - attaque par force brute
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^(auth|account)\s+(\S+\s+)*pam_tally2\.so" /etc/pam.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwquality
+
+
+# - PAM chiffrement (kerberos/mysql/ldap)
+# https://www.server-world.info/en/note?os=Debian_10&p=openldap&f=4
+
+
