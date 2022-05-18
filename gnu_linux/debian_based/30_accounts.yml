@@ -1,61 +1,110 @@
-# TODO :
-# - Comptes utilisateurs, connexion, délais, comptes de services, /home par user, shell user (voir 6.3), comptes inactifs
-
 - id: 1
-  name: Pluggable Authentication Module
+  name: Stockage des identifiants
   checkpoints:
   - id: 1
-    title: Critères communs
+    title: Stockage des identifiants - PAM
     description: >
       FIXME
     collect_only: false
     checks:
     - id: 1
-      title: La création d'un mot de passe vide n'est pas possible
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^[^#](\S+\s*)*nullok" /etc/pam.d/* || PASSING=1; echo $PASSING
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: >
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
-        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
-    - id: 2
-      title: Tous les utilisateurs ont un mot de passe
-      description: >
-        FIXME_DESCRIPTION
-      type: CMD_EXEC
-      cmd: "PASSING=0; [ -z $(awk -F: '!$2 {print $1}' /etc/shadow) ] && PASSING=1; echo $PASSING"
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
-      recommendation_on_failed: >
-        FIXME_RECO
-      see_also: >
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
-        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
-    - id: 3
       title: L'algorithme de hashage est sécurisé
       description: >
-        FIXME_DESCRIPTION
+        PAM et /etc/login.defs peuvent être configurés afin d'utiliser SHA-512 et un nombre de tours assez grand.
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*sha512\s*(\S+\s*)*(\s+#.*)?$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*(sha256|sha512)\s*(\S+\s*)*$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
+      severity: high
+      level: minimal
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.32
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+    - id: 2
+      title: Nombre de tours assez grand
+      description: >
+        PAM et /etc/login.defs peuvent être configurés afin d'utiliser SHA-512 et un nombre de tours assez grand.
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*rounds=65536\s*(\S+\s*)*$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.32
         https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
   - id: 2
+    title: Stockage des identifiants - login.defs
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/login.defs > login_defs.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: L'algorithme de hashage est sécurisé
+      description: >
+        PAM et /etc/login.defs peuvent être configurés afin d'utiliser SHA-512 et un nombre de tours assez grand.
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^ENCRYPT_METHOD\s*(SHA256|SHA512)\s*$" /etc/login.defs && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.32
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+    - id: 2
+      title: Nombre de tours assez grand
+      description: >
+        PAM et /etc/login.defs peuvent être configurés afin d'utiliser SHA-512 et un nombre de tours assez grand.
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^SHA_CRYPT_MIN_ROUNDS\s*65536\s*$" /etc/login.defs && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.32
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+  - id: 3
+    title: Stockage des identifiants - /etc/passwd
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/passwd > etc_passwd.txt;
+      cat /etc/shadow > etc_shadow.txt;
+      cat /etc/login.defs > login_defs.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Aucun mot de passe n'est stocké en clair
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [[ -z $(awk -F: '{ if ($2 !~ x) print $2 }' /etc/passwd) ]] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        FIXME
+- id: 2
+  name: Pluggable Authentication Module - PAM
+  checkpoints:
+  - id: 1
     title: Politique de mots de passe
     description: >
       FIXME
@@ -193,9 +242,312 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
         https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
         https://linux.die.net/man/8/pam_pwquality
-
-
-# - PAM chiffrement (kerberos/mysql/ldap)
-# https://www.server-world.info/en/note?os=Debian_10&p=openldap&f=4
-
-
+    - id: 9
+      title: Utilisation d'un historique de mots de passe d'au moins 5 mots de passe
+      description: >
+        L'utilisation d'un historique de mots de passe permet de garantir la non-réutilisation des mots de passe au cours du temps.
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)*pam_(pwhistory|unix)\.so\s+(\S+\s+)*remember=([5-9]|[1-9][0-9]{1,})" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+        https://linux.die.net/man/8/pam_pwhistory
+        https://linux.die.net/man/8/pam_unix
+- id: 3
+  name: Lightweight Directory Access Protocol - LDAP
+  checkpoints:
+  - id: 1
+    title: L'authentification est réalisée via LDAP
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/ldap/ldap.conf > ldap_conf.txt;
+      cat /etc/nsswitch.conf > nsswitch_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: PAM - L'authentification est réalisée via LDAP
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^(auth|password)(\S+\s*)*pam_ldap\.so" /etc/pam.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/ldap.conf
+    - id: 2
+      title: NSS - L'authentification est réalisée via LDAP
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^[^#](\S+\s+)*ldap$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/ldap.conf
+    - id: 3
+      title: Une couche de chiffrement SSL/TLS est utilisée
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^TLS_CACERT\s+\S+\s*$" /etc/ldap/ldap.conf && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/ldap.conf
+- id: 4
+  name: Gestion des comptes d'accès
+  checkpoints:
+  - id: 1
+    title: Utilisateurs
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/passwd > etc_passwd.txt;
+      cat /etc/shadow > etc_shadow.txt;
+      l_min=$(grep -E "^UID_MIN" /etc/login.defs); l_max=$(grep -E "^UID_MAX" /etc/login.defs); awk -F':' -v "min=${l_min##UID_MIN}" -v "max=${l_max##UID_MAX}" '{ if ($3 >= min && $3 <= max && $7 !~ /nologin|false/) print $0 }' /etc/passwd > normal_users_accounts.txt;
+      l_min=$(grep -E "^UID_MIN" /etc/login.defs); l_max=$(grep -E "^UID_MAX" /etc/login.defs); awk -F':' -v "min=${l_min##UID_MIN}" -v "max=${l_max##UID_MAX}" '{ if ( !($3 >= min && $3 <= max && $7 !~ /nologin|false/)) print $0 }' /etc/passwd > system_user_accounts.txt;
+      l_min=$(grep -E "^UID_MIN" /etc/login.defs); awk -F':' -v "min=${l_min##UID_MIN}" '{ if ($3 >= min && $7 !~ /nologin|false/) print $1 }' /etc/passwd | xargs -I {} last -R {} > last_logins.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: La création d'un mot de passe vide n'est pas possible
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^[^#](\S+\s*)*nullok" /etc/pam.d/* || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+    - id: 2
+      title: Tous les utilisateurs ont un mot de passe
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(awk -F: '!$2 {print $1}' /etc/shadow) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
+    - id: 3
+      title: Chaque UID est unique
+      description: >
+        FIXME pas de duplicate dans les UIDs
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(awk -F: 'list[$3]++{print $1, $3}' /etc/passwd) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+    - id: 4
+      title: Chaque nom d'utilisateur est unique
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(cut -d: -f1 /etc/passwd | sort | uniq -d) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+    - id: 5
+      title: Un seul compte dispose des droits superutilisateur (root)
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ $(awk -F: '($3 == 0) {print $1}' /etc/passwd | wc -l) -eq 1 ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+    - id: 6
+      title: Chaque utilisateur dispose d'un dossier personnel
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=1; awk -F: '{ if ($1 !~ /halt|sync|shutdown/ && $7 !~ /nologin|false/) print $6}' /etc/passwd | xargs -I {} [ -d {} ] || PASSING=0; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+    - id: 7
+      title: Les comptes système sont désactivés
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: ""PASSING=0; [ -z $(awk -F: '($1 !~ /root|sync|shutdown|halt/ && $1 !~ /^\+/ && $3 < '"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7 !~ /nologin|false/) {print}' /etc/passwd) ] && PASSING=1; echo $PASSING""
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.26
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.27
+  - id: 2
+    title: Groupes
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/group > group.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Chaque GID est unique
+      description: >
+        FIXME pas de duplicate dans les GIDs
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(awk -F: 'list[$4]++{print $1, $4}' /etc/passwd) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+    - id: 2
+      title: Chaque nom de groupe est unique
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(cut -d: -f1 /etc/group | sort | uniq -d) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+    - id: 3
+      title: Aucun utilisateur n'est présent dans le groupe shadow
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(grep -E "^shadow:[^:]*:[^:]*:[^:]+" /etc/group) ] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+    - id: 4
+      title: Tout les groupes déclarés dans /etc/passwd sont existants dans /etc/group
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=$(awk -F: '{print $4}' /etc/passwd | xargs -I {} sh -c 'grep -Eq "^.*?:[^:]*:{}:" /etc/group || echo 0' | uniq); { [[ $PASSING == "0" ]] && echo 0 || echo 1; }"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
+  - id: 3
+    title: Sessions
+    description: >
+      FIXME
+    collection_cmd: >
+      find /etc/profile.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > etc_profile_scripts.txt;
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Un délai d'expiration de sessions utilisateurs est défini
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^TMOUT=[1-9][0-9]{1,}" /etc/profile.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.29
+    - id: 2
+      title: Un délai d'expiration de sessions utilisateurs ne peut pas être modifié par un utilisateur
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^readonly\s+TMOUT" /etc/profile.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.29
+    - id: 3
+      title: Un délai d'expiration de sessions utilisateurs est ajouté à l'environnement des utilisateurs
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^export\s+TMOUT" /etc/profile.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.29

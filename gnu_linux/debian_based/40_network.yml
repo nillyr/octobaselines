@@ -148,7 +148,7 @@
       cmd: PASSING=0; dpkg -s ufw 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
+      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -162,7 +162,7 @@
       cmd: PASSING=0; dpkg -s iptables 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
+      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME

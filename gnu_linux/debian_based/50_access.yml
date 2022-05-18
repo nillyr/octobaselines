@@ -1,7 +1,16 @@
 # TODO :
-#  - Permissions sur les fichiers
-#  - Check les setuid/setguid (voir recommandation R38)
-#  - Vérification des droits de modification sur les crons
-#  - Configuration selinux/apparmor
+#  - Permissions sur les fichiers (etc/passwd, les dot files des users (ex. : .ssh), /etc/profile.d/ pour le TIMOUT "\-rw-(r|-)--(r|-)--:0:0")
+
+#  - Les home des users à 750 (rwxr-x---)
+
 #  - Configuration de la valeur du umask
+#    - https://linuxhint.com/configure-ldap-client-debian/ pour le umask dans LDAP
+#    - Les permissions sur les certif ldap
+
 #  - Configuration sudo
+
+#  - Check les setuid/setguid (voir recommandation R38)
+
+#  - Vérification des droits de modification sur les crons
+
+#  - Configuration selinux/apparmor

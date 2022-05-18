@@ -1507,7 +1507,7 @@
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 2
-    title: Dépôts de logiciels (clés gpg) (manuel)
+    title: Dépôts de logiciels (clés gpg)
     description: >
       Afin de limiter la surface d'attaque, seuls les composants strictement nécessaires au service rendu par l'équipement doivent être installés.
       Les composants installés doivent correctement être sélectionnés depuis des sources fiables.
@@ -1516,9 +1516,46 @@
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.14
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.15
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.16
-    collection_cmd: apt-key list > apt_key.txt
+    collection_cmd: >
+      find /etc/apt/apt.conf.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > apt_all_config.txt;
+      apt-key list > apt_key.txt
     collection_cmd_type: CMD_EXEC
-    collect_only: true
+    collect_only: false
+    checks:
+    - id: 1
+      title: La rétrogradation des paquets n'est pas autorisée - allow-downgrades
+      description: >
+        La rétrogradation des paquets est une option dangeureuse puisqu'elle peut conduire à la destruction du système.
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^(([a-zA-Z:])*|\s*)allow-downgrades\s\"(1|true)\";" /etc/apt/apt.conf.d/* || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.14
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.15
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.16
+        https://manpages.debian.org/unstable/apt/apt-get.8.fr.html
+    - id: 2
+      title: L'absence d'authenticité des paquets n'est pas autorisée - AllowUnauthenticated
+      description: >
+        Tous les paquets doivent être authentifiés avant d'être installés sur le système.
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^(([a-zA-Z:])*|\s*)AllowUnauthenticated\s\"(1|true)\";" /etc/apt/apt.conf.d/* || PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.14
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.15
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.16
+        https://manpages.debian.org/unstable/apt/apt-get.8.fr.html
   - id: 3
     title: Redémarrage requis (manuel)
     description: >
