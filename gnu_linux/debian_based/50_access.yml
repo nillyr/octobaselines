@@ -80,7 +80,7 @@
       description: >
         Aucun utilisateur n'est directement spécifié dans le fichier /etc/sudoers (à l'exception du compte root).
       type: CMD_EXEC
-      cmd: PASSING=0; [[ -z $(grep -E "^[^%#rootDefaults].*\s+\S+(\(\S+\))?\s*" /etc/sudoers) && -z $(grep -E "^[^%#rootDefaults].*\s+\S+\(\S+\)\s+" /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
+      cmd: PASSING=0; [[ -z $(grep -E "^[^%#rootDefaults].*\s+\S+(\(\S+\))?\s*" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -192,7 +192,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*NOPASSWD" /etc/sudoers) && -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*NOPASSWD" /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
+      cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*NOPASSWD" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -206,7 +206,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\!\S+" /etc/sudoers) && -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\!\S+" /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
+      cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\!\S+" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -220,7 +220,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\*\S*" /etc/sudoers) && -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\*\S*" /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
+      cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\*\S*" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
