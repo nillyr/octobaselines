@@ -508,7 +508,8 @@
     description: >
       FIXME
     collection_cmd: >
-      find /etc/profile.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > etc_profile_scripts.txt;
+      cat /etc/bash.bashrc;
+      find /etc/profile.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > etc_profile_scripts.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -517,7 +518,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^TMOUT=[1-9][0-9]{1,}" /etc/profile.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^TMOUT=[1-9][0-9]{1,}" /etc/bash.bashrc /etc/profile.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -531,7 +532,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^readonly\s+TMOUT" /etc/profile.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^readonly\s+TMOUT" /etc/bash.bashrc /etc/profile.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -545,7 +546,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^export\s+TMOUT" /etc/profile.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^export\s+TMOUT" /etc/bash.bashrc /etc/profile.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
