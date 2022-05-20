@@ -92,7 +92,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [[ -z $(awk -F: '{ if ($2 !~ x) print $2 }' /etc/passwd) ]] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [ -z $(awk -F: '{ if ($2 !~ x) print $2 }' /etc/passwd) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -425,7 +425,8 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: ""PASSING=0; [ -z $(awk -F: '($1 !~ /root|sync|shutdown|halt/ && $1 !~ /^\+/ && $3 < '"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7 !~ /nologin|false/) {print}' /etc/passwd) ] && PASSING=1; echo $PASSING""
+      cmd: >
+        PASSING=0; [ -z $(awk -F: '($1 !~ /root|sync|shutdown|halt/ && $1 !~ /^\+/ && $3 < '"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7 !~ /nologin|false/) {print}' /etc/passwd) ] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -449,7 +450,7 @@
       description: >
         FIXME pas de duplicate dans les GIDs
       type: CMD_EXEC
-      cmd: "PASSING=0; [ -z $(awk -F: 'list[$4]++{print $1, $4}' /etc/passwd) ] && PASSING=1; echo $PASSING"
+      cmd: "PASSING=0; [[ -z $(awk -F: '$4 !~ /65534/ && list[$4]++{print $1, $4}' /etc/passwd) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -477,7 +478,8 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=0; [ -z $(grep -E "^shadow:[^:]*:[^:]*:[^:]+" /etc/group) ] && PASSING=1; echo $PASSING"
+      cmd: >
+        PASSING=0; [ -z $(grep -E "^shadow:[^:]*:[^:]*:[^:]+" /etc/group) ] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -491,7 +493,8 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: "PASSING=$(awk -F: '{print $4}' /etc/passwd | xargs -I {} sh -c 'grep -Eq "^.*?:[^:]*:{}:" /etc/group || echo 0' | uniq); { [[ $PASSING == "0" ]] && echo 0 || echo 1; }"
+      cmd: >
+        PASSING=$(awk -F: '{print $4}' /etc/passwd | xargs -I {} sh -c 'grep -Eq "^.*?:[^:]*:{}:" /etc/group || echo 0' | uniq); { [[ $PASSING == "0" ]] && echo 0 || echo 1; }
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
