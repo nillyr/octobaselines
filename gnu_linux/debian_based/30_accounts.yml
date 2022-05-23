@@ -268,7 +268,9 @@
       FIXME
     collection_cmd: >
       cat /etc/ldap/ldap.conf > ldap_conf.txt;
-      cat /etc/nsswitch.conf > nsswitch_conf.txt
+      cat /etc/nsswitch.conf > nsswitch_conf.txt;
+      cat /etc/sssd/sssd.conf > sssd_conf.txt;
+      find /etc/sssd/conf.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > sssd_d_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -303,6 +305,53 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
         https://linux.die.net/man/5/ldap.conf
     - id: 3
+      title: SSSD - L'authentification est réalisée via LDAP
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^[^#]ldap_uri\s+=\s+ldap" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 4
+      title: SSSD - Une couche de chiffrement SSL/TLS est utilisée - cacert
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^ldap_tls_cacert\s+=\s+\S+\s*$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 5
+      title: SSSD - Une couche de chiffrement SSL/TLS est utilisée - reqcert
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^ldap_tls_reqcert\s+=\s+(demand|hard)\s*$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 6
       title: Une couche de chiffrement SSL/TLS est utilisée
       description: >
         FIXME_DESCRIPTION
@@ -318,6 +367,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
         https://linux.die.net/man/5/ldap.conf
+        https://www.openldap.org/faq/data/cache/185.html
 - id: 4
   name: Gestion des comptes d'accès
   checkpoints:
