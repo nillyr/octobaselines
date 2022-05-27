@@ -259,27 +259,99 @@
         https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
         https://linux.die.net/man/8/pam_pwhistory
         https://linux.die.net/man/8/pam_unix
+  - id: 2
+    title: Restriction d'accès au compte root via la commande su
+    description: >
+      FIXME
+    collect_only: false
+    checks:
+    - id: 1
+      title: L'utilisation de la commande su est restreinte aux utilisateurs du groupe wheel
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)+pam_wheel\.so\s*(\S+\s+)*(\s+#.*)?$" /etc/pam.d/su && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
 - id: 3
   name: Lightweight Directory Access Protocol - LDAP
   checkpoints:
   - id: 1
-    title: L'authentification est réalisée via LDAP
+    title: Name Service Switch - NSS
     description: >
       FIXME
     collection_cmd: >
-      cat /etc/ldap/ldap.conf > ldap_conf.txt;
-      cat /etc/nsswitch.conf > nsswitch_conf.txt;
-      cat /etc/sssd/sssd.conf > sssd_conf.txt;
-      find /etc/sssd/conf.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > sssd_d_conf.txt
+      cat /etc/nsswitch.conf > nsswitch_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
     - id: 1
-      title: PAM - L'authentification est réalisée via LDAP
+      title: Utilisation de LDAP pour la base de données locale passwd
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^(auth|password)(\S+\s*)*pam_ldap\.so" /etc/pam.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^passwd:\s+(\S+\s+)*ldap(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.2
+        https://linux.die.net/man/5/nsswitch.conf
+    - id: 2
+      title: Utilisation de LDAP pour la base de données locale group
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^group:\s+(\S+\s+)*ldap(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.2
+        https://linux.die.net/man/5/nsswitch.conf
+    - id: 3
+      title: Utilisation de LDAP pour la base de données locale shadow
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^shadow:\s+(\S+\s+)*ldap(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.2
+        https://linux.die.net/man/5/nsswitch.conf
+  - id: 2
+    title: Pluggable Authentication Module - PAM
+    description: >
+      FIXME
+    collection_cmd: >
+      find /etc/pam.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > pam_all_config.txt;
+      cat /etc/ldap/ldap.conf > ldap_conf.txt;
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: L'authentification est effectuée au travers de LDAP
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-auth && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -290,11 +362,11 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
         https://linux.die.net/man/5/ldap.conf
     - id: 2
-      title: NSS - L'authentification est réalisée via LDAP
+      title: La gestion du compte est effectuée au travers de LDAP
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^[^#](\S+\s+)*ldap$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^account\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-account && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -305,11 +377,11 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
         https://linux.die.net/man/5/ldap.conf
     - id: 3
-      title: SSSD - L'authentification est réalisée via LDAP
+      title: La gestion de la session est effectuée au travers de LDAP
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^[^#]ldap_uri\s+=\s+ldap" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -318,40 +390,54 @@
         FIXME_RECO
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
-        https://linux.die.net/man/5/sssd-ldap
+        https://linux.die.net/man/5/ldap.conf
     - id: 4
-      title: SSSD - Une couche de chiffrement SSL/TLS est utilisée - cacert
+      title: La gestion du mot de passe est effectuée au travers de LDAP
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^ldap_tls_cacert\s+=\s+\S+\s*$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
-      level: intermediate
+      severity: info
+      level: minimal
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
-        https://linux.die.net/man/5/sssd-ldap
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/ldap.conf
     - id: 5
-      title: SSSD - Une couche de chiffrement SSL/TLS est utilisée - reqcert
+      title: Un répertoire personnel est mis à disposition de chaque utilisateur
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^ldap_tls_reqcert\s+=\s+(demand|hard)\s*$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_mkhomedir\.so" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
-      level: intermediate
+      severity: info
+      level: minimal
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
-        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
-        https://linux.die.net/man/5/sssd-ldap
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/ldap.conf
     - id: 6
+      title: Le masque du répertoire personnel est permet de restreindre l'accès aux données
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_mkhomedir\.so\s+(\S+\s+)*umask=(0027|0077)" /etc/pam.d/common-session && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.35
+        https://linux.die.net/man/5/ldap.conf
+    - id: 7
       title: Une couche de chiffrement SSL/TLS est utilisée
       description: >
         FIXME_DESCRIPTION
@@ -368,6 +454,202 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
         https://linux.die.net/man/5/ldap.conf
         https://www.openldap.org/faq/data/cache/185.html
+    - id: 8
+      title: La couche de chiffrement SSL/TLS est constamment utilisée
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=1; grep -Eq "^TLS_REQCERT\s+(never|allow|try)(\s+#.*)?$" /etc/ldap/ldap.conf && PASSING=0; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/ldap.conf
+        https://www.openldap.org/faq/data/cache/185.html
+  - id: 3
+    title: System Security Services Daemon - SSSD
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/sssd/sssd.conf > sssd_conf.txt;
+      find /etc/sssd/conf.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > sssd_d_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Le paquet sssd est installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; dpkg -s sssd 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/sssd.conf
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 2
+      title: L'authentification est réalisée via LDAP
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^\s*ldap_uri\s+=\s+ldap" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/sssd.conf
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 3
+      title: La mise en cache est activée
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^\s*cache_credentials\s+=\s+true" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/sssd.conf
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 4
+      title: La mise en cache est limitée à 1 jour
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^\s*offline_credentials_expiration\s+=\s+1" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: low
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/sssd.conf
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 5
+      title: Une couche de chiffrement SSL/TLS est utilisée - cacert
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^\s*ldap_tls_cacert\s+=\s+\S+\s*(\s+#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/sssd.conf
+        https://linux.die.net/man/5/sssd-ldap
+    - id: 6
+      title: Une couche de chiffrement SSL/TLS est utilisée - reqcert
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=1; grep -Eq "^\s*ldap_tls_reqcert\s+=\s+(never|allow|try)\s*(\s+#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=0; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/sssd.conf
+        https://linux.die.net/man/5/sssd-ldap
+  - id: 4
+    title: Name Service Caching Daemon - NSCD
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/nscd.conf > nscd_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Le paquet nscd est installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; dpkg -s nscd 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/nslcd.conf
+    - id: 2
+      title: L'authentification est réalisée via LDAP
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^\s*uri\s+.*(\s+#.*)$" /etc/nscd.conf && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://linux.die.net/man/5/nslcd.conf
+    - id: 3
+      title: Une couche de chiffrement SSL/TLS est utilisée - ssl
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^\s*ssl\s+(on|start_tls)\s*(\s+#.*)?$" /etc/nscd.conf && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/nslcd.conf
+    - id: 4
+      title: Une couche de chiffrement SSL/TLS est utilisée - reqcert
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=1; grep -Eq "^\s*tls_reqcert\s+=\s+(never|allow|try)\s*(\s+#.*)?$" /etc/nscd.conf && PASSING=0; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.31
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
+        https://linux.die.net/man/5/nslcd.conf
 - id: 4
   name: Gestion des comptes d'accès
   checkpoints:
