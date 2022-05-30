@@ -279,6 +279,57 @@
         FIXME_RECO
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+  - id: 3
+    title: Désactivation de l'accès root via tout périphérique (tty)
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/securetty > securetty.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Le module pam_securetty est utilisé
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)*pam_securetty\.so\s*(\S+\s+)*(\s+#.*)?$" /etc/pam.d/login && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+    - id: 2
+      title: Le fichier securetty existe
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; [ -f /etc/securetty ] && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: minimal
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+    - id: 3
+      title: Le fichier securetty est vide
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: wc -l /etc/securetty | awk -F ' ' '{print $1}'
+      expected: 0
+      verification_type: CHECK_EXACT
+      severity: high
+      level: elevated
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
 - id: 3
   name: Lightweight Directory Access Protocol - LDAP
   checkpoints:
@@ -296,7 +347,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^passwd:\s+(\S+\s+)*ldap(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^passwd:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -311,7 +362,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^group:\s+(\S+\s+)*ldap(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^group:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -326,7 +377,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^shadow:\s+(\S+\s+)*ldap(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^shadow:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -757,8 +808,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: >
-        PASSING=0; [ -z $(awk -F: '($1 !~ /root|sync|shutdown|halt/ && $1 !~ /^\+/ && $3 < '"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7 !~ /nologin|false/) {print}' /etc/passwd) ] && PASSING=1; echo $PASSING
+      cmd: "PASSING=0; l_min=$(grep -E \"^UID_MIN\" /etc/login.defs); [ -z $(awk -F: -v \"min=${l_min##UID_MIN}\" '($1 !~ /root|sync|shutdown|halt/ && $1 !~ /^\\+/ && $3 < min && $7 !~ /nologin|false/) {print}' /etc/passwd) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -768,6 +818,21 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.26
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.27
+    - id: 8
+      title: L'accès au compte root est désactivé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [ -z $(awk -F: '{if ($1==\"root\" && $7 ~ \"nologin\") { print $1 $7 } }' /etc/passwd) ] && PASSING=1; echo $PASSING"
+      expected: 0
+      verification_type: CHECK_EXACT
+      severity: high
+      level: elevated
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+        https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-controlling_root_access
   - id: 2
     title: Groupes
     description: >
@@ -810,8 +875,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: >
-        PASSING=0; [ -z $(grep -E "^shadow:[^:]*:[^:]*:[^:]+" /etc/group) ] && PASSING=1; echo $PASSING
+      cmd: 'PASSING=0; [ -z $(grep -E "^shadow:[^:]*:[^:]*:[^:]+" /etc/group) ] && PASSING=1; echo $PASSING'
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -825,8 +889,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: >
-        PASSING=$(awk -F: '{print $4}' /etc/passwd | xargs -I {} sh -c 'grep -Eq "^.*?:[^:]*:{}:" /etc/group || echo 0' | uniq); { [[ $PASSING == "0" ]] && echo 0 || echo 1; }
+      cmd: "PASSING=$(awk -F: '{print $4}' /etc/passwd | xargs -I {} sh -c 'grep -Eq \"^.*?:[^:]*:{}:\" /etc/group || echo 0' | uniq); { [[ $PASSING == \"0\" ]] && echo 0 || echo 1; }"
       expected: 1
       verification_type: CHECK_EXACT
       severity: high

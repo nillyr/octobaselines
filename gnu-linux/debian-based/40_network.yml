@@ -45,6 +45,7 @@
       Pour de nombreuses raisons, l'équipement doit être synchronisé avec une source de temps fiable. Cela est d'autant plus utile lors de la corrélation des évènements. La synchronisation peut être effectuée via les services (liste non exhaustive) :
       * systemd-timesyncd
       * chrony
+      * ntp
     collection_cmd: >
       timedatectl status > systemd_timesyncd_status.txt;
       cat /etc/systemd/timesyncd.conf > systemd_timesyncd_conf.txt
@@ -70,7 +71,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: 'PASSING=0; cat /etc/systemd/timesyncd.conf | grep -Eq "^NTP=.*$" && PASSING=1; echo $PASSING'
+      cmd: 'PASSING=0; grep -Eq "^NTP=.*$" /etc/systemd/timesyncd.conf && PASSING=1; echo $PASSING'
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -84,7 +85,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: 'PASSING=0; cat /etc/systemd/timesyncd.conf | grep -Eq "^FallbackNTP=.*$" && PASSING=1; echo $PASSING'
+      cmd: 'PASSING=0; grep -Eq "^FallbackNTP=.*$" /etc/systemd/timesyncd.conf && PASSING=1; echo $PASSING'
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -99,6 +100,7 @@
       Pour de nombreuses raisons, l'équipement doit être synchronisé avec une source de temps fiable. Cela est d'autant plus utile lors de la corrélation des évènements. La synchronisation peut être effectuée via les services (liste non exhaustive) :
       * systemd-timesyncd
       * chrony
+      * ntp
     collection_cmd: cat /etc/chrony/chrony.conf > chrony_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
@@ -122,7 +124,46 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: 'PASSING=0; cat /etc/chrony/chrony.conf | grep -Eq "^(server|pool)\s+.*$" && PASSING=1; echo $PASSING'
+      cmd: 'PASSING=0; grep -Eq "^(server|pool)\s+.*$" /etc/chrony/chrony.conf && PASSING=1; echo $PASSING'
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
+  - id: 6
+    title: Synchronisation NTP - ntp
+    description: >
+      Pour de nombreuses raisons, l'équipement doit être synchronisé avec une source de temps fiable. Cela est d'autant plus utile lors de la corrélation des évènements. La synchronisation peut être effectuée via les services (liste non exhaustive) :
+      * systemd-timesyncd
+      * chrony
+      * ntp
+    collection_cmd: cat /etc/ntp.conf > ntp_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false
+    checks:
+    - id: 1
+      title: Service ntp actif
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; systemctl show ntp.service -p UnitFileState | grep -q enabled && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: minimal
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        FIXME
+    - id: 2
+      title: Les serveurs NTP sont définis
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: 'PASSING=0; grep -Eq "^(server|pool)\s+.*$" /etc/ntp.conf && PASSING=1; echo $PASSING'
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium

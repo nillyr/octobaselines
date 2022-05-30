@@ -1620,7 +1620,9 @@
   - id: 5
     title: Paquets installés (manuel)
     description: >
-      Afin de limiter la surface d'attaque, seuls les composants strictement nécessaires au service rendu par l'équipement doivent être installés.
+      Afin de limiter la surface d'attaque, seuls les composants strictement nécessaires au service rendu par l'équipement doivent être installés. À titre d'exemple, les paquests de développement sont généralement installés par défaut et peuvent ne pas être nécessaires.
+
+      Voir aussi : https://www.debian.org/doc/manuals/securing-debian-manual/ch03s06.en.html
     collection_cmd: dpkg-query -l > packages_list.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
