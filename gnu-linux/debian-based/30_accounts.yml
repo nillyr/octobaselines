@@ -947,7 +947,7 @@
     description: >
       FIXME
     collection_cmd: >
-      cat /etc/bash.bashrc;
+      cat /etc/bash.bashrc > bash_bashrc.txt;
       find /etc/profile.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > etc_profile_scripts.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
