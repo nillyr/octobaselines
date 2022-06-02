@@ -564,7 +564,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.36
   - id: 3
-    title: Permissions sur les tâches plannifiées
+    title: Permissions sur les tâches planifiées
     description: >
       FIXME
     collection_cmd: >
