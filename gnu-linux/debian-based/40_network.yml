@@ -513,7 +513,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; iptables -L INPUT -v -n | grep -Eq "^\s*\S+\s+\S+\s+ACCEPT\s+all\s+--\s+lo\s+\*\s+0\.0\.0\.0\/0\s+0\.0\.0\.0\/0\s*\s*(\s+#.*)?$" && PASSING=1; echo $PASSING
+      cmd: PASSING=0; iptables -L INPUT -v -n | grep -Eq "^\s*\S+\s+\S+\s+ACCEPT\s+all\s+--\s+lo\s+\*\s+0\.0\.0\.0\/0\s+0\.0\.0\.0\/0\s*(\s*#.*)?$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -527,7 +527,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; iptables -L OUTPUT -v -n | grep -Eq "^\s*\S+\s+\S+\s+ACCEPT\s+all\s+--\s+\*\s+lo\s+0\.0\.0\.0\/0\s+0\.0\.0\.0\/0\s*\s*(\s+#.*)?$" && PASSING=1; echo $PASSING
+      cmd: PASSING=0; iptables -L OUTPUT -v -n | grep -Eq "^\s*\S+\s+\S+\s+ACCEPT\s+all\s+--\s+\*\s+lo\s+0\.0\.0\.0\/0\s+0\.0\.0\.0\/0\s*(\s*#.*)?$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -541,7 +541,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; iptables -L INPUT -v -n | grep -Eq "^\s*\S+\s+\S+\s+DROP\s+all\s+--\s+\*\s+\*\s+127\.0\.0\.0\/8\s+0\.0\.0\.0\/0\s*\s*(\s+#.*)?$" && PASSING=1; echo $PASSING
+      cmd: PASSING=0; iptables -L INPUT -v -n | grep -Eq "^\s*\S+\s+\S+\s+DROP\s+all\s+--\s+\*\s+\*\s+127\.0\.0\.0\/8\s+0\.0\.0\.0\/0\s*(\s*#.*)?$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium

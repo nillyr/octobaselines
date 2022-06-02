@@ -1,0 +1,64 @@
+- id: 1
+  name: Audit - auditd
+  checkpoints:
+  - id: 1
+    title: Installation du paquet auditd
+    description: >
+      FIXME
+    collect_only: false
+    checks:
+    - id: 1
+      title: Le paquet auditd est installé audispd-plugins
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; dpkg -s auditd 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.3
+        https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+    - id: 2
+      title: Le paquet audispd-plugins est installé
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; dpkg -s audispd-plugins 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: info
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.3
+        https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+    - id: 3
+      title: Service auditd actif
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: PASSING=0; systemctl show auditd.service -p UnitFileState | grep -q enabled && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.50
+        https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+  - id: 2
+    title: Configuration du paquet auditd
+    description: >
+      FIXME
+    collection_cmd: >
+      find /etc/audit/ -type f -exec ls -lai {} \; -exec cat {} \; > auditd_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+    # TODO https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#appendix.A
+    #checks:

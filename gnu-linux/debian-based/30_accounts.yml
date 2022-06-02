@@ -270,7 +270,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)+pam_wheel\.so\s*(\S+\s+)*(\s+#.*)?$" /etc/pam.d/su && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)+pam_wheel\.so\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/su && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -293,7 +293,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)*pam_securetty\.so\s*(\S+\s+)*(\s+#.*)?$" /etc/pam.d/login && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)*pam_securetty\.so\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/login && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -330,6 +330,50 @@
         FIXME_RECO
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.4.1
+  - id: 4
+    title: Masque
+    description: >
+      FIXME
+    collect_only: false
+    checks:
+    - id: 1
+      title: Le masque par défaut est précisé
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_umask\.so\s*(\S+\s+)*umask=077\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/common-session && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: reinforced
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.35
+        https://linux.die.net/man/8/pam_umask
+  - id: 5
+    title: Répertoires temporaires dédiés aux comptes
+    description: >
+      FIXME
+    collect_only: false
+    checks:
+    - id: 1
+      title: Chaque compte utilisateur ou service possède son propre répertoire temporaire
+      description: >
+        FIXME_DESCRIPTION
+      type: CMD_EXEC
+      cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_(tmpdir|namespace|mktemp)\.so\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/common-session && PASSING=1; echo $PASSING
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: medium
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME_RECO
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.39
+        https://packages.debian.org/sid/libpam-tmpdir
+        https://linux.die.net/man/8/pam_namespace
+        https://github.com/openwall/pam_mktemp
 - id: 3
   name: Lightweight Directory Access Protocol - LDAP
   checkpoints:
@@ -347,7 +391,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^passwd:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^passwd:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s*#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -362,7 +406,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^group:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^group:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s*#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -377,7 +421,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^shadow:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s+#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^shadow:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s*#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
@@ -477,7 +521,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_mkhomedir\.so\s+(\S+\s+)*umask=(0027|0077)" /etc/pam.d/common-session && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_mkhomedir\.so\s+(\S+\s+)*umask=0077" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -510,7 +554,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=1; grep -Eq "^TLS_REQCERT\s+(never|allow|try)(\s+#.*)?$" /etc/ldap/ldap.conf && PASSING=0; echo $PASSING
+      cmd: PASSING=1; grep -Eq "^TLS_REQCERT\s+(never|allow|try)(\s*#.*)?$" /etc/ldap/ldap.conf && PASSING=0; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -601,7 +645,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^\s*ldap_tls_cacert\s+=\s+\S+\s*(\s+#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^\s*ldap_tls_cacert\s+=\s+\S+\s*(\s*#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -618,7 +662,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=1; grep -Eq "^\s*ldap_tls_reqcert\s+=\s+(never|allow|try)\s*(\s+#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=0; echo $PASSING
+      cmd: PASSING=1; grep -Eq "^\s*ldap_tls_reqcert\s+=\s+(never|allow|try)\s*(\s*#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=0; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -674,7 +718,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^\s*ssl\s+(on|start_tls)\s*(\s+#.*)?$" /etc/nscd.conf && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^\s*ssl\s+(on|start_tls)\s*(\s*#.*)?$" /etc/nscd.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
@@ -690,7 +734,7 @@
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
-      cmd: PASSING=1; grep -Eq "^\s*tls_reqcert\s+=\s+(never|allow|try)\s*(\s+#.*)?$" /etc/nscd.conf && PASSING=0; echo $PASSING
+      cmd: PASSING=1; grep -Eq "^\s*tls_reqcert\s+=\s+(never|allow|try)\s*(\s*#.*)?$" /etc/nscd.conf && PASSING=0; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: high

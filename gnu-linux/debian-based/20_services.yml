@@ -441,6 +441,20 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
+  - id: 3
+    title: Valeur du masque renforcée pour chaque service
+    description: >
+      FIXME
+      Voir aussi :
+      * https://www.freedesktop.org/software/systemd/man/systemd.service.html
+      * https://www.freedesktop.org/software/systemd/man/systemd.exec.html
+      * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.35
+    collection_cmd: >
+      systemctl list-units --type service --system --no-legend --no-pager | awk '{print $1}' > services_systemd.txt;
+      find /etc/systemd/ -exec ls -l {} \; -exec cat {} \; > systemd_conf_files.txt;
+      grep -E "^UMask=0..\s*(\s*#.*)?$" systemd_conf_files.txt > systemd_umask.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
 - id: 2
   name: Services réseau
   checkpoints:

@@ -526,7 +526,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^(UMASK|umask)\s+(027|077)\s*(\s*#.*)?$" /etc/login.defs /etc/profile /etc/profile.d/*.sh /etc/bash.bashrc /etc/csh.cshrc /etc/csh.login /etc/zshrc && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^(UMASK|umask)\s+077\s*(\s*#.*)?$" /etc/login.defs /etc/profile /etc/profile.d/*.sh /etc/bash.bashrc /etc/csh.cshrc /etc/csh.login /etc/zshrc && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -540,7 +540,7 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^(UMASK|umask)\s+(027|077)\s*(\s*#.*)?$" /root/.profile /root/.bashrc /root/.zshrc && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^(UMASK|umask)\s+077\s*(\s*#.*)?$" /root/.profile /root/.bashrc /root/.zshrc && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
@@ -658,39 +658,117 @@
         FIXME
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.36
-
-
-# TODO from here
-
-# /var/log/ dir 750 or less
-# /var/log owned root
-# /var/log group-owned syslog
-# /var/log/syslog file owned syslog
-
   - id: 4
     title: Permissions sur les journaux et outils de journalisation
     description: >
       FIXME
+    collection_cmd: >
+      find /var/log -exec ls -ail {} \; -exec getfacl {} \; > var_log_acls.txt;
+      stat -c "%n %A - %u:%g - %U:%G" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules > audit_tools_acls.txt
+    collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
     - id: 1
-
-
+      title: Les permissions du dossier /var/log sont correctement positionnées
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "gid_syslog=$(awk -F: '$1==\"syslog\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /var/log | grep -Eq \"^drwx(r|-)-(x|-)---:0:${gid_syslog}\" && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
+        https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
+    - id: 2
+      title: Les permissions du fichier /var/log/syslog sont correctement positionnées
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "uid_syslog=$(awk -F: '$1==\"syslog\" {print $3}' /etc/passwd); gid_adm=$(awk -F: '$1==\"adm\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /var/log | grep -Eq \"^-rw-(r|-)-----:${uid_syslog}:${gid_adm}\" && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
+        https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
+    - id: 3
+      title: Les outils de journalisation appartiennent à l'utilisateur root
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [[ -z $(stat -c \"%n %U\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | awk -F ' ' '$2!=\"root\" {print $1\" \"$2}') ]] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
+        https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
+    - id: 4
+      title: Les outils de journalisation appartiennent au groupe root
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [[ -z $(stat -c \"%n %G\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | awk -F ' ' '$2!=\"root\" {print $1\" \"$2}') ]] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
+        https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
+    - id: 5
+      title: Les permissions d'écriture ne sont pas possitionnées sur les outils de journalisation pour le groupe
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [[ -z $(stat -c \"%A\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | cut -c6 | awk '$1!=\"-\" {print $1}') ]] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
+        https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
+    - id: 6
+      title: Les permissions d'écriture ne sont pas possitionnées sur les outils de journalisation pour les autres
+      description: >
+        FIXME
+      type: CMD_EXEC
+      cmd: "PASSING=0; [[ -z $(stat -c \"%A\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | cut -c9 | awk '$1!=\"-\" {print $1}') ]] && PASSING=1; echo $PASSING"
+      expected: 1
+      verification_type: CHECK_EXACT
+      severity: high
+      level: intermediate
+      recommendation_on_failed: >
+        FIXME
+      see_also: >
+        https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
+        https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
 - id: 3
   name: Exécutables avec bits setuid et setgid
-  checkspoints:
+  checkpoints:
   - id: 1
-    title: Exécutables avec bits setuid
+    title: Exécutables avec bits setuid et setgid
     description: >
       FIXME
-    collect_only: false
-    checks:
-    - id: 1
-
-  - id: 2
-    title: Exécutables avec bits setgid
-    description: >
-      FIXME
-    collect_only: false
-    checks:
-    - id: 1
+      Voir aussi :
+      * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.37
+      * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.38
+    collection_cmd: >
+      find / -type f -perm /6000 -ls > setuid_setgid.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
