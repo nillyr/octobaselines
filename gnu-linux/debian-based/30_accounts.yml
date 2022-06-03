@@ -102,7 +102,7 @@
       see_also: >
         FIXME
 - id: 2
-  name: Pluggable Authentication Module - PAM
+  name: PAM
   checkpoints:
   - id: 1
     title: Politique de mots de passe
@@ -110,7 +110,7 @@
       FIXME
     collection_cmd: >
       find /etc/pam.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > pam_all_config.txt;
-      find /etc/security/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > pam_security_conf.txt
+      find /etc/security/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > etc_security_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
@@ -123,7 +123,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -139,7 +139,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -155,7 +155,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -171,7 +171,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -187,7 +187,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -203,7 +203,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -219,7 +219,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -235,7 +235,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -251,7 +251,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -274,7 +274,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -325,7 +325,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: high
-      level: elevated
+      level: high
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -345,7 +345,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -366,7 +366,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -375,7 +375,7 @@
         https://linux.die.net/man/8/pam_namespace
         https://github.com/openwall/pam_mktemp
 - id: 3
-  name: Lightweight Directory Access Protocol - LDAP
+  name: LDAP
   checkpoints:
   - id: 1
     title: Name Service Switch - NSS
@@ -525,7 +525,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -541,7 +541,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -558,7 +558,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -633,7 +633,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: low
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -649,7 +649,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -666,7 +666,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -722,7 +722,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -738,7 +738,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -746,6 +746,22 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.33
         https://linux.die.net/man/5/nslcd.conf
 - id: 4
+  name: Samba AD DC
+  checkpoints:
+  - id: 1
+    title: Samba Active Directory Domain Controller (manuel)
+    description: >
+      FIXME
+      Note : les fichiers peuvent également être utilisés pour vérifier la configuration des partages
+
+      Voir aussi :
+      * https://www.server-world.info/en/note?os=Debian_10&p=samba&f=4
+    collection_cmd: >
+      cat /etc/samba/smb.conf > smb_conf.txt;
+      samba-tool domain passwordsettings show > samba_domain_passpol.txt;
+      samba-tool domain level show > samba_domain_level.txt
+    collect_only: true
+- id: 5
   name: Gestion des comptes d'accès
   checkpoints:
   - id: 1
@@ -770,7 +786,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -785,7 +801,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -856,7 +872,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -871,7 +887,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: high
-      level: elevated
+      level: high
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -961,7 +977,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -975,7 +991,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -989,7 +1005,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >

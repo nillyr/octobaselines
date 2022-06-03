@@ -442,7 +442,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
   - id: 3
-    title: Valeur du masque renforcée pour chaque service
+    title: Valeur du masque renforcée pour chaque service (manuel)
     description: >
       FIXME
       Voir aussi :
@@ -746,7 +746,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -794,7 +794,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -900,7 +900,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -915,7 +915,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -930,7 +930,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >

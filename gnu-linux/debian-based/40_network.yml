@@ -173,44 +173,7 @@
       see_also: >
         FIXME
 - id: 2
-  name: Installation des pare-feux
-  checkpoints:
-  - id: 1
-    title: Pare-feu installé sur le système
-    description: >
-      Au moins un pare-feu doit être installé sur le système.
-    collect_only: false
-    checks:
-    - id: 1
-      title: Le pare-feu ufw est installé
-      description: >
-        FIXME
-      type: CMD_EXEC
-      cmd: PASSING=0; dpkg -s ufw 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: info
-      level: minimal
-      recommendation_on_failed: >
-        FIXME
-      see_also: >
-        FIXME
-    - id: 2
-      title: Le pare-feu iptables est installé
-      description: >
-        FIXME
-      type: CMD_EXEC
-      cmd: PASSING=0; dpkg -s iptables 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
-      expected: 1
-      verification_type: CHECK_EXACT
-      severity: info
-      level: minimal
-      recommendation_on_failed: >
-        FIXME
-      see_also: >
-        FIXME
-- id: 3
-  name: Configuration du pare-feu - ufw
+  name: Configuration du pare-feu ufw
   checkpoints:
   - id: 1
     title: Activation du service
@@ -392,7 +355,7 @@
       La configuration du filtrage des flux en sortie est conforme à la politique interne de l'entreprise et correspond aux besoins métiers.
     collect_only: true
   - id: 5
-    title: Il existe une règle pour chaque service en écoute
+    title: Services en écoute
     collection_cmd: ss -4tunlp > services_en_ecoute_ipv4.txt
     collection_cmd_type: CMD_EXEC
     description: >
@@ -400,7 +363,7 @@
     collect_only: false
     checks:
     - id: 1
-      title: Il existe une règle de filtrage pour chaque port en écoute
+      title: Il existe une règle de filtrage pour service en écoute
       description: >
         FIXME
       type: CMD_EXEC
@@ -413,8 +376,8 @@
         FIXME
       see_also: >
         FIXME
-- id: 4
-  name: Configuration du pare-feu - iptables
+- id: 3
+  name: Configuration du pare-feu iptables
   checkpoints:
   - id: 1
     title: Activation du service

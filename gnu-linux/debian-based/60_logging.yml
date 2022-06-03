@@ -16,7 +16,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -31,7 +31,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -57,7 +57,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -74,7 +74,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -92,7 +92,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -110,7 +110,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -125,8 +125,8 @@
       cmd: PASSING=0; grep -Pzo "(?s)^[^#](\s*\S+\s*)\s*action\(.*\)" /etc/rsyslog.conf /etc/rsyslog.d/*.conf | strings | grep -i -Eq '[^#]\s*StreamDriver="gtls"' && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
+      severity: high
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -144,8 +144,8 @@
       cmd: PASSING=0; grep -Pzo "(?s)^[^#](\s*\S+\s*)\s*action\(.*\)" /etc/rsyslog.conf /etc/rsyslog.d/*.conf | strings | grep -i -Eq '[^#]\s*StreamDriverMode="1"' && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
+      severity: high
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -163,8 +163,8 @@
       cmd: PASSING=0; grep -Pzo "(?s)^[^#](\s*\S+\s*)\s*action\(.*\)" /etc/rsyslog.conf /etc/rsyslog.d/*.conf | strings | grep -i -Eq '[^#]\s*StreamDriverAuthMode="x509/(fingerprint|name)"' && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
-      level: intermediate
+      severity: high
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -196,7 +196,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -212,7 +212,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -228,7 +228,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -236,10 +236,10 @@
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
         https://www.man7.org/linux/man-pages/man5/journald.conf.5.html
 - id: 3
-  name: Rotation des journaux - logrotate
+  name: Rotation des journaux
   checkpoints:
   - id: 1
-    title: Rotation des journaux
+    title: Rotation des journaux (manuel)
     description: >
       FIXME
       La rotation des journaux doit être conforme avec la politique de rétention.

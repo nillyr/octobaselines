@@ -16,7 +16,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -31,7 +31,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: info
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -46,19 +46,19 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.50
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
   - id: 2
-    title: Configuration du paquet auditd
+    title: Configuration du socle minimal de journalisation (manuel)
     description: >
       FIXME
+      Voir aussi :
+      * https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#appendix.A
     collection_cmd: >
       find /etc/audit/ -type f -exec ls -lai {} \; -exec cat {} \; > auditd_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
-    # TODO https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#appendix.A
-    #checks:

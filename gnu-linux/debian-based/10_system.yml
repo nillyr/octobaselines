@@ -18,7 +18,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.10
@@ -39,7 +39,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2015/03/NP_ConfigMateriel.pdf#subsection.3.6
@@ -60,7 +60,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2015/03/NP_ConfigMateriel.pdf#subsection.3.5
@@ -73,7 +73,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2015/03/NP_ConfigMateriel.pdf#subsection.3.4
@@ -99,7 +99,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2015/03/NP_ConfigMateriel.pdf#subsection.4.4
@@ -118,7 +118,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: elevated
+      level: high
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -141,7 +141,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -157,7 +157,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -173,7 +173,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -200,7 +200,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -213,7 +213,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -226,7 +226,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -239,7 +239,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -252,7 +252,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -265,7 +265,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -284,7 +284,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -297,7 +297,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -310,7 +310,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -323,7 +323,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.13
@@ -336,7 +336,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -349,7 +349,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -362,7 +362,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -375,7 +375,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -388,7 +388,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -401,7 +401,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -414,7 +414,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -427,7 +427,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -440,7 +440,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -453,7 +453,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -466,7 +466,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -479,7 +479,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -492,7 +492,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -505,7 +505,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -518,7 +518,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -531,7 +531,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -544,7 +544,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -557,7 +557,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -570,7 +570,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -583,7 +583,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -596,7 +596,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.12
@@ -712,7 +712,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: elevated
+      level: high
       recommendation_on_failed: >
         FIXME_RECO
       see_also: https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
@@ -748,7 +748,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -763,7 +763,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -778,7 +778,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -793,7 +793,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -808,7 +808,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -823,7 +823,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -838,7 +838,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -853,7 +853,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -868,7 +868,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -883,7 +883,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -898,7 +898,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -913,7 +913,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -928,7 +928,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -943,7 +943,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -958,7 +958,7 @@
       expected: 32768 65535
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -973,7 +973,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -988,7 +988,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1003,7 +1003,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1018,7 +1018,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1033,7 +1033,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1048,7 +1048,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1063,7 +1063,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1078,7 +1078,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1093,7 +1093,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1108,7 +1108,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1123,7 +1123,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1138,7 +1138,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1153,7 +1153,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1168,7 +1168,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1183,7 +1183,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1198,7 +1198,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1213,7 +1213,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1228,7 +1228,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1243,7 +1243,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1264,7 +1264,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1280,7 +1280,7 @@
       expected: 0
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1295,7 +1295,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1310,7 +1310,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1325,7 +1325,7 @@
       expected: 2
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1340,7 +1340,7 @@
       expected: 65536
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1355,7 +1355,7 @@
       expected: 65536
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1370,7 +1370,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1385,7 +1385,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1400,7 +1400,7 @@
       expected: 2
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1415,7 +1415,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1430,7 +1430,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1452,7 +1452,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1467,7 +1467,7 @@
       expected: 1|2
       verification_type: CHECK_REGEX
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1483,7 +1483,7 @@
       expected: 3
       verification_type: CHECK_EXACT
       severity: medium
-      level: elevated
+      level: high
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1531,7 +1531,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >
@@ -1548,7 +1548,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
       see_also: >

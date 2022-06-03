@@ -55,7 +55,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -69,7 +69,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -83,7 +83,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -97,7 +97,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -111,7 +111,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -125,7 +125,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -139,7 +139,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -153,7 +153,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -167,7 +167,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -195,7 +195,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -209,7 +209,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -243,7 +243,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -257,7 +257,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -271,7 +271,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -285,7 +285,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -299,7 +299,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -313,7 +313,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -327,7 +327,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -338,6 +338,7 @@
       FIXME
     collection_cmd: >
       awk -F: '$7 !~ /nologin|false/ {print $7}' /etc/passwd | sort | uniq | xargs -I{} stat -c "%n %A:%u:%g" {} > shells.txt;
+      nb_line=$(wc -l /etc/shells | awk '{print $1}'); cat /etc/shells | tail -n $((${nb_line} - 1)) | xargs -I{} ls -lai {} > etc_shells.txt;
       stat -c "%n %A:%u:%g" /etc/passwd /etc/passwd- /etc/group /etc/group- /etc/shadow /etc/shadow- /etc/gshadow /etc/gshadow- > sensitive_files_perm.txt;
       find / -xdev -type f -perm -0002 > world_writable.txt;
       find / -xdev \( -nouser -o -nogroup \) > nouser_o_nogroup.txt;
@@ -357,11 +358,11 @@
       description: >
         FIXME
       type: CMD_EXEC
-      cmd: 'PASSING=0; awk -F: "$7 !~ /nologin|false/ {print $7}" /etc/passwd | sort | uniq | xargs -I{} stat -c "%A:%u:%g" {} | grep -E "^-rwx(r|-)-x(r|-)-x:0:0" 1>/dev/null && PASSING=1; echo $PASSING'
+      cmd: "PASSING=0; nb_line=$(wc -l /etc/shells | awk '{print $1}'); cat /etc/shells | tail -n $((${nb_line} - 1)) | xargs -I{} stat -c \"%A:%u:%g\" {} | grep -E \"^-rwx(r|-)-x(r|-)-x:0:0\" 1>/dev/null && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -530,7 +531,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -544,7 +545,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -558,7 +559,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: medium
-      level: reinforced
+      level: enhanced
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -677,7 +678,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -692,7 +693,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -707,7 +708,7 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
@@ -722,14 +723,14 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
         https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
     - id: 5
-      title: Les permissions d'écriture ne sont pas possitionnées sur les outils de journalisation pour le groupe
+      title: Les permissions d'écriture ne sont pas positionnées sur les outils de journalisation pour le groupe
       description: >
         FIXME
       type: CMD_EXEC
@@ -737,14 +738,14 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
         https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
     - id: 6
-      title: Les permissions d'écriture ne sont pas possitionnées sur les outils de journalisation pour les autres
+      title: Les permissions d'écriture ne sont pas positionnées sur les outils de journalisation pour les autres
       description: >
         FIXME
       type: CMD_EXEC
@@ -752,17 +753,17 @@
       expected: 1
       verification_type: CHECK_EXACT
       severity: high
-      level: intermediate
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#subsection.6.7.1
         https://www.ssi.gouv.fr/administration/guide/recommandations-de-securite-pour-la-mise-en-oeuvre-dun-systeme-de-journalisation/
 - id: 3
-  name: Exécutables avec bits setuid et setgid
+  name: Exécutables setuid et setgid
   checkpoints:
   - id: 1
-    title: Exécutables avec bits setuid et setgid
+    title: Exécutables setuid et setgid (manuel)
     description: >
       FIXME
       Voir aussi :
@@ -770,5 +771,44 @@
       * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.38
     collection_cmd: >
       find / -type f -perm /6000 -ls > setuid_setgid.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+- id: 4
+  name: Scellement et intégrité
+  checkpoints:
+  - id: 1
+    title: Aide (manuel)
+    description: >
+      FIXME
+      Voir aussi :
+      * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.51
+      * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.52
+    collection_cmd: >
+      find /etc/aide/ -type f -exec ls -laiFR {} \; -exec cat {} \; > aide_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+- id: 5
+  name: LSM
+  checkpoints:
+  - id: 1
+    title: AppArmor (manuel)
+    description: >
+      FIXME
+      Voir aussi :
+      * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.65
+    collection_cmd: >
+      apparmor_status > apparmor_status.txt;
+      find /etc/apparmor.d/ -type f -exec ls -laiFR {} \; -exec cat {} \; > apparmor_profiles.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+  - id: 2
+    title: SELinux (manuel)
+    description: >
+      FIXME
+      Voir aussi :
+      * https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.66
+    collection_cmd: >
+      sestatus > selinux_status.txt;
+      cat /etc/selinux/config > selinux_config.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
