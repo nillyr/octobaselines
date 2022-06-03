@@ -724,7 +724,7 @@
     collection_cmd_type: CMD_EXEC
     collect_only: true
 - id: 3
-  name: Configuration système - sysctl
+  name: Configuration sysctl
   checkpoints:
   - id: 1
     title: Paramétrage sysctl (manuel)
