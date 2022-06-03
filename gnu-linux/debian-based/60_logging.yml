@@ -1,5 +1,5 @@
 - id: 1
-  name: Journalisation - rsyslog
+  name: Journalisation rsyslog
   checkpoints:
   - id: 1
     title: Installation du paquet rsyslog
@@ -175,7 +175,7 @@
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.20
         https://rsyslog.readthedocs.io/en/latest/concepts/ns_gtls.html
 - id: 2
-  name: Journalisation - journald
+  name: Journalisation journald
   checkpoints:
   - id: 1
     title: Configuration du service journald

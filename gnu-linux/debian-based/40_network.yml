@@ -173,7 +173,7 @@
       see_also: >
         FIXME
 - id: 2
-  name: Configuration du pare-feu ufw
+  name: Configuration de ufw
   checkpoints:
   - id: 1
     title: Activation du service
@@ -377,7 +377,7 @@
       see_also: >
         FIXME
 - id: 3
-  name: Configuration du pare-feu iptables
+  name: Configuration de iptables
   checkpoints:
   - id: 1
     title: Activation du service

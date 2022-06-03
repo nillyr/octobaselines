@@ -1,5 +1,5 @@
 - id: 1
-  name: Audit - auditd
+  name: Audit
   checkpoints:
   - id: 1
     title: Installation du paquet auditd
