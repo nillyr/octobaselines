@@ -936,3 +936,15 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
+  - id: 4
+    title: Partage réseau (manuel)
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/samba/smb.conf > share_smb.txt;
+      cat /etc/idmapd.conf > nfs_domain_share.txt;
+      cat /etc/exports > exports.txt;
+      cat /etc/fstab > mounted_share_fstab.txt;
+      showmount -e > mounted_share_client.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
