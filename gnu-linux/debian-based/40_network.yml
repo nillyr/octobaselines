@@ -8,6 +8,7 @@
     collection_cmd: >
       find /etc/netplan/ -type f \( -name *.yaml -o -name *.yml \) -exec ls -ailL {} \; -exec cat {} \; > netplan.txt;
       cat /etc/network/interfaces > network_interfaces.txt;
+      find /etc/systemd/network/ -type f -exec ls -ailL {} \; -exec cat {} \; > systemd_network_conf.txt;
       ip a > ip_a.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
@@ -36,7 +37,10 @@
     title: Configuration DNS (manuel)
     description: >
       La résolution de noms doit être réalisée à partir de serveurs de confiance en interne.
-    collection_cmd: cat /etc/resolv.conf > resolv_conf.txt
+    collection_cmd: >
+      cat /etc/resolv.conf > resolv_conf.txt;
+      cat /etc/systemd/resolved.conf > systemd_resolved.txt;
+      resolvectl status > resolvectl_status.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
   - id: 4
