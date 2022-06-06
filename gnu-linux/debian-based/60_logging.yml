@@ -44,7 +44,8 @@
     collection_cmd: >
       cat /etc/rsyslog.conf > etc_rsyslog_conf.txt;
       find /etc/rsyslog.d/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > rsyslog_d_conf.txt;
-      ls -l /var/log > var_log_files.txt
+      ls -l /var/log > var_log_files.txt;
+      find /opt/splunkforwarder/etc/ -type f -exec ls -ailL {} \; -exec cat {} \; > splunkforwarder_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
