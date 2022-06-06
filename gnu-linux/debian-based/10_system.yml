@@ -187,7 +187,11 @@
     title: Partitionnement
     description: >
       L'utilisation du partitionnementnement permet de protéger de d'isoler les différents composants du système de fichiers.
-    collection_cmd: mount > mount.txt
+      Note : si la commande lsblk indique "sdaX  crypto" alors la partition est chiffrée. Voir dpkg pour le paquet "cryptsetup".
+    collection_cmd: >
+      mount > mount.txt;
+      fdisk -l > fdisk.txt;
+      lsblk --fs > lsblk.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
