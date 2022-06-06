@@ -270,7 +270,7 @@
     collect_only: false
     checks:
     - id: 1
-      title: IPv4 - La boucle locale accepte le traffic - incoming
+      title: IPv4 - La boucle locale accepte le trafic - incoming
       description: >
         FIXME
       type: CMD_EXEC
@@ -284,7 +284,7 @@
       see_also: >
         FIXME
     - id: 2
-      title: IPv4 - La boucle locale accepte le traffic - outgoing
+      title: IPv4 - La boucle locale accepte le trafic - outgoing
       description: >
         FIXME
       type: CMD_EXEC
@@ -298,7 +298,7 @@
       see_also: >
         FIXME
     - id: 3
-      title: IPv4 - Tout traffic venant d'autres interfaces est refusé
+      title: IPv4 - Tout trafic venant d'autres interfaces est refusé
       description: >
         FIXME
       type: CMD_EXEC
@@ -312,7 +312,7 @@
       see_also: >
         FIXME
     - id: 4
-      title: IPv6 - La boucle locale accepte le traffic - incoming
+      title: IPv6 - La boucle locale accepte le trafc - incoming
       description: >
         FIXME
       type: CMD_EXEC
@@ -326,7 +326,7 @@
       see_also: >
         FIXME
     - id: 5
-      title: IPv6 - La boucle locale accepte le traffic - outgoing
+      title: IPv6 - La boucle locale accepte le trafic - outgoing
       description: >
         FIXME
       type: CMD_EXEC
@@ -340,7 +340,7 @@
       see_also: >
         FIXME
     - id: 6
-      title: IPv6 - Tout traffic venant d'autres interfaces est refusé
+      title: IPv6 - Tout trafic venant d'autres interfaces est refusé
       description: >
         FIXME
       type: CMD_EXEC
@@ -476,7 +476,7 @@
     collect_only: false
     checks:
     - id: 1
-      title: La boucle locale accepte le traffic - INPUT
+      title: La boucle locale accepte le trafic - INPUT
       description: >
         FIXME
       type: CMD_EXEC
@@ -490,7 +490,7 @@
       see_also: >
         FIXME
     - id: 2
-      title: La boucle locale accepte le traffic - OUTPUT
+      title: La boucle locale accepte le trafic - OUTPUT
       description: >
         FIXME
       type: CMD_EXEC
@@ -504,7 +504,7 @@
       see_also: >
         FIXME
     - id: 3
-      title: Tout traffic venant d'autres interfaces est refusé
+      title: Tout trafic venant d'autres interfaces est refusé
       description: >
         FIXME
       type: CMD_EXEC

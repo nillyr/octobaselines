@@ -227,7 +227,7 @@
         https://www.ssi.gouv.fr/guide/recommandations-relatives-a-lauthentification-multifacteur-et-aux-mots-de-passe/
         https://linux.die.net/man/8/pam_pwquality
     - id: 8
-      title: Vérouillage temporaire des comptes - attaque par force brute
+      title: Verrouillage temporaire des comptes - attaque par force brute
       description: >
         FIXME_DESCRIPTION
       type: CMD_EXEC
@@ -945,7 +945,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.3
     - id: 4
-      title: Tout les groupes déclarés dans /etc/passwd sont existants dans /etc/group
+      title: Tous les groupes déclarés dans /etc/passwd sont existants dans /etc/group
       description: >
         FIXME
       type: CMD_EXEC
