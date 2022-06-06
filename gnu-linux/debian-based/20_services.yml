@@ -948,3 +948,13 @@
       showmount -e > mounted_share_client.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
+  - id: 5
+    title: WIP_SQUID_NGINX_APACHE (manuel)
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/squid/squid.conf > squid_conf.txt;
+      find /etc/nginx/ -type f -exec ls -ailL {} ;\ -exec cat {} \; > nginx_all_config.txt;
+      find /etc/apache2/ -type f -name *.conf -exec ls -ailL {} ;\ -exec cat {} \; > apache_all_config.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
