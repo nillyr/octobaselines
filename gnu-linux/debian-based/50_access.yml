@@ -15,7 +15,6 @@
       cmd: PASSING=0; dpkg -s sudo 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -29,7 +28,6 @@
       cmd: PASSING=0; dpkg -s sudo-ldap 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -54,7 +52,6 @@
       cmd: PASSING=0; grep -Eq "^[^#]*sudo[^:]*:[^:]*:[^:]*:.+$" /etc/group && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -68,7 +65,6 @@
       cmd: PASSING=0; [[ -z $(grep -E "^[^%#rootDefaults].*\s+\S+(\(\S+\))?\s*" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -82,7 +78,6 @@
       cmd: PASSING=0; grep -Eq "^Defaults\s+([^#]+\S+,\s*)*noexec" /etc/sudoers && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -96,7 +91,6 @@
       cmd: PASSING=0; grep -Eq "^Defaults\s+([^#]+\S+,\s*)*requiretty" /etc/sudoers && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -110,7 +104,6 @@
       cmd: PASSING=0; grep -Eq "^Defaults\s+([^#]+\S+,\s*)*use_pty" /etc/sudoers && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -124,7 +117,6 @@
       cmd: PASSING=0; grep -Eq "^Defaults\s+([^#]+\S+,\s*)*umask=0027" /etc/sudoers && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -138,7 +130,6 @@
       cmd: PASSING=0; grep -Eq "^Defaults\s+([^#]+\S+,\s*)*ignore_dot" /etc/sudoers && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -152,7 +143,6 @@
       cmd: PASSING=0; grep -Eq "^Defaults\s+([^#]+\S+,\s*)*env_reset" /etc/sudoers && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -166,7 +156,6 @@
       cmd: PASSING=0; grep -Eq "^Defaults\s+([^#]+\S+,\s*)*passwd_timeout=1" /etc/sudoers && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -180,7 +169,6 @@
       cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*NOPASSWD" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -194,7 +182,6 @@
       cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\!\S+" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -208,7 +195,6 @@
       cmd: PASSING=0; [[ -z $(grep -E "^[^#].*\s+\S+(\(\S+\))?\s*\*\S*" /etc/sudoers /etc/sudoers.d/*) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -242,7 +228,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /boot | grep -Eq "drwx(r|-)-(x|-)(r|-)-(x|-):0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -256,7 +241,6 @@
       cmd: PASSING=0; [ -e /boot/grub2/grub.cfg ] && GRUB_CONFIG_FILE=/boot/grub2/grub.cfg || GRUB_CONFIG_FILE=/boot/grub/grub.cfg; stat -c "%A:%u:%g" "${GRUB_CONFIG_FILE}" | grep -Eq "^-r--------:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -270,7 +254,6 @@
       cmd: PASSING=0; [[ -z $(find /lib /usr/lib /lib64 ! -user root -type d -exec stat -c "%n %U" '{}' \;) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -284,7 +267,6 @@
       cmd: PASSING=0; [[ -z $(find /lib /usr/lib /lib64 ! -group root -type f -exec stat -c "%n %G" '{}' \;) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -298,7 +280,6 @@
       cmd: PASSING=0; [[ -z $(find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin ! -user root -type d -exec stat -c "%n %U" '{}' \;) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -312,7 +293,6 @@
       cmd: PASSING=0; [[ -z $(find /lib /lib64 /usr/lib -perm /022 -type d -exec stat -c "%n %a" '{}' \;) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -326,7 +306,6 @@
       cmd: PASSING=0; [[ -z $(find /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin -perm /022 -type d -exec stat -c "%n %a" '{}' \;) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -361,7 +340,6 @@
       cmd: "PASSING=0; nb_line=$(wc -l /etc/shells | awk '{print $1}'); cat /etc/shells | tail -n $((${nb_line} - 1)) | xargs -I{} stat -c \"%A:%u:%g\" {} | grep -E \"^-rwx(r|-)-x(r|-)-x:0:0\" 1>/dev/null && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -375,7 +353,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/passwd | grep -Eq "^-rw-(r|-)--(r|-)--:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -389,7 +366,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/passwd- | grep -Eq "^-rw-(r|-)--(r|-)--:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -403,7 +379,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/group | grep -Eq "^-rw-(r|-)--(r|-)--:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -417,7 +392,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/group- | grep -Eq "^-rw-(r|-)--(r|-)--:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -431,7 +405,6 @@
       cmd: "gid_shadow=$(awk -F: '$1==\"shadow\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /etc/shadow | grep -Eq \"^-rw-(r|-)-----:0:(0|${gid_shadow})\" && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -445,7 +418,6 @@
       cmd: "gid_shadow=$(awk -F: '$1==\"shadow\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /etc/shadow- | grep -Eq \"^-rw-(r|-)-----:0:(0|${gid_shadow})\" && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -459,7 +431,6 @@
       cmd: "gid_shadow=$(awk -F: '$1==\"shadow\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /etc/gshadow | grep -Eq \"^-rw-(r|-)-----:0:(0|${gid_shadow})\" && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -473,7 +444,6 @@
       cmd: "gid_shadow=$(awk -F: '$1==\"shadow\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /etc/gshadow- | grep -Eq \"^-rw-(r|-)-----:0:(0|${gid_shadow})\" && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -487,7 +457,6 @@
       cmd: PASSING=0; [[ -z $(find / -xdev \( -nouser -o -nogroup \)) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -501,7 +470,6 @@
       cmd: PASSING=0; [[ -z $(find / -xdev -type f -perm -0002) ]] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -516,7 +484,6 @@
       cmd: PASSING=0; ls /etc/profile.d/ | xargs -I{} stat -c "%A:%u:%g" /etc/profile.d/{} | grep -E "^-rw-(r|-)--(r|-)--:0:0" 1>/dev/null && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -530,7 +497,6 @@
       cmd: PASSING=0; grep -Eq "^(UMASK|umask)\s+077\s*(\s*#.*)?$" /etc/login.defs /etc/profile /etc/profile.d/*.sh /etc/bash.bashrc /etc/csh.cshrc /etc/csh.login /etc/zshrc && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -544,7 +510,6 @@
       cmd: PASSING=0; grep -Eq "^(UMASK|umask)\s+077\s*(\s*#.*)?$" /root/.profile /root/.bashrc /root/.zshrc && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -558,7 +523,6 @@
       cmd: PASSING=0; grep -Eq "DIR_MODE=07[0-5]0\s*(\s*#.*)?$" /etc/adduser.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -583,7 +547,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/crontab | grep -Eq "^-rw-------:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -597,7 +560,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/cron.daily | grep -Eq "^drwx------:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -611,7 +573,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/cron.hourly | grep -Eq "^drwx------:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -625,7 +586,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/cron.weekly | grep -Eq "^drwx------:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -639,7 +599,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/cron.monthly | grep -Eq "^drwx------:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -653,7 +612,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/cron.d | grep -Eq "^drwx------:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -677,7 +635,6 @@
       cmd: "gid_syslog=$(awk -F: '$1==\"syslog\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /var/log | grep -Eq \"^drwx(r|-)-(x|-)---:0:${gid_syslog}\" && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -692,7 +649,6 @@
       cmd: "uid_syslog=$(awk -F: '$1==\"syslog\" {print $3}' /etc/passwd); gid_adm=$(awk -F: '$1==\"adm\" {print $3}' /etc/group); PASSING=0; stat -c \"%A:%u:%g\" /var/log | grep -Eq \"^-rw-(r|-)-----:${uid_syslog}:${gid_adm}\" && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -707,7 +663,6 @@
       cmd: "PASSING=0; [[ -z $(stat -c \"%n %U\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | awk -F ' ' '$2!=\"root\" {print $1\" \"$2}') ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -722,7 +677,6 @@
       cmd: "PASSING=0; [[ -z $(stat -c \"%n %G\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | awk -F ' ' '$2!=\"root\" {print $1\" \"$2}') ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -737,7 +691,6 @@
       cmd: "PASSING=0; [[ -z $(stat -c \"%A\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | cut -c6 | awk '$1!=\"-\" {print $1}') ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME
@@ -752,7 +705,6 @@
       cmd: "PASSING=0; [[ -z $(stat -c \"%A\" /sbin/auditctl /sbin/aureport /sbin/ausearch /sbin/autrace /sbin/auditd /sbin/audispd /sbin/augenrules | cut -c9 | awk '$1!=\"-\" {print $1}') ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME

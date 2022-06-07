@@ -15,7 +15,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*(sha256|sha512)\s*(\S+\s*)*$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -30,7 +29,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*rounds=65536\s*(\S+\s*)*$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -54,7 +52,6 @@
       cmd: PASSING=0; grep -Eq "^ENCRYPT_METHOD\s*(SHA256|SHA512)\s*$" /etc/login.defs && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -69,7 +66,6 @@
       cmd: PASSING=0; grep -Eq "^SHA_CRYPT_MIN_ROUNDS\s*65536\s*$" /etc/login.defs && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -95,7 +91,6 @@
       cmd: "PASSING=0; [ -z $(awk -F: '{ if ($2 !~ x) print $2 }' /etc/passwd) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -122,7 +117,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+minlen=[1-9][0-9]{1,}" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -138,7 +132,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+lcredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -154,7 +147,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+ucredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -170,7 +162,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+ocredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -186,7 +177,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+dcredit=-[1-9]" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -202,7 +192,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+dictpath=" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -218,7 +207,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_pwquality\.so\s+(\S+\s+)+enforce_for_root" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -234,7 +222,6 @@
       cmd: PASSING=0; grep -Eq "^(auth|account)\s+(\S+\s+)*pam_tally2\.so" /etc/pam.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -250,7 +237,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)*pam_(pwhistory|unix)\.so\s+(\S+\s+)*remember=([5-9]|[1-9][0-9]{1,})" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -273,7 +259,6 @@
       cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)+pam_wheel\.so\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/su && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -296,7 +281,6 @@
       cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)*pam_securetty\.so\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/login && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -310,7 +294,6 @@
       cmd: PASSING=0; [ -f /etc/securetty ] && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -324,7 +307,6 @@
       cmd: wc -l /etc/securetty | awk -F ' ' '{print $1}'
       expected: 0
       verification_type: CHECK_EXACT
-      severity: high
       level: high
       recommendation_on_failed: >
         FIXME_RECO
@@ -344,7 +326,6 @@
       cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_umask\.so\s*(\S+\s+)*umask=077\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -365,7 +346,6 @@
       cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_(tmpdir|namespace|mktemp)\.so\s*(\S+\s*)*(\s*#.*)?$" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -394,7 +374,6 @@
       cmd: PASSING=0; grep -Eq "^passwd:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s*#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -409,7 +388,6 @@
       cmd: PASSING=0; grep -Eq "^group:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s*#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -424,7 +402,6 @@
       cmd: PASSING=0; grep -Eq "^shadow:\s+(\S+\s+)*(ldap|sss)(\s+\S+)*(\s*#.*)?$" /etc/nsswitch.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -449,7 +426,6 @@
       cmd: PASSING=0; grep -Eq "^auth\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-auth && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -464,7 +440,6 @@
       cmd: PASSING=0; grep -Eq "^account\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-account && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -479,7 +454,6 @@
       cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -494,7 +468,6 @@
       cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)*pam_ldap\.so" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -509,7 +482,6 @@
       cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_mkhomedir\.so" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -524,7 +496,6 @@
       cmd: PASSING=0; grep -Eq "^session\s+(\S+\s+)*pam_mkhomedir\.so\s+(\S+\s+)*umask=0077" /etc/pam.d/common-session && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -540,7 +511,6 @@
       cmd: PASSING=0; grep -Eq "^TLS_CACERT\s+\S+\s*$" /etc/ldap/ldap.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -557,7 +527,6 @@
       cmd: PASSING=1; grep -Eq "^TLS_REQCERT\s+(never|allow|try)(\s*#.*)?$" /etc/ldap/ldap.conf && PASSING=0; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -584,7 +553,6 @@
       cmd: PASSING=0; dpkg -s sssd 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -600,7 +568,6 @@
       cmd: PASSING=0; grep -Eq "^\s*ldap_uri\s+=\s+ldap" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -616,7 +583,6 @@
       cmd: PASSING=0; grep -Eq "^\s*cache_credentials\s+=\s+true" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -632,7 +598,6 @@
       cmd: PASSING=0; grep -Eq "^\s*offline_credentials_expiration\s+=\s+1" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: low
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -648,7 +613,6 @@
       cmd: PASSING=0; grep -Eq "^\s*ldap_tls_cacert\s+=\s+\S+\s*(\s*#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -665,7 +629,6 @@
       cmd: PASSING=1; grep -Eq "^\s*ldap_tls_reqcert\s+=\s+(never|allow|try)\s*(\s*#.*)?$" /etc/sssd/sssd.conf /etc/sssd/conf.d/* && PASSING=0; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -691,7 +654,6 @@
       cmd: PASSING=0; dpkg -s nscd 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -706,7 +668,6 @@
       cmd: PASSING=0; grep -Eq "^\s*uri\s+.*(\s+#.*)$" /etc/nscd.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -721,7 +682,6 @@
       cmd: PASSING=0; grep -Eq "^\s*ssl\s+(on|start_tls)\s*(\s*#.*)?$" /etc/nscd.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -737,7 +697,6 @@
       cmd: PASSING=1; grep -Eq "^\s*tls_reqcert\s+=\s+(never|allow|try)\s*(\s*#.*)?$" /etc/nscd.conf && PASSING=0; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -785,7 +744,6 @@
       cmd: PASSING=0; grep -Eq "^[^#](\S+\s*)*nullok" /etc/pam.d/* || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -800,7 +758,6 @@
       cmd: "PASSING=0; [ -z $(awk -F: '!$2 {print $1}' /etc/shadow) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -815,7 +772,6 @@
       cmd: "PASSING=0; [ -z $(awk -F: 'list[$3]++{print $1, $3}' /etc/passwd) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -829,7 +785,6 @@
       cmd: "PASSING=0; [ -z $(cut -d: -f1 /etc/passwd | sort | uniq -d) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -843,7 +798,6 @@
       cmd: "PASSING=0; [ $(awk -F: '($3 == 0) {print $1}' /etc/passwd | wc -l) -eq 1 ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -857,7 +811,6 @@
       cmd: "PASSING=1; awk -F: '{ if ($1 !~ /halt|sync|shutdown/ && $7 !~ /nologin|false/) print $6}' /etc/passwd | xargs -I {} [ -d {} ] || PASSING=0; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -871,7 +824,6 @@
       cmd: "PASSING=0; l_min=$(grep -E \"^UID_MIN\" /etc/login.defs); [ -z $(awk -F: -v \"min=${l_min##UID_MIN}\" '($1 !~ /root|sync|shutdown|halt/ && $1 !~ /^\\+/ && $3 < min && $7 !~ /nologin|false/) {print}' /etc/passwd) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -886,7 +838,6 @@
       cmd: "PASSING=0; [ -z $(awk -F: '{if ($1==\"root\" && $7 ~ \"nologin\") { print $1 $7 } }' /etc/passwd) ] && PASSING=1; echo $PASSING"
       expected: 0
       verification_type: CHECK_EXACT
-      severity: high
       level: high
       recommendation_on_failed: >
         FIXME_RECO
@@ -910,7 +861,6 @@
       cmd: "PASSING=0; [[ -z $(awk -F: '$4 !~ /65534/ && list[$4]++{print $1, $4}' /etc/passwd) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -924,7 +874,6 @@
       cmd: "PASSING=0; [ -z $(cut -d: -f1 /etc/group | sort | uniq -d) ] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -938,7 +887,6 @@
       cmd: 'PASSING=0; [ -z $(grep -E "^shadow:[^:]*:[^:]*:[^:]+" /etc/group) ] && PASSING=1; echo $PASSING'
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -952,7 +900,6 @@
       cmd: "PASSING=$(awk -F: '{print $4}' /etc/passwd | xargs -I {} sh -c 'grep -Eq \"^.*?:[^:]*:{}:\" /etc/group || echo 0' | uniq); { [[ $PASSING == \"0\" ]] && echo 0 || echo 1; }"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -976,7 +923,6 @@
       cmd: PASSING=0; grep -Eq "^TMOUT=[1-9][0-9]{1,}" /etc/bash.bashrc /etc/profile.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -990,7 +936,6 @@
       cmd: PASSING=0; grep -Eq "^readonly\s+TMOUT" /etc/bash.bashrc /etc/profile.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -1004,7 +949,6 @@
       cmd: PASSING=0; grep -Eq "^export\s+TMOUT" /etc/bash.bashrc /etc/profile.d/* && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO

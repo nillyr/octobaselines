@@ -17,7 +17,6 @@
       cmd: PASSING=0; arch | grep -Eq "x86_64|amd64|aarch64" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -38,7 +37,6 @@
       cmd: PASSING=0; grep -q aes /proc/cpuinfo && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -59,7 +57,6 @@
       cmd: PASSING=0; grep -q nosmap /proc/cmdline || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -72,7 +69,6 @@
       cmd: PASSING=0; grep -q nosmep /proc/cmdline || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -98,7 +94,6 @@
       cmd: PASSING=0; dmesg | grep "Execute Disable" | grep -v active || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -117,7 +112,6 @@
       cmd: PASSING=0; dpkg -s aide 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: high
       recommendation_on_failed: >
         FIXME_RECO
@@ -140,7 +134,6 @@
       cmd: PASSING=0; grep -Eq "^set superusers" "${GRUB_CONFIG_FILE}" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -156,7 +149,6 @@
       cmd: PASSING=0; grep -Eq "^password_pbkdf2" "${GRUB_CONFIG_FILE}" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -172,7 +164,6 @@
       cmd: PASSING=0; grep -Eq ".*--users\s" "${GRUB_CONFIG_FILE}" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -203,7 +194,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s+/srv\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -216,7 +206,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s+/home\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -229,7 +218,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s+/tmp\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -242,7 +230,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s+/var\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -255,7 +242,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s+/var/log\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -268,7 +254,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s+/var/tmp\s+type.*" && echo 1 PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -287,7 +272,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -300,7 +284,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -313,7 +296,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -326,7 +308,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/boot\s.*\((\S+,)*noauto(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -339,7 +320,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/opt\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -352,7 +332,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/opt\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -365,7 +344,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/tmp\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -378,7 +356,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/tmp\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -391,7 +368,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/tmp\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -404,7 +380,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/srv\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -417,7 +392,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/srv\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -430,7 +404,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/home\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -443,7 +416,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/home\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -456,7 +428,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/home\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -469,7 +440,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/proc\s.*\((\S+,)*hidepid=2(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -482,7 +452,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/usr\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -495,7 +464,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -508,7 +476,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -521,7 +488,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -534,7 +500,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var/log\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -547,7 +512,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var/log\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -560,7 +524,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var/log\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -573,7 +536,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var/tmp\s.*\((\S+,)*nosuid(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -586,7 +548,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var/tmp\s.*\((\S+,)*nodev(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -599,7 +560,6 @@
       cmd: PASSING=0; mount | grep -Eq ".*on\s/var/tmp\s.*\((\S+,)*noexec(\S+,?)*\)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -618,7 +578,6 @@
       cmd: "PASSING=0; [[ $(modprobe -n -v freevxfs) == */bin/true* && -z $(lsmod | grep freevxfs) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -631,7 +590,6 @@
       cmd: "PASSING=0; [[ $(modprobe -n -v jffs2) == */bin/true* && -z $(lsmod | grep jffs2) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -644,7 +602,6 @@
       cmd: "PASSING=0; [[ $(modprobe -n -v hfs) == */bin/true* && -z $(lsmod | grep hfs) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -657,7 +614,6 @@
       cmd: "PASSING=0; [[ $(modprobe -n -v hfsplus) == */bin/true* && -z $(lsmod | grep hfsplus) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -670,7 +626,6 @@
       cmd: "PASSING=0; [[ $(modprobe -n -v squashfs) == */bin/true* && -z $(lsmod | grep squashfs) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -683,7 +638,6 @@
       cmd: "PASSING=0; [[ $(modprobe -n -v udf) == */bin/true* && -z $(lsmod | grep udf) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -702,7 +656,6 @@
       cmd: "PASSING=0; [[ ! $(dpkg -s autofs 2>&1 | grep -q 'is not installed') || ! $(systemctl show autofs.service -p UnitFileState | grep -v enabled) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -715,7 +668,6 @@
       cmd: "PASSING=0; [[ $(modprobe -n -v usb-storage) == */bin/true* && -z $(lsmod | grep usb-storage) ]] && PASSING=1; echo $PASSING"
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: high
       recommendation_on_failed: >
         FIXME_RECO
@@ -751,7 +703,6 @@
       cmd: sysctl -n net.ipv4.ip_forward
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -766,7 +717,6 @@
       cmd: sysctl -n net.ipv4.conf.all.rp_filter
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -781,7 +731,6 @@
       cmd: sysctl -n net.ipv4.conf.default.rp_filter
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -796,7 +745,6 @@
       cmd: sysctl -n net.ipv4.conf.all.send_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -811,7 +759,6 @@
       cmd: sysctl -n net.ipv4.conf.default.send_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -826,7 +773,6 @@
       cmd: sysctl -n net.ipv4.conf.all.accept_source_route
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -841,7 +787,6 @@
       cmd: sysctl -n net.ipv4.conf.default.accept_source_route
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -856,7 +801,6 @@
       cmd: sysctl -n net.ipv4.conf.all.accept_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -871,7 +815,6 @@
       cmd: sysctl -n net.ipv4.conf.all.secure_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -886,7 +829,6 @@
       cmd: sysctl -n net.ipv4.conf.default.accept_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -901,7 +843,6 @@
       cmd: sysctl -n net.ipv4.conf.default.secure_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -916,7 +857,6 @@
       cmd: sysctl -n net.ipv4.conf.all.log_martians
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -931,7 +871,6 @@
       cmd: sysctl -n net.ipv4.tcp_rfc1337
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -946,7 +885,6 @@
       cmd: sysctl -n net.ipv4.icmp_ignore_bogus_error_responses
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -961,7 +899,6 @@
       cmd: sysctl -n net.ipv4.ip_local_port_range
       expected: 32768 65535
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -976,7 +913,6 @@
       cmd: sysctl -n net.ipv4.tcp_syncookies
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -991,7 +927,6 @@
       cmd: sysctl -n net.ipv6.conf.all.disable_ipv6
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1006,7 +941,6 @@
       cmd: sysctl -n net.ipv6.conf.default.disable_ipv6
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1021,7 +955,6 @@
       cmd: sysctl -n net.ipv6.conf.all.router_solicitations
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1036,7 +969,6 @@
       cmd: sysctl -n net.ipv6.conf.default.router_solicitations
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1051,7 +983,6 @@
       cmd: sysctl -n net.ipv6.conf.all.accept_ra_rtr_pref
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1066,7 +997,6 @@
       cmd: sysctl -n net.ipv6.conf.default.accept_ra_rtr_pref
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1081,7 +1011,6 @@
       cmd: sysctl -n net.ipv6.conf.all.accept_ra_pinfo
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1096,7 +1025,6 @@
       cmd: sysctl -n net.ipv6.conf.default.accept_ra_pinfo
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1111,7 +1039,6 @@
       cmd: sysctl -n net.ipv6.conf.all.accept_ra_defrtr
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1126,7 +1053,6 @@
       cmd: sysctl -n net.ipv6.conf.default.accept_ra_defrtr
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1141,7 +1067,6 @@
       cmd: sysctl -n net.ipv6.conf.all.autoconf
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1156,7 +1081,6 @@
       cmd: sysctl -n net.ipv6.conf.default.autoconf
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1171,7 +1095,6 @@
       cmd: sysctl -n net.ipv6.conf.all.accept_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1186,7 +1109,6 @@
       cmd: sysctl -n net.ipv6.conf.default.accept_redirects
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1201,7 +1123,6 @@
       cmd: sysctl -n net.ipv6.conf.all.accept_source_route
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1216,7 +1137,6 @@
       cmd: sysctl -n net.ipv6.conf.default.accept_source_route
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1231,7 +1151,6 @@
       cmd: sysctl -n net.ipv6.conf.all.max_addresses
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1246,7 +1165,6 @@
       cmd: sysctl -n net.ipv6.conf.default.max_addresses
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1267,7 +1185,6 @@
       cmd: sysctl -n kernel.sysrq
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1283,7 +1200,6 @@
       cmd: sysctl -n fs.suid_dumpable
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1298,7 +1214,6 @@
       cmd: sysctl -n fs.protected_symlinks
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1313,7 +1228,6 @@
       cmd: sysctl -n fs.protected_hardlinks
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1328,7 +1242,6 @@
       cmd: sysctl -n kernel.randomize_va_space
       expected: 2
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1343,7 +1256,6 @@
       cmd: sysctl -n vm.mmap_min_addr
       expected: 65536
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1358,7 +1270,6 @@
       cmd: sysctl -n kernel.pid_max
       expected: 65536
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1373,7 +1284,6 @@
       cmd: sysctl -n kernel.kptr_restrict
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1388,7 +1298,6 @@
       cmd: sysctl -n kernel.dmesg_restrict
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1403,7 +1312,6 @@
       cmd: sysctl -n kernel.perf_event_paranoid
       expected: 2
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1418,7 +1326,6 @@
       cmd: sysctl -n kernel.perf_event_max_sample_rate
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1433,7 +1340,6 @@
       cmd: sysctl -n kernel.perf_cpu_time_max_percent
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1455,7 +1361,6 @@
       cmd: sysctl -n kernel.modules_disabled
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -1470,7 +1375,6 @@
       cmd: sysctl -n kernel.yama.ptrace_scope
       expected: 1|2
       verification_type: CHECK_REGEX
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME_RECO
@@ -1486,7 +1390,6 @@
       cmd: sysctl -n kernel.yama.ptrace_scope
       expected: 3
       verification_type: CHECK_EXACT
-      severity: medium
       level: high
       recommendation_on_failed: >
         FIXME_RECO
@@ -1534,7 +1437,6 @@
       cmd: PASSING=0; grep -Eq "^(([a-zA-Z:])*|\s*)allow-downgrades\s\"(1|true)\";" /etc/apt/apt.conf.d/* || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1551,7 +1453,6 @@
       cmd: PASSING=0; grep -Eq "^(([a-zA-Z:])*|\s*)AllowUnauthenticated\s\"(1|true)\";" /etc/apt/apt.conf.d/* || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: intermediary
       recommendation_on_failed: >
         FIXME_RECO
@@ -1587,7 +1488,6 @@
       cmd: PASSING=0; grep -Eq '^\s*\"${distro_id}.*\-security\";' /etc/apt/apt.conf.d/50unattended-upgrades && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -1601,7 +1501,6 @@
       cmd: PASSING=0; grep -Eq '^APT\:\:Periodic\:\:Unattended-Upgrade' /etc/apt/apt.conf.d/20auto-upgrades && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO
@@ -1615,7 +1514,6 @@
       cmd: PASSING=0; systemctl show unattended-upgrades.service -p UnitFileState | grep -q enabled && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME_RECO

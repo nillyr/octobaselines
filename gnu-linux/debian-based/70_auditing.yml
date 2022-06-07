@@ -15,7 +15,6 @@
       cmd: PASSING=0; dpkg -s auditd 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -30,7 +29,6 @@
       cmd: PASSING=0; dpkg -s audispd-plugins 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: info
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -45,7 +43,6 @@
       cmd: PASSING=0; systemctl show auditd.service -p UnitFileState | grep -q enabled && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: enhanced
       recommendation_on_failed: >
         FIXME

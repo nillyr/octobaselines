@@ -26,7 +26,6 @@
       cmd: PASSING=0; systemctl show avahi-daemon.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -41,7 +40,6 @@
       cmd: PASSING=0; systemctl show cups.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -56,7 +54,6 @@
       cmd: PASSING=0; systemctl show dhcp-server.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -71,7 +68,6 @@
       cmd: PASSING=0; systemctl show slapd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -86,7 +82,6 @@
       cmd: PASSING=0; systemctl show nfs-server.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -101,7 +96,6 @@
       cmd: PASSING=0; systemctl show rpcbind.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -116,7 +110,6 @@
       cmd: PASSING=0; systemctl show portmap.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -131,7 +124,6 @@
       cmd: PASSING=0; systemctl show rpc.statd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -146,7 +138,6 @@
       cmd: PASSING=0; grep -Eq "^\/\S+\s*.*\((\S+\s*)*no_root_squash(\S+\s*)*\)\s*$" /etc/exports || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -161,7 +152,6 @@
       cmd: PASSING=0; systemctl show bind9.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -176,7 +166,6 @@
       cmd: PASSING=0; systemctl show vsftpd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -191,7 +180,6 @@
       cmd: PASSING=0; systemctl show apache.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -206,7 +194,6 @@
       cmd: PASSING=0; systemctl show apache2.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -221,7 +208,6 @@
       cmd: PASSING=0; systemctl show nginx.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -236,7 +222,6 @@
       cmd: PASSING=0; systemctl show lighttpd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -251,7 +236,6 @@
       cmd: PASSING=0; systemctl show dovecot.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -266,7 +250,6 @@
       cmd: PASSING=0; systemctl show smbd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -281,7 +264,6 @@
       cmd: PASSING=0; systemctl show squid.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -297,7 +279,6 @@
       cmd: PASSING=0; systemctl show snmpd.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -313,7 +294,6 @@
       cmd: PASSING=0; systemctl show rsync.service -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -328,7 +308,6 @@
       cmd: PASSING=0; ss -lntu | grep -E ':25\s' | grep -E -v '\s(127.0.0.1|::1):25\s' || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -344,7 +323,6 @@
       cmd: dpkg -s rsh-client 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -359,7 +337,6 @@
       cmd: dpkg -s talk 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -374,7 +351,6 @@
       cmd: dpkg -s telnet 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -389,7 +365,6 @@
       cmd: dpkg -s ldap-utils 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -404,7 +379,6 @@
       cmd: dpkg -s xinetd 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -419,7 +393,6 @@
       cmd: dpkg -s openbsd-inetd 2>/dev/null | wc -l
       expected: 0
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -434,7 +407,6 @@
       cmd: PASSING=0; systemctl show ctrl-alt-del.target -p UnitFileState | grep -q enable || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -483,7 +455,6 @@
       cmd: PASSING=0; cat /etc/snmp/snmpd.conf | grep -Eq "^\s*r(o|w)community.*" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -497,7 +468,6 @@
       cmd: PASSING=0; cat /etc/snmp/snmp.conf | grep -Eq "^\s*defVersion\s+2c" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -511,7 +481,6 @@
       cmd: PASSING=0; cat /etc/snmp/snmp.conf | grep -Eq "^\s*disableSNMPv1\s+(1|yes|true)" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -525,7 +494,6 @@
       cmd: PASSING=0; cat /etc/snmp/snmpd.conf | grep -Eq "^\s*r(o|w)community.*(public|private)" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -549,7 +517,6 @@
       cmd: PASSING=0; stat -c "%A:%u:%g" /etc/ssh/sshd_config | grep -q -E "\-rw-(r|-)--(r|-)--:0:0" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -564,7 +531,6 @@
       cmd: PASSING=0; find /etc/ssh -xdev -type f -name "ssh_host_*_key" -exec stat -c "%A:%u:%g" {} \; | xargs -I {} echo {} | grep -v -E "\-rw-------:0:0" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -579,7 +545,6 @@
       cmd: PASSING=0; find /etc/ssh -xdev -type f -name "ssh_host_*_key.pub" -exec stat -c "%A:%u:%g" {} \; | xargs -I {} echo {} | grep -v -E "\-rw-(r|-)--(r|-)--:0:0" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -594,7 +559,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq '^protocol\s+(1\s*,\s*2|2\s*,\s*1|1)$' || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -609,7 +573,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq '^loglevel\s+(INFO|VERBOSE)$' && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -624,7 +587,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^x11forwarding\sno$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -639,7 +601,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^maxauthtries\s*[1-4]$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -654,7 +615,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^ignorerhosts\s*yes$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -669,7 +629,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^hostbasedauthentication\s*no$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -684,7 +643,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^permitrootlogin\s*no$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -699,7 +657,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^permitemptypasswords\s*no$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: high
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -714,7 +671,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^permituserenvironment\s*no$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -729,7 +685,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^ciphers\s+(\S+,)*(3des-cbc|aes128-cbc|aes192-cbc|aes256-cbc|arcfour|arcfour128|arcfour256|blowfish-cbc|cast128-cbc|rijndael-cbc@lysator\.liu\.se)(,\S+)*\s*$" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -745,7 +700,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^ciphers\s+(\S+,)*(3des-cbc|aes128-cbc|aes192-cbc|aes256-cbc|aes128-gcm@openssh\.com|aes256-gcm@openssh\.com|arcfour|arcfour128|arcfour256|blowfish-cbc|cast128-cbc|rijndael-cbc@lysator\.liu\.se|chacha20-poly1305@openssh\.com)(,\S+)*\s*$" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -761,7 +715,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^macs\s+(\S+,)*(hmac-md5|hmac-md5-96|hmac-ripemd160|hmac-sha1|hmac-sha1-96|umac-64@openssh\.com|hmac-md5-etm@openssh\.com|hmac-md5-96-etm@openssh\.com|hmac-ripemd160-etm@openssh\.com|hmac-sha1-etm@openssh\.com|hmac-sha1-96-etm@openssh\.com|umac-64-etm@openssh\.com|umac-128-etm@openssh\.com)(,\S+)*\s*$" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -777,7 +730,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^kexalgorithms\s+(\S+,)*(diffie-hellman-group1-sha1|diffie-hellman-group14-sha1|diffie-hellman-group-exchange-sha1)(,\S+)*\s*$" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -793,7 +745,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^kexalgorithms\s+(\S+,)*(diffie-hellman-group1-sha1|diffie-hellman-group14-sha1|diffie-hellman-group-exchange-sha1|curve25519-sha256|curve25519-sha256@libssh\.org)(,\S+)*\s*$" || PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -809,7 +760,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^clientaliveinterval\s+([1-9]|[1-9][0-9]|[1-2][0-9][0-9]|300)$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -824,7 +774,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^clientalivecountmax\s+[0-3]$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -839,7 +788,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^logingracetime\s+([0-9]|[1-5][0-9]|60)$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -854,7 +802,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^(allowusers|allowgroups|denyusers|denygroups)\s(\S+).*$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -869,7 +816,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^usepam\s+yes$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -884,7 +830,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^allowtcpforwarding\s+no$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: minimal
       recommendation_on_failed: >
         FIXME
@@ -899,7 +844,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^maxstartups\s+(10|[1-9])\:(30|[1-2][0-9]|[1-9])\:(60|[1-5][0-9]|[1-9])\s*$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -914,7 +858,6 @@
       cmd: PASSING=0; sshd -T | grep -Eq "^maxsessions\s+([0-9]|10)$" && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
@@ -929,7 +872,6 @@
       cmd: 'PASSING=0; [[ ! $(sshd -T | grep -Eq "^pubkeyauthentication\s+yes$") || ! $(sshd -T | grep -Eq "^\s*passwordauthentication\s+no$") ]] && PASSING=1; echo $PASSING'
       expected: 1
       verification_type: CHECK_EXACT
-      severity: medium
       level: enhanced
       recommendation_on_failed: >
         FIXME
