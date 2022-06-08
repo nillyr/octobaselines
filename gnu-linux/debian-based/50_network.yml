@@ -173,7 +173,7 @@
       see_also: >
         FIXME
 - id: 2
-  name: Configuration de ufw
+  name: Pare-feu ufw
   checkpoints:
   - id: 1
     title: Activation du service
@@ -365,7 +365,7 @@
       see_also: >
         FIXME
 - id: 3
-  name: Configuration de iptables
+  name: Pare-feu iptables
   checkpoints:
   - id: 1
     title: Activation du service
@@ -508,7 +508,7 @@
       Chaque service en écoute sur le réseau doit disposer d'une règle de filtrage permettant de limiter la surface d'attaque.
     collect_only: true
 - id: 4
-  name: Configuration de firewalld
+  name: Pare-feu firewalld
   checkpoints:
   - id: 1
     title: Configuration de firewalld (manuel)
@@ -520,7 +520,7 @@
     collection_cmd_type: CMD_EXEC
     collect_only: true
 - id: 5
-  name: Configuration de nftables
+  name: Pare-feu nftables
   checkpoints:
   - id: 1
     title: Configuration de nftables (manuel)

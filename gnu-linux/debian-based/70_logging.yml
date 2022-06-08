@@ -1,10 +1,15 @@
 - id: 1
-  name: Journalisation rsyslog
+  name: Journalisation
   checkpoints:
   - id: 1
-    title: Installation du paquet rsyslog
+    title: Configuration du paquet rsyslog
     description: >
       FIXME
+    collection_cmd: >
+      cat /etc/rsyslog.conf > etc_rsyslog_conf.txt;
+      find /etc/rsyslog.d/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > rsyslog_d_conf.txt;
+      ls -l /var/log > var_log_files.txt
+    collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
     - id: 1
@@ -35,18 +40,7 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
-  - id: 2
-    title: Configuration du paquet rsyslog
-    description: >
-      FIXME
-    collection_cmd: >
-      cat /etc/rsyslog.conf > etc_rsyslog_conf.txt;
-      find /etc/rsyslog.d/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > rsyslog_d_conf.txt;
-      ls -l /var/log > var_log_files.txt
-    collection_cmd_type: CMD_EXEC
-    collect_only: false
-    checks:
-    - id: 1
+    - id: 3
       title: Les permissions sont définies - FileCreateMode
       description: >
         FIXME
@@ -61,7 +55,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
         https://www.rsyslog.com/doc/master/index.html
-    - id: 2
+    - id: 4
       title: Les journaux sont exportés
       description: >
         FIXME
@@ -78,7 +72,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
         https://www.rsyslog.com/doc/master/index.html
-    - id: 3
+    - id: 5
       title: Les journaux sont exportés - ancienne syntaxe
       description: >
         FIXME
@@ -95,7 +89,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
         https://www.rsyslog.com/doc/master/index.html
-    - id: 4
+    - id: 6
       title: Le serveur n'est pas en écoute
       description: >
         FIXME
@@ -111,7 +105,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
         https://www.rsyslog.com/doc/master/index.html
-    - id: 5
+    - id: 7
       title: Les flux sont chiffrés - StreamDriver
       description: >
         FIXME
@@ -129,7 +123,7 @@
         https://www.rsyslog.com/doc/master/index.html
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.20
         https://rsyslog.readthedocs.io/en/latest/concepts/ns_gtls.html
-    - id: 6
+    - id: 8
       title: Les flux sont chiffrés - StreamDriverMode
       description: >
         FIXME
@@ -147,7 +141,7 @@
         https://www.rsyslog.com/doc/master/index.html
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.20
         https://rsyslog.readthedocs.io/en/latest/concepts/ns_gtls.html
-    - id: 7
+    - id: 9
       title: Les flux sont authentifiés - StreamDriverAuthMode
       description: >
         FIXME
@@ -165,10 +159,7 @@
         https://www.rsyslog.com/doc/master/index.html
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.20
         https://rsyslog.readthedocs.io/en/latest/concepts/ns_gtls.html
-- id: 2
-  name: Journalisation journald
-  checkpoints:
-  - id: 1
+  - id: 2
     title: Configuration du service journald
     description: >
       FIXME
@@ -223,26 +214,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
         https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
         https://www.man7.org/linux/man-pages/man5/journald.conf.5.html
-- id: 3
-  name: Rotation des journaux
-  checkpoints:
-  - id: 1
-    title: Rotation des journaux (manuel)
-    description: >
-      FIXME
-      La rotation des journaux doit être conforme avec la politique de rétention.
-      Voir aussi :
-      * https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.29
-      * https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.30
-    collection_cmd: >
-      cat /etc/logrotate.conf > logrotate_conf.txt;
-      find /etc/logrotate.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > logrotate_d_conf.txt
-    collection_cmd_type: CMD_EXEC
-    collect_only: true
-- id: 4
-  name: Splunk
-  checkpoints:
-  - id: 1
+  - id: 3
     title: Splunk Universal Forwarder (manuel)
     description: >
       FIXME
@@ -253,5 +225,18 @@
       * Vérifier l'utilisation d'un canal de communication sécurisé
     collection_cmd: >
       find /opt/splunkforwarder/etc/ -type f -exec ls -ailL {} \; -exec cat {} \; > splunkforwarder_conf.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: true
+  - id: 4
+    title: Rotation des journaux (manuel)
+    description: >
+      FIXME
+      La rotation des journaux doit être conforme avec la politique de rétention.
+      Voir aussi :
+      * https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.29
+      * https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.30
+    collection_cmd: >
+      cat /etc/logrotate.conf > logrotate_conf.txt;
+      find /etc/logrotate.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > logrotate_d_conf.txt
     collection_cmd_type: CMD_EXEC
     collect_only: true
