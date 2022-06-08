@@ -518,7 +518,7 @@
       find /etc/firewalld/ -type f -exec ls - ailL {} \; -exec cat {} \; > fw_firewalld_conf.txt;
       firewall-cmd --state > fw_firewalld_status.txt
     collection_cmd_type: CMD_EXEC
-    collect_only: false
+    collect_only: true
 - id: 5
   name: Configuration de nftables
   checkpoints:
@@ -531,4 +531,4 @@
       find /etc/nftables/ -type f -exec ls - ailL {} \; -exec cat {} \; > fw_nftables_all_conf.txt;
       nft list ruleset > fw_nftables_ruleset.txt
     collection_cmd_type: CMD_EXEC
-    collect_only: false
+    collect_only: true
