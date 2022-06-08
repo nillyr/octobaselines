@@ -523,7 +523,7 @@
       cmd: PASSING=0; grep -Eq "DIR_MODE=07[0-5]0\s*(\s*#.*)?$" /etc/adduser.conf && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
-      level: enhanced
+      level: intermediary
       recommendation_on_failed: >
         FIXME
       see_also: >

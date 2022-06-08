@@ -1410,6 +1410,7 @@
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.14
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.15
       -  https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.16
+      -  https://www.wapt.fr/fr/doc-1.8/waptserver-install/debian/install-debian-wapt.html
     collection_cmd: >
       find /etc/apt/ -type f \( -name *.list -o -name *.sources \) -exec ls -ailL {} \; -exec cat {} \; > sources_list.txt;
       find /opt/wapt/ -type f -exec ls -ailL {} \; -exec cat {} \; > wapt_conf.txt

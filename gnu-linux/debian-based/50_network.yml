@@ -519,3 +519,16 @@
       firewall-cmd --state > fw_firewalld_status.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
+- id: 5
+  name: Configuration de nftables
+  checkpoints:
+  - id: 1
+    title: Configuration de nftables (manuel)
+    description: >
+      FIXME
+    collection_cmd: >
+      cat /etc/nftables.conf > fw_nftables_conf.txt;
+      find /etc/nftables/ -type f -exec ls - ailL {} \; -exec cat {} \; > fw_nftables_all_conf.txt;
+      nft list ruleset > fw_nftables_ruleset.txt
+    collection_cmd_type: CMD_EXEC
+    collect_only: false

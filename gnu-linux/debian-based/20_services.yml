@@ -75,7 +75,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 5
-      title: Serveur NFS - Part 1
+      title: Serveur NFS - nfs-server
       description: >
         FIXME
       type: CMD_EXEC
@@ -89,7 +89,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 6
-      title: Serveur NFS - Part 2
+      title: Serveur NFS - rpcbind
       description: >
         FIXME
       type: CMD_EXEC
@@ -103,7 +103,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 7
-      title: Serveur NFS - Part 3
+      title: Serveur NFS - portmap
       description: >
         FIXME
       type: CMD_EXEC
@@ -117,7 +117,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 8
-      title: Serveur NFS - Part 4
+      title: Serveur NFS - rpc.statd
       description: >
         FIXME
       type: CMD_EXEC
@@ -131,7 +131,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 9
-      title: Serveur NFS - Part 5
+      title: Serveur NFS - no root squash
       description: >
         Dans le cas où NFS venait à être utilisé en tant que serveur, l'option no_root_squash ne doit pas être utilisée.
       type: CMD_EXEC
@@ -173,7 +173,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 12
-      title: Serveur HTTP (apache)
+      title: Serveur HTTP - apache
       description: >
         FIXME
       type: CMD_EXEC
@@ -187,7 +187,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 13
-      title: Serveur HTTP (apache2)
+      title: Serveur HTTP - apache2
       description: >
         FIXME
       type: CMD_EXEC
@@ -201,7 +201,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 14
-      title: Serveur HTTP (nginx)
+      title: Serveur HTTP - nginx
       description: >
         FIXME
       type: CMD_EXEC
@@ -215,7 +215,7 @@
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.42
     - id: 15
-      title: Serveur HTTP (lighttpd)
+      title: Serveur HTTP - lighttpd
       description: >
         FIXME
       type: CMD_EXEC
@@ -878,25 +878,3 @@
       see_also: >
         https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.1
         https://www.ssi.gouv.fr/uploads/2014/01/NT_OpenSSH.pdf
-  - id: 4
-    title: Partage réseau (manuel)
-    description: >
-      FIXME
-    collection_cmd: >
-      cat /etc/samba/smb.conf > share_smb.txt;
-      cat /etc/idmapd.conf > nfs_domain_share.txt;
-      cat /etc/exports > exports.txt;
-      cat /etc/fstab > mounted_share_fstab.txt;
-      showmount -e > mounted_share_client.txt
-    collection_cmd_type: CMD_EXEC
-    collect_only: true
-  - id: 5
-    title: WIP_SQUID_NGINX_APACHE (manuel)
-    description: >
-      FIXME
-    collection_cmd: >
-      cat /etc/squid/squid.conf > squid_conf.txt;
-      find /etc/nginx/ -type f -exec ls -ailL {} ;\ -exec cat {} \; > nginx_all_config.txt;
-      find /etc/apache2/ -type f -name *.conf -exec ls -ailL {} ;\ -exec cat {} \; > apache_all_config.txt
-    collection_cmd_type: CMD_EXEC
-    collect_only: true
