@@ -11,8 +11,11 @@
       title: L'algorithme de hashage est sécurisé
       description: >
         PAM et /etc/login.defs peuvent être configurés afin d'utiliser SHA-512 et un nombre de tours assez grand.
+        "yescrypt" est présent dans les dernières versions et utilise PBKDF.
+        Voir aussi :
+        * https://skybert.net/debian-linux/yescript-replaces-sha512-for-password-hashing/
       type: CMD_EXEC
-      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*(sha256|sha512)\s*(\S+\s*)*$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
+      cmd: PASSING=0; grep -Eq "^password\s+(\S+\s+)+pam_unix\.so\s+(\S+\s+)*(sha256|sha512|yescript)\s*(\S+\s*)*$" /etc/pam.d/common-password && PASSING=1; echo $PASSING
       expected: 1
       verification_type: CHECK_EXACT
       level: minimal
@@ -413,6 +416,7 @@
     description: >
       FIXME
     collection_cmd: >
+      { cat /etc/pam_ldap.conf; cat /etc/libnss-ldap.conf; } > pam_nss_ldap_conf.txt;
       find /etc/pam.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > pam_all_config.txt;
       find /etc/ldap/ -type f -exec ls -ailL {} \; -exec cat {} \; > ldap_conf.txt
     collection_cmd_type: CMD_EXEC
