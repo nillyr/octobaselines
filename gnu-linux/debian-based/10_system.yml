@@ -182,7 +182,8 @@
     collection_cmd: >
       mount > mount.txt;
       fdisk -l > fdisk.txt;
-      lsblk --fs > lsblk.txt
+      lsblk --fs > lsblk.txt;
+      { cat /etc/fstab; cat /etc/crypttab; } > mounted_disk.txt
     collection_cmd_type: CMD_EXEC
     collect_only: false
     checks:
