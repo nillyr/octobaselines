@@ -83,8 +83,8 @@
         cat /etc/passwd > etc_passwd.txt;
         cat /etc/shadow > etc_shadow.txt;
         cat /etc/login.defs > login_defs.txt;
-        getent passwd;
-        getent shadow
+        getent passwd > getent_passwd.txt;
+        getent shadow > getent_shadow.txt
       collection_cmd_type: CMD_EXEC
       collect_only: false
       checks:

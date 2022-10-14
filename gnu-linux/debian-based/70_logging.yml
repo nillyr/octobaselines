@@ -224,7 +224,7 @@
         * Vérifier l'envoi vers un serveur distant
         * Vérifier l'utilisation d'un canal de communication sécurisé
       collection_cmd: >
-        find /opt/splunkforwarder/etc/ -type f -exec ls -ailL {} \; -exec cat {} \; > splunkforwarder_conf.txt;
+        find /opt/splunkforwarder/etc/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > splunkforwarder_conf.txt;
         /opt/splunkforwarder/bin/splunk btool inputs list --debug > splunk_universal_forwarder_inputs_running_conf.txt;
         /opt/splunkforwarder/bin/splunk btool outputs list --debug > splunk_universal_forwarder_outputs_running_conf.txt;
         /opt/splunkforwarder/bin/splunk btool server list --debug > splunk_universal_forwarder_server_running_conf.txt
