@@ -21,7 +21,7 @@ See [octoconf](https://github.com/Nillyr/octoconf "octoconf") for the usage inst
 
 ## Copyright and license
 
-Copyright (c) 2021-2022 Nicolas GRELLETY
+Copyright (c) 2021-2023 Nicolas GRELLETY
 
 This software is licensed under GNU GPLv3 license. See `LICENSE` file in the root folder of the project.
 
