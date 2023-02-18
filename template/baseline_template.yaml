@@ -1,0 +1,8 @@
+title: "MATCH_AND_REPLACE_TITLE"
+categories:
+  - category: "MATCH_AND_REPLACE_CATEGORY"
+    name: "MATCH_AND_REPLACE_NAME"
+    description: |
+      MATCH_AND_REPLACE_DESCRIPTION
+    rules:
+      - MATCH_AND_REPLACE_RULE
