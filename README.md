@@ -9,15 +9,15 @@ Submodule of the octoconf project.
 
 ## Usage
 
-See [octoconf](https://github.com/Nillyr/octoconf "octoconf") for the usage instructions.
+See [octoconf](https://github.com/nillyr/octoconf "octoconf") for the usage instructions.
 
 ## Maintainer
 
-- [Nicolas GRELLETY](https://github.com/Nillyr)
+- [Nicolas GRELLETY](https://github.com/nillyr)
 
 ## Authors
 
-- [Nicolas GRELLETY](https://github.com/Nillyr)
+- [Nicolas GRELLETY](https://github.com/nillyr)
 
 ## Copyright and license
 
