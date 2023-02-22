@@ -55,9 +55,10 @@ main() {
 
     aes_key=$(decrypt_aes_key "$rsa_private_key_path" "$unpacked_archive_path"/aes_key.enc)
 
-    export -f decrypt_and_save
-    export -f decrypt_data
-    find "$unpacked_archive_path" -type f -name '*.txt' -exec bash -c 'decrypt_and_save "$@"' bash "$aes_key" {} +
+    find "$unpacked_archive_path" -type f -name "*.txt" -print0 |
+        while read -d $'\0' -r encrypted_file; do
+            decrypt_and_save "$aes_key" "$encrypted_file"
+        done
 }
 
 main "$@"

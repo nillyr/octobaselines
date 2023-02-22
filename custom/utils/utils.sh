@@ -3,14 +3,20 @@
 
 # Verbose mode. Prints (success|warning|failure) messages
 VERBOSE=1
+readonly VERBOSE
 # Debug mode. Warning: sensitive information may be printed.
 DEBUG=0
+readonly DEBUG
 
 # Enable encryption
 ENABLE_ENCRYPTION=0
+readonly ENABLE_ENCRYPTION
 
-AES_KEY_SIZE=32 # in bytes (16=128/8, 24=192/8, 32=256/8)
+AES_KEY_SIZE=32 # in bytes (32=256/8)
+readonly AES_KEY_SIZE
+
 AES_IV_SIZE=16 # in bytes
+readonly AES_IV_SIZE
 
 # Create the RSA private key: openssl genpkey -out private.key -algorithm RSA -pkeyopt rsa_keygen_bits:4096
 # Create a CSR: openssl req -new -key private.key -out certificate.csr
@@ -72,96 +78,6 @@ cleanup(){
 }
 
 # shellcheck disable=SC2317
-init_crypto_material() {
-    info "Initialization of the cryptographic material"
-    if ! is_package_installed openssl; then
-        failure "openssl package is not installed. Switching off encryption option."
-        ENABLE_ENCRYPTION=0
-        return
-    fi
-
-    if [ -z "$CERTIFICATE" ]; then
-        failure "No certificate found. Switching off encryption option."
-        ENABLE_ENCRYPTION=0
-        return
-    fi
-
-    echo "$CERTIFICATE" > certificate.crt
-    if ! openssl x509 -in certificate.crt -text -noout &>/dev/null; then
-        failure "Invalid certificate. Switching off encryption option."
-        ENABLE_ENCRYPTION=0
-        return
-    fi
-
-    info "Generating new AES symmetric-key."
-    AES_KEY=$(openssl rand -rand /dev/urandom -hex $AES_KEY_SIZE)
-
-    info "Saving encrypted version of the AES symmetric-key."
-    echo "$AES_KEY" | openssl pkeyutl -encrypt -certin -inkey certificate.crt -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha384 | base64 > "${BASEDIR}"/aes_key.enc
-}
-
-# shellcheck disable=SC2317
-encrypt_output() {
-    [ $ENABLE_ENCRYPTION -eq 0 ] && {
-        cat /dev/stdin
-        return
-    }
-
-    if ! is_package_installed openssl; then
-        failure "openssl package is not installed. Data cannot be encrypted."
-        cat /dev/stdin
-        return
-    fi
-
-    AES_IV=$(openssl rand -rand /dev/urandom -hex $AES_IV_SIZE)
-    ENCRYPTED_BYTES_B64=$(openssl enc -e -aes-256-cbc -K "$AES_KEY" -iv "$AES_IV" -base64 < /dev/stdin)
-
-    AES_IV_BYTES_B64=$(echo "$AES_IV" | xxd -r -p | base64)
-    FINAL_BLOCK=${AES_IV_BYTES_B64}${ENCRYPTED_BYTES_B64}
-
-    echo "${FINAL_BLOCK//[$'\t\r\n ']}"
-}
-
-# shellcheck disable=SC2317
-get_permissions(){  # args: $1..n = file:str
-    local files=("$@")
-
-    for file in "${files[@]}"; do
-        real_path=$(realpath "$file")
-        printf "\nFile: %s\n" "$real_path"
-        printf "\n[ Discretionary Access Control (DAC) ]\n"
-        stat -c "%n %A:%u:%g" "$real_path"
-
-        printf "\n[ Access Control Lists (ACLs) ]\n"
-        getfacl "$real_path"
-
-        printf "\n[ ATTRIBUTES ]\n"
-        lsattr "$real_path"
-
-        if [ -d "$real_path" ]; then
-	    	ls -ailLZ "$real_path"
-		    for child in "$real_path"/*; do
-			    get_permissions "$child"
-		    done
-	    fi
-    done
-}
-
-# shellcheck disable=SC2317
-is_dac_setting_correct(){ # args: $1 = file:str, $2 = regex pattern from stat(%A:%U:%G):str
-    local file="$1"
-    local pattern="$2"
-
-    is_package_installed sudo && SUDO_CMD="sudo"
-    if { $SUDO_CMD stat -c "%A:%U:%G" "$file" | grep -E "$pattern"; } &>/dev/null; then
-        debug "DAC of file '$file' match with pattern '$pattern'"
-        return 0
-    fi
-    debug "DAC of '$file' does not match with pattern '$pattern'"
-    return 1
-}
-
-# shellcheck disable=SC2317
 identify_distribution(){
     if [ -e /etc/os-release ]; then
         # shellcheck source=/dev/null
@@ -189,7 +105,7 @@ identify_distribution(){
                 DISTRIBUTION=rocky
                 ;;
             *)
-                failure "Unknown or unsupported distribution with ID='$ID'"
+                failure "Unknown or unsupported distribution with ID='$ID'."
                 exit 1
                 ;;
         esac
@@ -198,7 +114,7 @@ identify_distribution(){
         # RHEL/CentOS, RHEL/Rocky, Fedora, etc.
         DISTRIBUTION=rhel
     else
-        failure "Unknown or unsupported distribution"
+        failure "Unknown or unsupported distribution."
         exit 1
     fi
 }
@@ -234,6 +150,44 @@ is_package_installed(){ # args: $1 = package:str
             return 1
             ;;
     esac
+}
+
+# shellcheck disable=SC2317
+count_available_updates(){ # args: $1 = write_to_stdout:bool
+    local write_to_stdout="$1"
+    local tmp_output_file
+    local count=0
+    tmp_output_file=$(mktemp -p /dev/shm/ pkgs.XXXXXXXX)
+    is_package_installed sudo && SUDO_CMD="sudo"
+    case $DISTRIBUTION in
+        debian|ubuntu)
+            last=$((1<<62))
+            [ -f "/var/cache/apt/pkgcache.bin" ] && last=$(($(date +%s) - $(stat -c '%Y' /var/cache/apt/pkgcache.bin)))
+            if ((last >= 28800)); then
+                $SUDO_CMD apt-get update &>/dev/null
+            fi
+            apt-get upgrade -s 2>/dev/null | grep -E "^Inst" > "$tmp_output_file"
+            ;;
+        fedora|rhel|centos|rocky)
+            if is_package_installed dnf; then
+                $SUDO_CMD dnf check-update 2>/dev/null > "$tmp_output_file"
+            else
+                $SUDO_CMD yum check-update 2>/dev/null > "$tmp_output_file"
+            fi
+            ;;
+        sles)
+            # zypper list-updates and zypper list-patches are available. lp -> "needed patches"
+            $SUDO_CMD zypper list-patches 2>/dev/null > "$tmp_output_file"
+            ;;
+    esac
+
+    count=$(wc -l "$tmp_output_file" | cut -d' ' -f1)
+    debug "Found $count available update(s)."
+
+    [ "$write_to_stdout" == "true" ] && printf "%s\n" "$(cat "$tmp_output_file")"
+    rm -f "$tmp_output_file"
+
+    return "$count"
 }
 
 # shellcheck disable=SC2317
@@ -284,41 +238,94 @@ is_partition_mounted_with_option(){ # args: $1 = partition:str, $2 = option:str
 }
 
 # shellcheck disable=SC2317
-count_available_updates(){ # args: $1 = write_to_stdout:bool
-    local write_to_stdout="$1"
-    local tmp_output_file
-    local count=0
-    tmp_output_file=$(mktemp -p /dev/shm/ pkgs.XXXXXXXX)
+is_dac_setting_correct(){ # args: $1 = file:str, $2 = regex pattern from stat(%A:%U:%G):str
+    local file="$1"
+    local pattern="$2"
+
     is_package_installed sudo && SUDO_CMD="sudo"
-    case $DISTRIBUTION in
-        debian|ubuntu)
-            last=$((1<<62))
-            [ -f "/var/cache/apt/pkgcache.bin" ] && last=$(($(date +%s) - $(stat -c '%Y' /var/cache/apt/pkgcache.bin)))
-            if ((last >= 28800)); then
-                $SUDO_CMD apt-get update &>/dev/null
-            fi
-            apt-get upgrade -s 2>/dev/null | grep -E "^Inst" > "$tmp_output_file"
-            ;;
-        fedora|rhel|centos|rocky)
-            if is_package_installed dnf; then
-                $SUDO_CMD dnf check-update 2>/dev/null > "$tmp_output_file"
-            else
-                $SUDO_CMD yum check-update 2>/dev/null > "$tmp_output_file"
-            fi
-            ;;
-        sles)
-            # zypper list-updates and zypper list-patches are available. lp -> "needed patches"
-            $SUDO_CMD zypper list-patches 2>/dev/null > "$tmp_output_file"
-            ;;
-    esac
+    if { $SUDO_CMD stat -c "%A:%U:%G" "$file" | grep -E "$pattern"; } &>/dev/null; then
+        debug "DAC of file '$file' match with pattern '$pattern'."
+        return 0
+    fi
+    debug "DAC of '$file' does not match with pattern '$pattern'."
+    return 1
+}
 
-    count=$(wc -l "$tmp_output_file" | cut -d' ' -f1)
-    debug "Found $count available update(s)."
+# shellcheck disable=SC2317
+init_crypto_material() {
+    info "Initialization of the cryptographic material"
+    if [ -z "$CERTIFICATE" ] || [ "$AES_KEY_SIZE" != 32 ] || [ "$AES_IV_SIZE" != 16 ]; then
+        return 1
+    fi
 
-    [ "$write_to_stdout" == "true" ] && printf "%s\n" "$(cat "$tmp_output_file")"
-    rm -f "$tmp_output_file"
+    if ! is_package_installed openssl; then
+        return 1
+    fi
 
-    return "$count"
+    info "Generating new AES symmetric-key."
+    AES_KEY=$(openssl rand -rand /dev/urandom -hex "$AES_KEY_SIZE")
+
+    info "Saving encrypted version of the AES symmetric-key."
+    echo "$CERTIFICATE" > "${BASEDIR}"/certificate.crt
+    if ! openssl x509 -in "${BASEDIR}"/certificate.crt -text -noout &>/dev/null; then
+        return 1
+    fi
+
+    echo "$AES_KEY" | openssl pkeyutl -encrypt -certin -inkey "${BASEDIR}"/certificate.crt -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha384 2>/dev/null | base64 > "${BASEDIR}"/aes_key.enc
+    file_size=$(stat --printf="%s" "${BASEDIR}"/aes_key.enc)
+    if [ "$file_size" -eq 0 ]; then
+        return 1
+    fi
+}
+
+# shellcheck disable=SC2317
+encrypt_output() {
+    [ "$ENABLE_ENCRYPTION" -eq 0 ] && {
+        cat /dev/stdin
+        return
+    }
+
+    if [ "$AES_KEY_SIZE" != 32 ] || [ "$AES_IV_SIZE" != 16 ]; then
+        failure "Critical Error: The specified settings do not allow the use of data encryption. Run the script with 'ENABLE_ENCRYPTION' disabled or check your settings."
+        kill -s INT $$
+    fi
+
+    AES_IV=$(openssl rand -rand /dev/urandom -hex "$AES_IV_SIZE")
+    ENCRYPTED_BYTES_B64=$(openssl enc -e -aes-256-cbc -K "$AES_KEY" -iv "$AES_IV" -base64 < /dev/stdin 2>/dev/null)
+    rc=$?
+    if [ "$rc" -ne 0 ]; then
+        failure "Critical Error: Error while encrypting data. Run the script with 'ENABLE_ENCRYPTION' disabled or check your settings."
+        kill -s INT $$
+    else
+        AES_IV_BYTES_B64=$(echo "$AES_IV" | xxd -r -p | base64)
+        FINAL_BLOCK=${AES_IV_BYTES_B64}${ENCRYPTED_BYTES_B64}
+        echo "${FINAL_BLOCK//[$'\t\r\n ']}"
+    fi
+}
+
+# shellcheck disable=SC2317
+get_permissions(){  # args: $1..n = file:str
+    local files=("$@")
+
+    for file in "${files[@]}"; do
+        real_path=$(realpath "$file")
+        printf "\nFile: %s\n" "$real_path"
+        printf "\n[ Discretionary Access Control (DAC) ]\n"
+        stat -c "%n %A:%u:%g" "$real_path"
+
+        printf "\n[ Access Control Lists (ACLs) ]\n"
+        getfacl "$real_path"
+
+        printf "\n[ ATTRIBUTES ]\n"
+        lsattr "$real_path"
+
+        if [ -d "$real_path" ]; then
+	    	ls -ailLZ "$real_path"
+		    for child in "$real_path"/*; do
+			    get_permissions "$child"
+		    done
+	    fi
+    done
 }
 
 # shellcheck disable=SC2317
@@ -420,10 +427,29 @@ get_system_info(){
     printf "%s\n" "$ifaces"
 }
 
+# shellcheck disable=SC2317
+assert_user_privileges() {
+    if [ "${EUID}" -eq 0 ]; then
+        return 0
+    fi
+
+    is_package_installed sudo && SUDO_CMD="sudo"
+    if $SUDO_CMD -l &>/dev/null; then
+        return 0
+    fi
+
+    return 1
+}
+
 trap cleanup SIGHUP SIGINT SIGQUIT SIGABRT
 
 if [ ! "$(uname -s)" == "Linux" ]; then
-    failure "This script must be run on Linux operating system."
+    failure "This script must be run on Linux."
+    exit 1
+fi
+
+if ! assert_user_privileges; then
+    failure "'${USER}' does not have enough privileges to run this script."
     exit 1
 fi
 
@@ -431,9 +457,14 @@ fi
 # reason: this file is integrated in the generated script, which must initialize the variable.
 if [ -z "$BASEDIR" ]; then
     BASEDIR=$(mktemp -d -t tmp.XXXXXXXXXXXX)
+    info "A working directory has been created in $BASEDIR."
 fi
 
-# TODO: improve error management on crypto
-[ "$ENABLE_ENCRYPTION" -eq 1 ] && init_crypto_material
+if [ "$ENABLE_ENCRYPTION" -eq 1 ]; then
+    if ! init_crypto_material; then
+        failure "Critical Error: The specified settings do not allow the use of data encryption. Run the script with 'ENABLE_ENCRYPTION' disabled or check your settings."
+        kill -s INT $$
+    fi
+fi
 
 get_system_info | encrypt_output > "${BASEDIR}"/system_information.txt

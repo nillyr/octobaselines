@@ -1,7 +1,7 @@
 # Functions to ease the development of scripts
 
 # Enable encryption
-$global:ENABLE_ENCRYPTION = $True
+$global:ENABLE_ENCRYPTION = $False
 
 # Create the RSA private key: openssl genpkey -out private.key -algorithm RSA -pkeyopt rsa_keygen_bits:4096
 # Create a CSR: openssl req -new -key private.key -out certificate.csr
