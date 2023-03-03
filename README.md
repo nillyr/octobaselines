@@ -1,7 +1,7 @@
 # octochecklists
 
 <p align="center">
-  <img width="200" height="200" src="ressources/logo.png">
+  <img width="200" height="200" src="resources/logo.png">
   <br/><br/>
 </p>
 
