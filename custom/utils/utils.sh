@@ -109,7 +109,7 @@ identify_distribution(){
                 exit 1
                 ;;
         esac
-    elif command -v rpm >/dev/null && [ -e /etc/redhat-release ]; then
+    elif command -v rpm &>/dev/null && [ -e /etc/redhat-release ]; then
         # Standardizes a set of distributions in rhel
         # RHEL/CentOS, RHEL/Rocky, Fedora, etc.
         DISTRIBUTION=rhel
@@ -308,8 +308,14 @@ get_permissions(){  # args: $1..n = file:str
     local files=("$@")
 
     for file in "${files[@]}"; do
-        real_path=$(realpath "$file")
-        printf "\nFile: %s\n" "$real_path"
+        printf "\nCurrent file:\n%s\n" "$(ls -ailLZ "$file")"
+
+        if ! command -v realpath &>/dev/null; then
+            real_path="$file"
+        else
+            real_path=$(realpath "$file")
+        fi
+
         printf "\n[ Discretionary Access Control (DAC) ]\n"
         stat -c "%n %A:%u:%g" "$real_path"
 
