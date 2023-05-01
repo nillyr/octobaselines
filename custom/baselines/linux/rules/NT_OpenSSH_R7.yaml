@@ -1,0 +1,98 @@
+id: NT_OpenSSH_R7
+title: Génération de clés - tailles et algorithmes
+description: |
+  Différents algorithmes et tailles de clés sont utilisables par SSH. Tous ne répondent pas aux critères de sécurité du RGS. L'implémentation DSA présente dans OpenSSH est limitée à une taille de clé de 1024 bits, qui est une taille insuffisante.
+
+  L'usage de DSA n'est pas recommandé.
+
+collection_cmd: |
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      printf "File: %s\n%s\n\n" "$(${SUDO_CMD} ls -lZ "${file}")" "$(${SUDO_CMD} cat "${file}" 2>/dev/null)" >> NT_OpenSSH_R7_config_files.txt
+      printf "File: %s\n%s\n\n" "$(${SUDO_CMD} ls -lZ "${file}")" "$(${SUDO_CMD} sshd -T -f "${file}" 2>/dev/null)" >> NT_OpenSSH_R7_running_configs.txt
+
+      ${SUDO_CMD} sshd -T -f "${file}" | grep "hostkey " |
+        while read -r file; do
+          ${SUDO_CMD} ssh-keygen -f "${file}" -y 2>/dev/null >> NT_OpenSSH_R7_public_keys.txt
+        done < <(awk '{print $2}')
+
+    done
+  else
+    : > NT_OpenSSH_R7.txt
+  fi
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NT_OpenSSH_R7"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_PASS # (default: rsa, ed25519 & ecdsa)
+
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      ${SUDO_CMD} sshd -T -f "${file}" | grep "hostkey " |
+        while read -r file; do
+          type=$(${SUDO_CMD} ssh-keygen -f "${file}" -y 2>/dev/null | awk '{print $1}')
+          # DSA = ssh-dss [...]
+          # RSA = ssh-rsa [...]
+          # ed25519 = ssh-ed25519 [...]
+          # ecdsa = ecdsa-sha2-nistp256 [...]
+
+          if [[ "${type}" == "ssh-dss" ]]; then
+            STATUS=RESULT_CHECK_FAIL
+          fi
+        done < <(awk '{print $2}')
+    done
+
+  else
+    STATUS=RESULT_CHECK_NA
+  fi
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*(RESULT_CHECK_PASS|RESULT_CHECK_NA)
+recommendation: |
+  Nous recommandons de ne plus utiliser l'algorithme DSA, considéré comme faible pour les raisons sus-citées.
+
+  Pour cela, le _playbook_ Ansible suivant peut être utilisé :
+  [source%linenums,yaml]
+  [options="nowrap"]
+  ----
+  - name: Remove usage of DSA keys
+    hosts: all
+    become: true
+
+    ansible.builtin.lineinfile:
+      path: "{{ item }}"
+      regexp: "^\s*HostKey /etc/ssh/ssh_host_dsa_key"
+      line: "#HostKey /etc/ssh/ssh_host_dsa_key"
+    with_items:
+      - /etc/ssh/sshd_config
+    notify:
+      - Restart SSH service
+
+    handlers:
+      - name Restart SSH service
+        become: true
+        ansible.builtin.service:
+          name: ssh
+          state: restarted
+  ----
+
+  Voir aussi :
+
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/lineinfile_module.html
+
+level: minimal
+severity: high
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/guide/recommandations-pour-un-usage-securise-dopenssh/
+  - https://www.ssi.gouv.fr/administration/reglementation/confiance-numerique/le-referentiel-general-de-securite-rgs/

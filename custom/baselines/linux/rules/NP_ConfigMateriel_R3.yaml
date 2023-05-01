@@ -1,0 +1,75 @@
+id: NP_ConfigMateriel_R3
+title: Activation du bit de protection NX/XD
+description: |
+  Les droits d'accès sur les pages mémoire physiques sont usuellement spécifiés au travers de 3 bits :
+
+  - R ("read") : droit d'accès en lecture ;
+  - W ("write") : droit d'accès en écriture ;
+  - NX/XD ("no-execute" ou encore "execute-disable") : indique si le contenu de la mémoire est exécutable ou non.
+
+  Si le processeur dispose de cette fonction, elle est activée par défaut, à moins qu'elle ne soit supplantée par le paramètre "noexec=off".
+
+  Nous recommandons d'activer le bit de protection NX/XD.
+
+collection_cmd: |
+  is_package_installed sudo && SUDO_CMD="sudo"
+
+  grep -m1 nx /proc/cpuinfo | encrypt_output > NP_ConfigMateriel_R3_cpu_support.txt
+  ${SUDO_CMD} cat /proc/cmdline /etc/kernel/cmdline 2>/dev/null | encrypt_output > NP_ConfigMateriel_R3_cmdline.txt
+  ${SUDO_CMD} dmesg | grep "Execute Disable" | encrypt_output > NP_ConfigMateriel_R3_current_dmesg.txt
+  ${SUDO_CMD} grep "Execute Disable" /var/log/dmesg* | encrypt_output > NP_ConfigMateriel_R3_rotated_dmesg.txt
+  ${SUDO_CMD} cat /var/log/messages 2>/dev/null | grep "Execute Disable" | encrypt_output > NP_ConfigMateriel_R3_log_messages.txt
+  ${SUDO_CMD} journalctl -k -b all 2>/dev/null | grep "Execute Disable" | encrypt_output > NP_ConfigMateriel_R3_journalctl.txt
+  ${SUDO_CMD} cat /etc/{default,sysconfig}/{grub,grub.d/*} 2>/dev/null | encrypt_output > NP_ConfigMateriel_R3_grub_cfg.txt
+  ${SUDO_CMD} cat /etc/grub.conf 2>/dev/null | encrypt_output > NP_ConfigMateriel_R3_grub_cfg_old.txt
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NP_ConfigMateriel_R3"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_PASS # (default = on)
+
+  is_package_installed sudo && SUDO_CMD="sudo"
+
+  if ! grep -m1 -q nx /proc/cpuinfo 2>/dev/null; then
+    debug "NX bit is not supported by the CPU."
+    STATUS=RESULT_CHECK_FAIL
+  fi
+
+  if ! arch | grep -Eq "x86_64|amd64|aarch64"; then
+    if ! ${SUDO_CMD} grep -q -E "^CONFIG_X86_PAE=y" "/boot/config-$(uname -r)" 2>/dev/null; then
+      debug "PAE is not enabled."
+      STATUS=RESULT_CHECK_FAIL
+    fi
+  fi
+
+  if ! ${SUDO_CMD} grep -q -v "noexec=off" /proc/cmdline /etc/kernel/cmdline 2>/dev/null; then
+    debug "NX bit is disabled in GRUB line."
+    STATUS=RESULT_CHECK_FAIL
+  fi
+
+  # At least one check must succeed
+  f_a=$(${SUDO_CMD} dmesg | grep -q "NX (Execute Disable) protection: active" 2>/dev/null && echo 1)
+  f_b=$(${SUDO_CMD} grep -q "NX (Execute Disable) protection: active" /var/log/dmesg* 2>/dev/null && echo 1)
+  f_c=$(${SUDO_CMD} grep -q "NX (Execute Disable) protection: active" /var/log/messages 2>/dev/null && echo 1)
+  f_d=$(${SUDO_CMD} journalctl -k -b all | grep -q "NX (Execute Disable) protection: active" 2>/dev/null && echo 1)
+
+  (( ${f_a:-0} || ${f_b:-0} || ${f_c:-0} || ${f_d:-0} )) || STATUS=RESULT_CHECK_FAIL
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*RESULT_CHECK_PASS
+recommendation: |
+  Nous recommandons l'activation du bit de protection NX/XD. Cette recommandation peut nécessiter un changement de matériel en cas d'utilisation d'un processeur ne le prenant pas en charge.
+
+  Dans le cas de l'architecture 32 bits, le paramètre de configuration "CONFIG_X86_PAE" doit être activé (valeur "y").
+level: enhanced
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/administration/guide/recommandations-de-configuration-materielle-de-postes-clients-et-serveurs-x86/
+  - https://access.redhat.com/solutions/2936741
+  - https://www.kernelconfig.io/config_x86_pae

@@ -1,0 +1,97 @@
+id: NT_OpenSSH_R13
+title: Droits d'accès et diffusion des clés
+description: |
+  Les clés d'authentification SSH peuvent être regroupées selon deux rôles :
+
+  - celles utilisées pour l'authentification d’utilisateurs ;
+  - celles utilisées pour l'authentification d’un hôte/serveur.
+
+  La clé privée ne doit être connue que de l'entité qui cherche à prouver son identité à un tiers et éventuellement d'une autorité de confiance. Cette clé privée doit être dûment protégée pour en éviter la diffusion à une personne non autorisée.
+
+  Dans le cadre de l'audit, seule la clé de l'hôte est vérifiée.
+
+collection_cmd: |
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      ${SUDO_CMD} sshd -T -f "${file}" | grep "hostkey " |
+        while read -r file; do
+          ${SUDO_CMD} get_permissions "${file}" "${file}.pub" 2>/dev/null >> NT_OpenSSH_R13_permissions.txt
+        done < <(awk '{print $2}')
+    done
+
+  else
+    : > NT_OpenSSH_R13.txt
+  fi
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NT_OpenSSH_R13"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_FAIL
+
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+
+    temp_status=""
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      temp_status=$(${SUDO_CMD} sshd -T -f "${file}" | grep "hostkey " |
+        while read -r hostkey; do
+          if ! is_dac_setting_correct "${hostkey}" "\-r(w|-)-------:root:root"; then
+            echo "false"
+          fi
+        done < <(awk '{print $2}'))
+    done
+
+    [[ "${temp_status}" == *"false"* ]] || STATUS=RESULT_CHECK_PASS
+
+  else
+    STATUS=RESULT_CHECK_NA
+  fi
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*(RESULT_CHECK_PASS|RESULT_CHECK_NA)
+recommendation: |
+  Nous recommandons de modifier les droits d'accès sur les clés. Il est recommandé d'utiliser les valeurs suivantes :
+
+  - Mode : 400 (600 au plus)
+  - Utilisateur : root
+  - Groupe : root
+  - (option) Attribut : immutable
+
+  Pour cela, le _playbook_ Ansible suivant peut être utilisé :
+  [source%linenums,yaml]
+  [options="nowrap"]
+  ----
+  - name: Change DAC on SSH Keys
+    hosts: all
+    become: true
+
+    ansible.builtin.file:
+      path: "{{ item }}"
+      owner: root
+      group: root
+      mode: "400"
+      attribute: "+i"
+    with_items:
+      - /etc/ssh/ssh_host_rsa_key
+  ----
+
+  Voir aussi :
+
+  - https://www.man7.org/linux/man-pages/man5/sshd_config.5.html
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+
+level: minimal
+severity: medium
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/guide/recommandations-pour-un-usage-securise-dopenssh/

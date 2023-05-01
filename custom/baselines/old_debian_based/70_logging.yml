@@ -1,0 +1,245 @@
+- id: 1
+  name: Journalisation
+  checkpoints:
+    - id: 1
+      title: Configuration du paquet rsyslog
+      description: >
+        FIXME
+      collection_cmd: >
+        cat /etc/rsyslog.conf > etc_rsyslog_conf.txt;
+        find /etc/rsyslog.d/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > rsyslog_d_conf.txt;
+        ls -l /var/log > var_log_files.txt
+      collection_cmd_type: CMD_EXEC
+      collect_only: false
+      checks:
+        - id: 1
+          title: Le paquet rsyslog est installé
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; dpkg -s rsyslog 2>/dev/null | grep -Eq "Status:\sinstall\sok\sinstalled" && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+        - id: 2
+          title: Service rsyslog actif
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; systemctl show rsyslog.service -p UnitFileState | grep -q enabled && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+        - id: 3
+          title: Les permissions sont définies - FileCreateMode
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; grep ^\$FileCreateMode /etc/rsyslog.conf /etc/rsyslog.d/*.conf | awk '{print $2}' | grep -Eq "06[0-4]0" && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.rsyslog.com/doc/master/index.html
+        - id: 4
+          title: Les journaux sont exportés
+          description: >
+            FIXME
+            N/A s'il s'agit du serveur de journalisation.
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -Pzo "(?s)^[^#](\s*\S+\s*)\s*action\(.*\)" /etc/rsyslog.conf /etc/rsyslog.d/*.conf | strings | grep -i -Eq "[^#]\s*target=" && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.7
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.rsyslog.com/doc/master/index.html
+        - id: 5
+          title: Les journaux sont exportés - ancienne syntaxe
+          description: >
+            FIXME
+            N/A s'il s'agit du serveur de journalisation.
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -Eq "^[^#]\s*\S+\.\*\s+@" /etc/rsyslog.conf /etc/rsyslog.d/*.conf && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.7
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.rsyslog.com/doc/master/index.html
+        - id: 6
+          title: Le serveur n'est pas en écoute
+          description: >
+            FIXME
+            S'il s'agit d'un serveur de journalisation, il n'y a pas de problème. À l'inverse il ne doit pas y avoir d'écoute pour les équipements "finaux".
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -Eq '^input\(type="im(tcp|udp)"' /etc/rsyslog.conf /etc/rsyslog.d/*.conf || PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.rsyslog.com/doc/master/index.html
+        - id: 7
+          title: Les flux sont chiffrés - StreamDriver
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -Pzo "(?s)^[^#](\s*\S+\s*)\s*action\(.*\)" /etc/rsyslog.conf /etc/rsyslog.d/*.conf | strings | grep -i -Eq '[^#]\s*StreamDriver="gtls"' && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.7
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.rsyslog.com/doc/master/index.html
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.20
+            https://rsyslog.readthedocs.io/en/latest/concepts/ns_gtls.html
+        - id: 8
+          title: Les flux sont chiffrés - StreamDriverMode
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -Pzo "(?s)^[^#](\s*\S+\s*)\s*action\(.*\)" /etc/rsyslog.conf /etc/rsyslog.d/*.conf | strings | grep -i -Eq '[^#]\s*StreamDriverMode="1"' && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.7
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.rsyslog.com/doc/master/index.html
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.20
+            https://rsyslog.readthedocs.io/en/latest/concepts/ns_gtls.html
+        - id: 9
+          title: Les flux sont authentifiés - StreamDriverAuthMode
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -Pzo "(?s)^[^#](\s*\S+\s*)\s*action\(.*\)" /etc/rsyslog.conf /etc/rsyslog.d/*.conf | strings | grep -i -Eq '[^#]\s*StreamDriverAuthMode="x509/(fingerprint|name)"' && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section*.7
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.rsyslog.com/doc/master/index.html
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.20
+            https://rsyslog.readthedocs.io/en/latest/concepts/ns_gtls.html
+    - id: 2
+      title: Configuration du service journald
+      description: >
+        FIXME
+      collection_cmd: >
+        cat /etc/systemd/journald.conf > journald_conf.txt;
+        find /etc/systemd/journald.conf.d/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > journald_d_conf.txt
+      collection_cmd_type: CMD_EXEC
+      collect_only: false
+      checks:
+        - id: 1
+          title: Les journaux sont envoyés vers rsyslog
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -E "^ForwardToSyslog=yes\s*(\s*#.*)?$" /etc/systemd/journald.conf /etc/systemd/journald.conf.d/* && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.man7.org/linux/man-pages/man5/journald.conf.5.html
+        - id: 2
+          title: Les journaux de taille volumineuse sont compressés
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -E "^Compress=yes\s*(\s*#.*)?$" /etc/systemd/journald.conf /etc/systemd/journald.conf.d/* && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.man7.org/linux/man-pages/man5/journald.conf.5.html
+        - id: 3
+          title: Les journaux sont écrits de manière persistante
+          description: >
+            FIXME
+          type: CMD_EXEC
+          cmd: PASSING=0; grep -E "^Storage=persistent\s*(\s*#.*)?$" /etc/systemd/journald.conf /etc/systemd/journald.conf.d/* && PASSING=1; echo $PASSING
+          expected: 1
+          verification_type: CHECK_EXACT
+          level: intermediary
+          recommendation_on_failed: >
+            FIXME
+          see_also: >
+            https://www.ssi.gouv.fr/uploads/2016/01/linux_configuration-fr-v1.2.pdf#section.6.7
+            https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf
+            https://www.man7.org/linux/man-pages/man5/journald.conf.5.html
+    - id: 3
+      title: Splunk Universal Forwarder (manuel)
+      description: >
+        FIXME
+        Les journaux sont envoyés vers Splunk en utilisant un canal de communication sécurisé
+        TODO:
+        * Vérifier la présence de splunkforwarder dans les paquets installés (dpkg -i splunkforwarder-*.deb)
+        * Vérifier l'envoi vers un serveur distant
+        * Vérifier l'utilisation d'un canal de communication sécurisé
+      collection_cmd: >
+        find /opt/splunkforwarder/etc/ -type f -name *.conf -exec ls -ailL {} \; -exec cat {} \; > splunkforwarder_conf.txt;
+        /opt/splunkforwarder/bin/splunk btool inputs list --debug > splunk_universal_forwarder_inputs_running_conf.txt;
+        /opt/splunkforwarder/bin/splunk btool outputs list --debug > splunk_universal_forwarder_outputs_running_conf.txt;
+        /opt/splunkforwarder/bin/splunk btool server list --debug > splunk_universal_forwarder_server_running_conf.txt
+      collection_cmd_type: CMD_EXEC
+      collect_only: true
+    - id: 4
+      title: Rotation des journaux (manuel)
+      description: >
+        FIXME
+        La rotation des journaux doit être conforme avec la politique de rétention.
+        Voir aussi :
+        * https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.29
+        * https://www.ssi.gouv.fr/uploads/2022/01/anssi-guide-recommandations_securite_architecture_systeme_journalisation.pdf#section*.30
+      collection_cmd: >
+        cat /etc/logrotate.conf > logrotate_conf.txt;
+        find /etc/logrotate.d/ -type f -exec ls -ailL {} \; -exec cat {} \; > logrotate_d_conf.txt
+      collection_cmd_type: CMD_EXEC
+      collect_only: true

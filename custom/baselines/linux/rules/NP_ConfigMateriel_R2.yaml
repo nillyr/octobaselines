@@ -1,0 +1,30 @@
+id: NP_ConfigMateriel_R2
+title: Utilisation d'un système en 64 bits
+description: |
+  Lorsque la machine le supporte, il est recommandé de privilégier des systèmes en version 64 bits plutôt qu'en 32 bits.
+
+collection_cmd: |
+  arch | encrypt_output > NP_ConfigMateriel_R2.txt
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NP_ConfigMateriel_R2"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_FAIL
+
+  arch | grep -q -E "x86_64|amd64|aarch64" && STATUS=RESULT_CHECK_PASS
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+
+verification_type: CHECK_REGEX
+expected: ^\s*RESULT_CHECK_PASS
+recommendation: |
+  Nous recommandons d'utiliser un système en 64 bits. Cette recommandation peut nécessiter un changement de matériel si la machine actuelle ne le supporte pas.
+level: enhanced
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/administration/guide/recommandations-de-configuration-materielle-de-postes-clients-et-serveurs-x86/

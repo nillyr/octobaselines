@@ -1,0 +1,86 @@
+id: NT_OpenSSH_R27
+title: AllowTCPForwarding
+description: |
+  OpenSSH permet à un utilisateur de rediriger des flux au travers du serveur, aussi bien en provenance du réseau local que du réseau distant. Cette fonctionnalité peut être utilisée dans le cadre d'attaques par rebonds qui cherchent à accéder à des services a priori inaccessibles (bloqués par une passerelle filtrante, en écoute sur un réseau différent, etc.). En outre, la redirection de flux locaux risque d'exposer un réseau interne à des flux non maitrisés car provenant de l’extérieur.
+
+  Sauf besoin dûment justifié, toute fonctionnalité de redirections de flux doit être désactivée :
+
+  - au niveau de la configuration du serveur SSH ;
+  - au niveau du pare-feu local en bloquant les connexions.
+
+collection_cmd: |
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      printf "File: %s\n%s\n\n" "$(${SUDO_CMD} ls -lZ "${file}")" "$(${SUDO_CMD} cat "${file}" 2>/dev/null)" >> NT_OpenSSH_R27_config_files.txt
+      printf "File: %s\n%s\n\n" "$(${SUDO_CMD} ls -lZ "${file}")" "$(${SUDO_CMD} sshd -T -f "${file}" 2>/dev/null)" >> NT_OpenSSH_R27_running_configs.txt
+    done
+  else
+    : > NT_OpenSSH_R27.txt
+  fi
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NT_OpenSSH_R27"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_PASS
+
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      if { ! ${SUDO_CMD} sshd -T -f "${file}" | grep -E "^\s*allowtcpforwarding\s+no$" ; } &>/dev/null; then
+        STATUS=RESULT_CHECK_FAIL
+      fi
+    done
+
+  else
+    STATUS=RESULT_CHECK_NA
+  fi
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*(RESULT_CHECK_PASS|RESULT_CHECK_NA)
+recommendation: |
+  Nous recommandons de bloquer la redirection des flux au travers du serveur afin de limiter le risque d'attaques par rebonds.
+
+  Pour cela, le _playbook_ Ansible suivant peut être utilisé :
+  [source%linenums,yaml]
+  [options="nowrap"]
+  ----
+  - name: Block TCP Forwarding
+    hosts: all
+    become: true
+
+    ansible.builtin.lineinfile:
+      path: "{{ item }}"
+      regexp: "^\s*AllowTcpForwarding"
+      line: "AllowTcpForwarding no"
+    with_items:
+      - /etc/ssh/sshd_config
+    notify:
+      - Restart SSH service
+
+    handlers:
+      - name Restart SSH service
+        become: true
+        ansible.builtin.service:
+          name: ssh
+          state: restarted
+  ----
+
+  Voir aussi :
+
+  - https://www.man7.org/linux/man-pages/man5/sshd_config.5.html
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/lineinfile_module.html
+
+level: minimal
+severity: high
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/guide/recommandations-pour-un-usage-securise-dopenssh/

@@ -1,0 +1,119 @@
+id: NT_OpenSSH_R3
+title: Administration à distance
+description: |
+  L'administration à distance est le cas d'usage le plus répandu de SSH. Toutefois, d'autres protocoles historiques existent tels que "telnet", "rsh" et "rlogin". Ces protocoles n'apportant pas le même niveau de sécurité que SSH, il ne faut plus les utiliser.
+
+  Les serveurs d'accès distants "telnet", "rsh" et "rlogin" ne doivent pas être installés.
+
+collection_cmd: |
+  if [ -z "${DISTRIBUTION}" ]; then
+        identify_distribution
+  fi
+
+  case ${DISTRIBUTION} in
+      debian|ubuntu)
+          dpkg -l > NT_OpenSSH_R3_packages_dpkg.txt
+          ;;
+      fedora|rhel|centos|rocky)
+          if is_package_installed dnf; then
+              dnf list installed > NT_OpenSSH_R3_packages_dnf.txt
+          elif is_package_installed yum; then
+              yum list installed > NT_OpenSSH_R3_packages_yum.txt
+          else
+              rpm -qa > NT_OpenSSH_R3_packages_rpm.txt
+          fi
+          ;;
+      sles)
+          if is_package_installed zypper; then
+              zypper search --installed-only > NT_OpenSSH_R3_packages_zypper.txt
+          else
+              rpm -qa > NT_OpenSSH_R3_packages_rpm.txt
+          fi
+          ;;
+      *)
+          : > NT_OpenSSH_R3_packages_unsupported.txt
+          ;;
+  esac
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NT_OpenSSH_R3"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_PASS # (default: not installed on recent distribs)
+
+  packages=(inetutils-telnetd telnet telnet-server telnetd telnetd-ssl rsh-server rsh-redone-server rsh)
+  for package in "${packages[@]}"; do
+    is_package_installed "${package}" && STATUS=RESULT_CHECK_FAIL
+  done
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*RESULT_CHECK_PASS
+recommendation: |
+  Nous recommandons de désinstailler les serveurs d'accès distants différents de SSH.
+
+  Pour cela, le _playbook_ Ansible suivant peut être utilisé :
+  [source%linenums,yaml]
+  [options="nowrap"]
+  ----
+  - name: Remove unsecure remote server packages
+    hosts: all
+    become: true
+
+    ansible.builtin.apt:
+      name:
+        - inetutils-telnetd
+        - telnet
+        - telnet-server
+        - telnetd
+        - telnetd-ssl
+        - rsh-server
+        - rsh-redone-server
+        - rsh
+      state: absent
+    when: ansible_facts["os_family"] == "Debian"
+
+    # change '.dnf' with '.yum' if needed
+    ansible.builtin.dnf:
+      name:
+        - inetutils-telnetd
+        - telnet
+        - telnet-server
+        - telnetd
+        - telnetd-ssl
+        - rsh-server
+        - rsh-redone-server
+        - rsh
+      state: absent
+    when: ansible_facts["os_family"] == "RedHat"
+
+    # require: ansible-galaxy collection install community.general
+    community.general.zypper:
+      name:
+        - inetutils-telnetd
+        - telnet
+        - telnet-server
+        - telnetd
+        - telnetd-ssl
+        - rsh-server
+        - rsh-redone-server
+        - rsh
+      state: absent
+    when: ansible_facts["os_family"] == "Suse"
+  ----
+
+  Voir aussi :
+
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html
+  - https://docs.ansible.com/ansible/latest/collections/community/general/zypper_module.html
+level: minimal
+severity: high
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/guide/recommandations-pour-un-usage-securise-dopenssh/

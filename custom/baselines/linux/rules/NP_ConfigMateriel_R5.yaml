@@ -1,0 +1,53 @@
+id: NP_ConfigMateriel_R5
+title: Activation de la fonctionnalité SMEP
+description: |
+  La fonctionnalité SMEP sert à empêcher les tentatives d'exécution de code situé dans un espace mémoire moins privilégié que celui du contexte d'exécution du processeur ; ce dernier levant une faute matérielle le cas échéant. Cette fonctionnalité complexifie l'exploitation de certaines vulnérabilités du système d'exploitation car elle empêche le noyau d'exécuter directement du code résidant dans l'espace mémoire utilisateur naturellement plus exposé aux attaques que le noyau lui-même.
+
+  Il est recommandé d'utiliser un processeur et un système d'exploitation capable de supporter la fonctionnalité SMEP.
+
+collection_cmd: |
+  grep -m1 smep /proc/cpuinfo | encrypt_output > NP_ConfigMateriel_R5_cpu.txt
+
+  is_package_installed sudo && SUDO_CMD="sudo"
+  ${SUDO_CMD} cat /proc/cmdline /etc/kernel/cmdline 2>/dev/null | encrypt_output > NP_ConfigMateriel_R5_cmdline.txt
+  ${SUDO_CMD} cat /etc/{default,sysconfig}/{grub,grub.d/*} 2>/dev/null | encrypt_output > NP_ConfigMateriel_R5_grub_cfg.txt
+  ${SUDO_CMD} cat /etc/grub.conf 2>/dev/null | encrypt_output > NP_ConfigMateriel_R5_grub_cfg_old.txt
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NP_ConfigMateriel_R5"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_FAIL
+
+  if ! grep -m1 -q smep /proc/cpuinfo; then
+    debug "SMEP is not supported by the CPU."
+    f_a=0
+  else
+    debug "SMEP is supported by the CPU."
+    f_a=1
+  fi
+
+  is_package_installed sudo && SUDO_CMD="sudo"
+  if ${SUDO_CMD} grep -q "nosmep" /proc/cmdline /etc/kernel/cmdline 2>/dev/null; then
+    debug "SMEP is disabled in GRUB line."
+    f_b=0
+  else
+    debug "SMEP is not disabled in GRUB line."
+    f_b=1
+  fi
+
+  (( ${f_a:-0} && ${f_b:-0} )) && STATUS=RESULT_CHECK_PASS
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*RESULT_CHECK_PASS
+recommendation: |
+  Nous recommandons l'activation de la fonctionnalité SMEP. Cette recommandation peut nécessiter un changement de matériel en cas d'utilisation d'un processeur ne la prenant pas en charge.
+level: enhanced
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/administration/guide/recommandations-de-configuration-materielle-de-postes-clients-et-serveurs-x86/

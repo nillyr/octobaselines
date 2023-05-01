@@ -5,7 +5,7 @@
 VERBOSE=1
 readonly VERBOSE
 # Debug mode. Warning: sensitive information may be printed.
-DEBUG=0
+DEBUG=1
 readonly DEBUG
 
 # Enable encryption
@@ -29,28 +29,28 @@ CERTIFICATE="-----BEGIN CERTIFICATE-----
 msg(){ # args: $1 = tag:str, $2..n = message:str
     local tag="$1"
     shift
-    printf "%s [$tag] %s\n" "$(basename "$0")" "$@" >&2
+    printf "%s [${tag}] %s\n" "$(basename "$0")" "$@" >&2
 }
 
 # shellcheck disable=SC2317
 failure(){ # args: $1 = message:str
     local rc=$?
     local message="$1"
-    [ $VERBOSE -eq 1 ] && msg "\e[31mFAIL\e[0m" "$message"
+    [ "${VERBOSE}" -eq 1 ] && msg "\e[31mFAIL\e[0m" "${message}"
     return "$rc"
 }
 
 # shellcheck disable=SC2317
 success(){ # args: $1 = message:str
     local message="$1"
-    [ "$VERBOSE" -eq 1 ] && msg "\e[32m OK \e[0m" "$message"
+    [ "${VERBOSE}" -eq 1 ] && msg "\e[32m OK \e[0m" "${message}"
     return 0
 }
 
 # shellcheck disable=SC2317
 debug(){ # args: $1 = message:str
     local message="$1"
-    [ "$DEBUG" -eq 1 ] && msg "\e[1;33mDBG \e[0m" "$message"
+    [ "${DEBUG}" -eq 1 ] && msg "\e[1;33mDBG \e[0m" "${message}"
     return 0
 }
 
@@ -58,21 +58,21 @@ debug(){ # args: $1 = message:str
 warning(){ # args: $1 = message:str
     local rc=$?
     local message="$1"
-    [ "$VERBOSE" -eq 1 ] && msg "\e[33mWARN\e[0m" "$message"
+    [ "${VERBOSE}" -eq 1 ] && msg "\e[33mWARN\e[0m" "${message}"
     return "$rc"
 }
 
 # shellcheck disable=SC2317
 info(){ # args: $1 = message:str
     local message="$1"
-    [ "$VERBOSE" -eq 1 ] && msg "\e[34mINFO\e[0m" "$message"
+    [ "${VERBOSE}" -eq 1 ] && msg "\e[34mINFO\e[0m" "${message}"
     return 0
 }
 
 # shellcheck disable=SC2317
 cleanup(){
-    if [[ -n "$BASEDIR" && -d "$BASEDIR" ]]; then
-        rm -rf "$BASEDIR" && debug "'$BASEDIR' directory has been removed."
+    if [[ -n "${BASEDIR}" && -d "${BASEDIR}" ]]; then
+        rm -rf "${BASEDIR}" && debug "'${BASEDIR}' directory has been removed."
     fi
     exit 1
 }
@@ -82,7 +82,7 @@ identify_distribution(){
     if [ -e /etc/os-release ]; then
         # shellcheck source=/dev/null
         . /etc/os-release
-        case $ID in
+        case ${ID} in
             debian)
                 DISTRIBUTION=debian
                 ;;
@@ -105,7 +105,7 @@ identify_distribution(){
                 DISTRIBUTION=rocky
                 ;;
             *)
-                failure "Unknown or unsupported distribution with ID='$ID'."
+                failure "Unknown or unsupported distribution with ID='${ID}'."
                 exit 1
                 ;;
         esac
@@ -123,26 +123,26 @@ identify_distribution(){
 is_package_installed(){ # args: $1 = package:str
     local package="$1"
 
-    if [ -z "$DISTRIBUTION" ]; then
+    if [ -z "${DISTRIBUTION}" ]; then
         identify_distribution
     fi
 
-    case $DISTRIBUTION in
+    case ${DISTRIBUTION} in
         debian|ubuntu)
             if { dpkg -l "${package}" | grep -E "^ii"; } &>/dev/null; then
-                debug "'$package' is installed."
+                debug "'${package}' is installed."
                 return 0
             else
-                debug "'$package' is not installed."
+                debug "'${package}' is not installed."
                 return 1
             fi
             ;;
         fedora|rhel|centos|rocky|sles)
             if { rpm -q "${package}" ; } &>/dev/null ; then
-                debug "'$package' is installed."
+                debug "'${package}' is installed."
                 return 0
             else
-                debug "'$package' is not installed."
+                debug "'${package}' is not installed."
                 return 1
             fi
             ;;
@@ -153,51 +153,114 @@ is_package_installed(){ # args: $1 = package:str
 }
 
 # shellcheck disable=SC2317
-count_available_updates(){ # args: $1 = write_to_stdout:bool
-    local write_to_stdout="$1"
-    local tmp_output_file
-    local count=0
-    tmp_output_file=$(mktemp -p /dev/shm/ pkgs.XXXXXXXX)
-    is_package_installed sudo && SUDO_CMD="sudo"
-    case $DISTRIBUTION in
+get_pkg_version(){ # args: $1 = package
+    local package="$1"
+
+    if [ -z "${DISTRIBUTION}" ]; then
+        identify_distribution
+    fi
+
+    pkg_version=""
+    case ${DISTRIBUTION} in
         debian|ubuntu)
-            last=$((1<<62))
-            [ -f "/var/cache/apt/pkgcache.bin" ] && last=$(($(date +%s) - $(stat -c '%Y' /var/cache/apt/pkgcache.bin)))
-            if ((last >= 28800)); then
-                $SUDO_CMD apt-get update &>/dev/null
-            fi
-            apt-get upgrade -s 2>/dev/null | grep -E "^Inst" > "$tmp_output_file"
+            pkg_version=$(dpkg -s "${package}" | grep -E "^\s*Version\s*:" | awk -F ":" '{print $NF}' | tr -d ' ')
             ;;
         fedora|rhel|centos|rocky)
-            if is_package_installed dnf; then
-                $SUDO_CMD dnf check-update 2>/dev/null > "$tmp_output_file"
-            else
-                $SUDO_CMD yum check-update 2>/dev/null > "$tmp_output_file"
-            fi
+            pkg_version=$(rpm -qi "${package}" | grep -E "^\s*Version\s*:" | awk -F ":" '{print $NF}' | tr -d ' ')
             ;;
         sles)
-            # zypper list-updates and zypper list-patches are available. lp -> "needed patches"
-            $SUDO_CMD zypper list-patches 2>/dev/null > "$tmp_output_file"
+            pkg_version=$(zypper info "${package}" | grep -E "^\s*Version\s*:" | awk -F ":" '{print $NF}' | tr -d ' ')
+            ;;
+        *)
             ;;
     esac
 
-    count=$(wc -l "$tmp_output_file" | cut -d' ' -f1)
-    debug "Found $count available update(s)."
+    echo "${pkg_version}"
+}
 
-    [ "$write_to_stdout" == "true" ] && printf "%s\n" "$(cat "$tmp_output_file")"
-    rm -f "$tmp_output_file"
+# shellcheck disable=SC2317
+get_installation_date_of_pkg(){ # args: $1 = package, $2 = full_details: bool
+    local package="$1"
+    local full_details="$2"
 
-    return "$count"
+    is_package_installed sudo && SUDO_CMD="sudo"
+    case ${DISTRIBUTION} in
+        debian|ubuntu)
+            if [[ "${full_details}" == "true" ]]; then
+                installation_date=$(${SUDO_CMD} zgrep "install ${package}" /var/log/dpkg.log* 2>/dev/null | cut -f1,2,4 -d' ')
+            else
+                installation_date=$(${SUDO_CMD} zgrep "install ${package}" /var/log/dpkg.log* 2>/dev/null | cut -f1,2 -d' ' | awk -F ":" '{ for(i=2; i<=NF; i++) printf "%s%s", (i == 2 ? $i : ":"$i ), (i < NF ? "" : ORS) }')
+            fi
+            ;;
+        fedora|rhel|centos|rocky|sles)
+            if [[ "${full_details}" == "true" ]]; then
+                installation_date=$(${SUDO_CMD} rpm -qi "${package}" 2>/dev/null | grep "Install Date: ")
+            else
+                installation_date=$(${SUDO_CMD} rpm -qi "${package}" 2>/dev/null | grep "Install Date: " | awk -F ":" '{ for(i=2; i<=NF; i++) printf "%s%s", (i == 2 ? $i : ":"$i ), (i < NF ? "" : ORS) }')
+            fi
+            ;;
+        *)
+            ;;
+    esac
+
+    echo "${installation_date}"
+}
+
+# shellcheck disable=SC2317
+count_available_updates(){ # args: $1 = write_to_stdout:bool
+    local write_to_stdout="$1"
+    local tmp_output_file=""
+    local count=0
+    tmp_output_file=$(mktemp -p /dev/shm/ pkgs.XXXXXXXX)
+    is_package_installed sudo && SUDO_CMD="sudo"
+    case ${DISTRIBUTION} in
+        debian|ubuntu)
+            last=$((1<<62))
+            [ -f "/var/cache/apt/pkgcache.bin" ] && last=$(($(date +%s) - $(stat -c '%Y' /var/cache/apt/pkgcache.bin)))
+            # 28800 seconds = 8 hours
+            if ((last >= 28800)); then
+                ${SUDO_CMD} apt update &>/dev/null
+            fi
+            apt upgrade -s 2>/dev/null | grep -E "^Inst" > "${tmp_output_file}"
+            ;;
+        fedora|rhel|centos|rocky)
+            if is_package_installed dnf; then
+                ${SUDO_CMD} dnf check-update 2>/dev/null > "${tmp_output_file}"
+            else
+                ${SUDO_CMD} yum check-update 2>/dev/null > "${tmp_output_file}"
+            fi
+            ;;
+        sles)
+            ${SUDO_CMD} zypper list-patches 2>/dev/null > "${tmp_output_file}"
+            ;;
+    esac
+
+    case ${DISTRIBUTION} in
+        sles)
+            # regex "xx patches needed (yy security patches)" on the last line
+            count=$(tail --lines 1 "${tmp_output_file}" | grep -Eo "^[0-9]*")
+            ;;
+        *)
+            count=$(wc -l "${tmp_output_file}" | cut -d' ' -f1)
+            ;;
+    esac
+
+    debug "Found ${count} available update(s)."
+
+    [ "${write_to_stdout}" == "true" ] && printf "%s\n" "$(cat "${tmp_output_file}")"
+    rm -f "${tmp_output_file}"
+
+    return "${count}"
 }
 
 # shellcheck disable=SC2317
 is_partition_delared(){ # args: $1 = partition:str
     local partition="$1"
-    if { findmnt --fstab "$partition"; } &>/dev/null; then
-        debug "'$partition' is declared in /etc/fstab."
+    if { findmnt --fstab "${partition}"; } &>/dev/null; then
+        debug "'${partition}' is declared in /etc/fstab."
         return 0
     fi
-    debug "'$partition' is not declared in /etc/fstab."
+    debug "'${partition}' is not declared in /etc/fstab."
     return 1
 }
 
@@ -205,22 +268,22 @@ is_partition_delared(){ # args: $1 = partition:str
 is_partition_declared_with_option(){ # args: $1 = partition:str, $2 = option:str
     local partition="$1"
     local option="$2"
-    if { findmnt --fstab "$partition" | grep "$option"; } &>/dev/null; then
-        debug "'$partition' is declared with option '$option'."
+    if { findmnt --fstab "${partition}" | grep "${option}"; } &>/dev/null; then
+        debug "'${partition}' is declared with option '${option}'."
         return 0
     fi
-    debug "'$partition' is not declared with option '$option'."
+    debug "'${partition}' is not declared with option '${option}'."
     return 1
 }
 
 # shellcheck disable=SC2317
 is_partition_mounted(){ # args: $1 = partition:str
     local partition="$1"
-    if { findmnt --mtab "$partition"; } &>/dev/null; then
-        debug "'$partition' is mounted."
+    if { findmnt --mtab "${partition}"; } &>/dev/null; then
+        debug "'${partition}' is mounted."
         return 0
     fi
-    debug "'$partition' is not mounted."
+    debug "'${partition}' is not mounted."
     return 1
 }
 
@@ -228,11 +291,11 @@ is_partition_mounted(){ # args: $1 = partition:str
 is_partition_mounted_with_option(){ # args: $1 = partition:str, $2 = option:str
     local partition="$1"
     local option="$2"
-    if { findmnt --mtab "$partition" | grep "$option"; } &>/dev/null; then
-        debug "'$partition' is mounted with option '$option'."
+    if { findmnt --mtab "${partition}" | grep "${option}"; } &>/dev/null; then
+        debug "'${partition}' is mounted with option '${option}'."
         return 0
     else
-        debug "'$partition' is not mounted with option '$option'."
+        debug "'${partition}' is not mounted with option '${option}'."
         return 1
     fi
 }
@@ -242,19 +305,18 @@ is_dac_setting_correct(){ # args: $1 = file:str, $2 = regex pattern from stat(%A
     local file="$1"
     local pattern="$2"
 
-    is_package_installed sudo && SUDO_CMD="sudo"
-    if { $SUDO_CMD stat -c "%A:%U:%G" "$file" | grep -E "$pattern"; } &>/dev/null; then
-        debug "DAC of file '$file' match with pattern '$pattern'."
+    if { stat -c "%A:%U:%G" "${file}" | grep -E "${pattern}"; } &>/dev/null; then
+        debug "DAC of file '${file}' match with pattern '${pattern}'."
         return 0
     fi
-    debug "DAC of '$file' does not match with pattern '$pattern'."
+    debug "DAC of '${file}' does not match with pattern '${pattern}'."
     return 1
 }
 
 # shellcheck disable=SC2317
 init_crypto_material() {
     info "Initialization of the cryptographic material"
-    if [ -z "$CERTIFICATE" ] || [ "$AES_KEY_SIZE" != 32 ] || [ "$AES_IV_SIZE" != 16 ]; then
+    if [ -z "${CERTIFICATE}" ] || [ "${AES_KEY_SIZE}" != 32 ] || [ "${AES_IV_SIZE}" != 16 ]; then
         return 1
     fi
 
@@ -263,44 +325,66 @@ init_crypto_material() {
     fi
 
     info "Generating new AES symmetric-key."
-    AES_KEY=$(openssl rand -rand /dev/urandom -hex "$AES_KEY_SIZE")
+    AES_KEY=$(openssl rand -rand /dev/urandom -hex "${AES_KEY_SIZE}")
 
     info "Saving encrypted version of the AES symmetric-key."
-    echo "$CERTIFICATE" > "${BASEDIR}"/certificate.crt
+    echo "${CERTIFICATE}" > "${BASEDIR}"/certificate.crt
     if ! openssl x509 -in "${BASEDIR}"/certificate.crt -text -noout &>/dev/null; then
         return 1
     fi
 
-    echo "$AES_KEY" | openssl pkeyutl -encrypt -certin -inkey "${BASEDIR}"/certificate.crt -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha384 2>/dev/null | base64 > "${BASEDIR}"/aes_key.enc
+    echo "${AES_KEY}" | openssl pkeyutl -encrypt -certin -inkey "${BASEDIR}"/certificate.crt -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha384 2>/dev/null | base64 > "${BASEDIR}"/aes_key.enc
     file_size=$(stat --printf="%s" "${BASEDIR}"/aes_key.enc)
-    if [ "$file_size" -eq 0 ]; then
+    if [ "${file_size}" -eq 0 ]; then
         return 1
     fi
 }
 
 # shellcheck disable=SC2317
 encrypt_output() {
-    [ "$ENABLE_ENCRYPTION" -eq 0 ] && {
+    [ "${ENABLE_ENCRYPTION}" -eq 0 ] && {
         cat /dev/stdin
         return
     }
 
-    if [ "$AES_KEY_SIZE" != 32 ] || [ "$AES_IV_SIZE" != 16 ]; then
+    if [ "${AES_KEY_SIZE}" != 32 ] || [ "${AES_IV_SIZE}" != 16 ]; then
         failure "Critical Error: The specified settings do not allow the use of data encryption. Run the script with 'ENABLE_ENCRYPTION' disabled or check your settings."
         kill -s INT $$
     fi
 
-    AES_IV=$(openssl rand -rand /dev/urandom -hex "$AES_IV_SIZE")
-    ENCRYPTED_BYTES_B64=$(openssl enc -e -aes-256-cbc -K "$AES_KEY" -iv "$AES_IV" -base64 < /dev/stdin 2>/dev/null)
+    AES_IV=$(openssl rand -rand /dev/urandom -hex "${AES_IV_SIZE}")
+    ENCRYPTED_BYTES_B64=$(openssl enc -e -aes-256-cbc -K "${AES_KEY}" -iv "${AES_IV}" -base64 < /dev/stdin 2>/dev/null)
     rc=$?
-    if [ "$rc" -ne 0 ]; then
+    if [ "${rc}" -ne 0 ]; then
         failure "Critical Error: Error while encrypting data. Run the script with 'ENABLE_ENCRYPTION' disabled or check your settings."
         kill -s INT $$
     else
-        AES_IV_BYTES_B64=$(echo "$AES_IV" | xxd -r -p | base64)
+        AES_IV_BYTES_B64=$(echo "${AES_IV}" | xxd -r -p | base64)
         FINAL_BLOCK=${AES_IV_BYTES_B64}${ENCRYPTED_BYTES_B64}
         echo "${FINAL_BLOCK//[$'\t\r\n ']}"
     fi
+}
+
+# shellcheck disable=SC2317
+get_all_sshd_config_files() {
+    if ! is_package_installed openssh-server; then
+        echo ""
+        return 0
+    fi
+
+    local config_files=()
+    local default=/etc/ssh/sshd_config
+
+    config_files+=("${default}")
+
+    # TODO: check with init in addition of systemd
+    is_package_installed sudo && SUDO_CMD="sudo"
+    while read -r file; do
+        candidate=$(echo "${file}" | grep -Po "(?<=\-f)\s?[a-zA-Z0-9\-_\./]*" | tr -d ' ')
+        [ -f "${candidate}" ] && config_files+=("${candidate}")
+    done < <(${SUDO_CMD} grep -R -E "^\s*ExecStart=/usr/sbin/sshd\s+" /etc/systemd/ 2>/dev/null)
+
+    echo "${config_files[@]}"
 }
 
 # shellcheck disable=SC2317
@@ -308,27 +392,27 @@ get_permissions(){  # args: $1..n = file:str
     local files=("$@")
 
     for file in "${files[@]}"; do
-        printf "\nCurrent file:\n%s\n" "$(ls -ailLZ "$file")"
+        printf "\nCurrent file:\n%s\n" "$(ls -ailLZ "${file}")"
 
         if ! command -v realpath &>/dev/null; then
-            real_path="$file"
+            real_path="${file}"
         else
-            real_path=$(realpath "$file")
+            real_path=$(realpath "${file}")
         fi
 
         printf "\n[ Discretionary Access Control (DAC) ]\n"
-        stat -c "%n %A:%u:%g" "$real_path"
+        stat -c "%n %A:%u:%g" "${real_path}"
 
         printf "\n[ Access Control Lists (ACLs) ]\n"
-        getfacl "$real_path"
+        getfacl "${real_path}"
 
         printf "\n[ ATTRIBUTES ]\n"
-        lsattr "$real_path"
+        lsattr "${real_path}"
 
-        if [ -d "$real_path" ]; then
-	    	ls -ailLZ "$real_path"
-		    for child in "$real_path"/*; do
-			    get_permissions "$child"
+        if [ -d "${real_path}" ]; then
+	    	ls -ailLZ "${real_path}"
+		    for child in "${real_path}"/*; do
+			    get_permissions "${child}"
 		    done
 	    fi
     done
@@ -338,64 +422,13 @@ get_permissions(){  # args: $1..n = file:str
 get_system_info(){
     local hostname=""
     local os=""
-    local host=""
+    local hardware=""
     local kernel=""
-    local cpu=""
-    local gpu=""
-    local memory=""
     local ifaces=""
 
     identify_distribution
 
-    if is_package_installed jq; then
-        is_package_installed sudo && SUDO_CMD="sudo"
-
-        hostname="${USER:-$(whoami)}@$($SUDO_CMD lshw -C system -json | jq ".[:1] | .[] | .id" | tr -d '"')"
-
-        host="Host: $($SUDO_CMD lshw -C system -json | jq ".[:1] | .[] | .product" | tr -d '"')"
-        host+=" ($($SUDO_CMD lshw -C system -json | jq ".[:1] | .[] | .vendor" | tr -d '"'))"
-
-        gpu="GPU: $($SUDO_CMD lshw -C display -json | jq ".[:1] | .[] | .product" | tr -d '"')"
-        gpu+=" ($($SUDO_CMD lshw -C display -json | jq ".[:1] | .[] | .vendor" | tr -d '"'))"
-    else
-        hostname="${USER:-$(whoami)}@$(hostname -f)"
-
-        host="Host: "
-        # https://github.com/dylanaraps/neofetch/blob/master/neofetch#L1238-L1256
-        if [[ -d /system/app/ && -d /system/priv-app ]]; then
-            host+="$(getprop ro.product.brand) $(getprop ro.product.model)"
-
-        elif [[ -f /sys/devices/virtual/dmi/id/product_name
-                && -f /sys/devices/virtual/dmi/id/product_version ]]; then
-            host+=$(< /sys/devices/virtual/dmi/id/product_name)
-            host+=" $(< /sys/devices/virtual/dmi/id/product_version)"
-
-        elif [[ -f /sys/devices/virtual/dmi/id/board_vendor
-                && -f /sys/devices/virtual/dmi/id/board_name ]]; then
-            host+=$(< /sys/devices/virtual/dmi/id/board_vendor)
-            host+=" $(< /sys/devices/virtual/dmi/id/board_name)"
-
-        elif [[ -f /sys/firmware/devicetree/base/model ]]; then
-            host+=$(< /sys/firmware/devicetree/base/model)
-        fi
-
-        gpu="GPU:"
-        # https://github.com/dylanaraps/neofetch/blob/master/neofetch#L2506-L2517
-        gpu_cmd="$(lspci -mm |
-                    awk -F '\"|\" \"|\\(' \
-                            '/"Display|"3D|"VGA/ {
-                                a[$0] = $1 " " $3 " " ($(NF-1) ~ /^$|^Device [[:xdigit:]]+$/ ? $4 : $(NF-1))
-                            }
-                            END { for (i in a) {
-                                if (!seen[a[i]]++) {
-                                    sub("^[^ ]+ ", "", a[i]);
-                                    print a[i]
-                                }
-                            }}')"
-        gpus=""
-        IFS=$'\n' read -d "" -ra gpus <<< "$gpu_cmd"
-        gpu+=$gpus
-    fi
+    hostname="Hostname: $(hostname -f)"
 
     if [ -e /etc/lsb-release ]; then
         # shellcheck source=/dev/null
@@ -408,29 +441,41 @@ get_system_info(){
 
     os="OS: $(uname -o) ${PRETTY_NAME:-${DISTRIB_DESCRIPTION}} $(uname -m)"
     kernel="Kernel: $(uname -r)"
-    cpu="CPU: $(grep "model name" /proc/cpuinfo | awk -F ": " '{print $NF}' | head -n1) ($(nproc --all))"
-    memory="Memory: $(grep -i "MemTotal" /proc/meminfo | awk '{$2/=1024;printf "%.2f MB",$2}')"
-
     ifaces="Network: [ "
     for iface in "/sys/class/net"/*; do
-        iface=$(basename "$iface")
+        iface=$(basename "${iface}")
         if is_package_installed iproute2; then
-            ifaces+="$iface: $(ip -4 -o addr show "$iface" 2>/dev/null | awk '{print $4}'), "
+            ifaces+="$iface: $(ip -4 -o addr show "${iface}" 2>/dev/null | awk '{print $4}') "
         else
-            ifaces+="$iface: $(ifconfig "$iface" 2>/dev/null | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1), "
+            ifaces+="$iface: $(ifconfig "${iface}" 2>/dev/null | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1) "
         fi
     done
     ifaces+="]"
 
-    printf "%s\n" "$hostname"
-    printf "%s\n" "--------------------------"
-    printf "%s\n" "$os"
-    printf "%s\n" "$host"
-    printf "%s\n" "$kernel"
-    printf "%s\n" "$cpu"
-    printf "%s\n" "$gpu"
-    printf "%s\n" "$memory"
-    printf "%s\n" "$ifaces"
+    hardware="Hardware: "
+    # https://github.com/dylanaraps/neofetch/blob/master/neofetch#L1238-L1256
+    if [[ -d /system/app/ && -d /system/priv-app ]]; then
+        hardware+="$(getprop ro.product.brand) $(getprop ro.product.model)"
+
+    elif [[ -f /sys/devices/virtual/dmi/id/product_name
+            && -f /sys/devices/virtual/dmi/id/product_version ]]; then
+        hardware+=$(< /sys/devices/virtual/dmi/id/product_name)
+        hardware+=" $(< /sys/devices/virtual/dmi/id/product_version)"
+
+    elif [[ -f /sys/devices/virtual/dmi/id/board_vendor
+            && -f /sys/devices/virtual/dmi/id/board_name ]]; then
+        hardware+=$(< /sys/devices/virtual/dmi/id/board_vendor)
+        hardware+=" $(< /sys/devices/virtual/dmi/id/board_name)"
+
+    elif [[ -f /sys/firmware/devicetree/base/model ]]; then
+        hardware+=$(< /sys/firmware/devicetree/base/model)
+    fi
+
+    printf "%s\n" "${hostname}"
+    printf "%s\n" "${os}"
+    printf "%s\n" "${kernel}"
+    printf "%s\n" "${ifaces}"
+    printf "%s\n" "${hardware}"
 }
 
 # shellcheck disable=SC2317
@@ -440,7 +485,7 @@ assert_user_privileges() {
     fi
 
     is_package_installed sudo && SUDO_CMD="sudo"
-    if $SUDO_CMD -l &>/dev/null; then
+    if ${SUDO_CMD} -l &>/dev/null; then
         return 0
     fi
 
@@ -461,12 +506,12 @@ fi
 
 # This should never happen, but we never know.
 # reason: this file is integrated in the generated script, which must initialize the variable.
-if [ -z "$BASEDIR" ]; then
+if [ -z "${BASEDIR}" ]; then
     BASEDIR=$(mktemp -d -t tmp.XXXXXXXXXXXX)
-    info "A working directory has been created in $BASEDIR."
+    info "A working directory has been created in ${BASEDIR}."
 fi
 
-if [ "$ENABLE_ENCRYPTION" -eq 1 ]; then
+if [ "${ENABLE_ENCRYPTION}" -eq 1 ]; then
     if ! init_crypto_material; then
         failure "Critical Error: The specified settings do not allow the use of data encryption. Run the script with 'ENABLE_ENCRYPTION' disabled or check your settings."
         kill -s INT $$

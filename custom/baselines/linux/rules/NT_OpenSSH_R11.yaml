@@ -1,0 +1,103 @@
+id: NT_OpenSSH_R11
+title: Génération de clés - qualité de l'aléa
+description: |
+  Par défaut, les clés sont générées à l'installation du paquet "openssh-server". Cependant au moment de l'installation, la source d'aléa peut ne pas être fiable. Ainsi, il est recommandé de remplacer ces clés. Les critères suivants sont utilisés pour s'assurer que le réservoir d'entropie est correctement rempli :
+
+  - la machine de génération de clés doit être une machine physique ;
+  - elle doit disposer de plusieurs sources d’entropie indépendantes ;
+  - l’aléa ne doit être obtenu qu’après une période d’activité suffisamment importante (plusieurs minutes voire heures).
+
+  Les clés doivent être générées dans un contexte où la source d'aléa est fiable, ou à défaut dans un environnement où suffisamment d'entropie a été accumulée.
+
+collection_cmd: |
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+
+    get_installation_date_of_pkg openssh-server true > NT_OpenSSH_R11_installation_date.txt
+
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      ${SUDO_CMD} sshd -T -f "${file}" | grep "hostkey " |
+        while read -r file; do
+          ${SUDO_CMD} stat "${file}" 2>/dev/null >> NT_OpenSSH_R11_key_birth.txt
+        done < <(awk '{print $2}')
+    done
+
+  else
+    : > NT_OpenSSH_R11.txt
+  fi
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NT_OpenSSH_R11"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_FAIL
+
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+
+    installation_date=$(date -d "$(get_installation_date_of_pkg openssh-server false)" +"%Y%m%d_%H%M")
+
+    temp_status=""
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      temp_status=$(${SUDO_CMD} sshd -T -f "${file}" | grep "hostkey " |
+        while read -r hostkey; do
+          key_birth=$(date -d "$(stat -c '%w' "${hostkey}" 2>/dev/null)" +"%Y%m%d_%H%M")
+          if [ "${key_birth}" == "${installation_date}" ]; then
+            echo "false"
+          fi
+        done < <(awk '{print $2}'))
+    done
+
+    [[ "${temp_status}" == *"false"* ]] || STATUS=RESULT_CHECK_PASS
+
+  else
+    STATUS=RESULT_CHECK_NA
+  fi
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*(RESULT_CHECK_PASS|RESULT_CHECK_NA)
+recommendation: |
+  Nous recommandons de regénérer les clés du serveur SSH en utilisant une source d'aléa fiable. Il est à noter que cette vérification s'est basée sur la date d'installation du paquet "openssh-server". Toutefois, l'installation peut avoir été effectuée à un moment où la source d'aléa été fiable. Dans ce cas, cette recommandation peut être ignorée.
+
+  Différentes méthodes peuvent être utilisées afin de générer de nouvelles clés :
+
+  - Utilisation de la commande "ssh-keygen"
+  - Utilisation d'une IGC (Infrastruction de Gestion de Clés)
+
+  Enfin, le _playbook_ Ansible suivant peut être utilisé afin de déployer la clé ainsi générée :
+  [source%linenums,yaml]
+  [options="nowrap"]
+  ----
+  - name: Deploy new SSH Keys
+    hosts: all
+    become: true
+
+    ansible.builtin.copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: root
+      group: root
+      mode: "600"
+    with_items:
+      - { src: "/path/to/file/changeme", dest: "/etc/ssh/changeme" }
+      - { src: "/path/to/file/changeme.pub", dest: "/etc/ssh/changeme.pub" }
+  ----
+
+  Voir aussi :
+
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+
+level: minimal
+severity: high
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/guide/recommandations-pour-un-usage-securise-dopenssh/
+  - https://www.ssi.gouv.fr/administration/reglementation/confiance-numerique/le-referentiel-general-de-securite-rgs/
+  - https://www.deltasight.fr/entropie-linux-generation-nombres-aleatoires/

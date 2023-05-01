@@ -1,0 +1,162 @@
+id: NT_OpenSSH_R15
+title: Choix des algorithmes symétriques
+description: |
+  Une fois les parties mutuellement authentifiées, le canal de communication est protégé en chiffrement et en intégrité.
+
+  Le choix des algorithmes étant établi suivant une négociation entre le client et le serveur, la liste des algorithmes doit être fixée des deux côtés. Les algorithmes considérés comme faibles doivent être retirés de la suite.
+
+  Le mode CTR permet de s'affranchir de vulnérabilités connues du mode CBC tel qu'utilisé par SSH. Les HMAC SHA-256 et SHA-512 ne sont supportés que depuis la version "5.9" d'OpenSSH. Les systèmes d'exploitation utilisant des versions antérieures doivent alors reposer sur un HMAC SHA-1.
+
+collection_cmd: |
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      printf "File: %s\n\n%s\n" "$(${SUDO_CMD} ls -lZ "${file}")" "$(${SUDO_CMD} sshd -T -f "${file}" | grep -E -i "^(ciphers|macs)")" >> NT_OpenSSH_R15_ciphers_n_macs.txt
+    done
+
+  else
+    : > NT_OpenSSH_R15.txt
+  fi
+
+check: |
+  ################################################################################
+  LANG=en_US.utf8
+
+  RULE_ID="NT_OpenSSH_R15"
+  HOSTNAME="$(hostname -f)"
+  DATE="$(date +"%Y/%m/%d")"
+
+  STATUS=RESULT_CHECK_FAIL
+
+  if is_package_installed openssh-server; then
+    is_package_installed sudo && SUDO_CMD="sudo"
+
+    # Supported Ciphers:
+    # 3des-cbc
+    # aes128-cbc, aes192-cbc, aes256-cbc
+    # aes128-ctr, aes192-ctr, aes256-ctr
+    # aes128-gcm@openssh.com, aes256-gcm@openssh.com
+    # arcfour, arcfour128, arcfour256
+    # blowfish-cbc, cast128-cbc, chacha20-poly1305@openssh.com, rijndael-cbc@lysator.liu.se
+
+    # Expected:
+    # Ciphers aes256-ctr,aes192-ctr,aes128-ctr
+    ciphers_regex="^\s*ciphers\s+(\S+,)*(3des-cbc|aes128-cbc|aes192-cbc|aes256-cbc|aes128-gcm@openssh\.com|aes256-gcm@openssh\.com|arcfour|arcfour128|arcfour256|blowfish-cbc|cast128-cbc|rijndael-cbc@lysator\.liu\.se|chacha20-poly1305@openssh\.com)(,\S+)*\s*$"
+
+    # Supported MACs:
+    # hmac-ripemd160
+    # hmac-ripemd160-etm@openssh.com
+    # hmac-sha2-256, hmac-sha2-512, hmac-sha1, hmac-sha1-96, hmac-md5, hmac-md5-96
+    # umac-64@openssh.com, umac-128@openssh.com
+    # hmac-sha2-256-etm@openssh.com, hmac-sha2-512-etm@openssh.com
+    # hmac-sha1-etm@openssh.com, hmac-sha1-96-etm@openssh.com
+    # hmac-md5-etm@openssh.com, hmac-md5-96-etm@openssh.com
+    # umac-64-etm@openssh.com, umac-128-etm@openssh.com
+
+    # Expected:
+    # OpenSSH >= 6.3: MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+    # OpenSSH < 6.3: hmac-sha2-512,hmac-sha2-256,hmac-sha1
+    macs_regex="^\s*macs\s+(\S+,)*(hmac-md5|hmac-md5-96|hmac-ripemd160|hmac-sha1|hmac-sha1-96|umac-64@openssh\.com|hmac-md5-etm@openssh\.com|hmac-md5-96-etm@openssh\.com|hmac-ripemd160-etm@openssh\.com|hmac-sha1-etm@openssh\.com|hmac-sha1-96-etm@openssh\.com|umac-64-etm@openssh\.com|umac-128-etm@openssh\.com)(,\S+)*\s*$"
+
+    # KexAlgorithms:
+    # sntrup761x25519-sha512@openssh.com
+    # curve25519-sha256, curve25519-sha256@libssh.org
+    # diffie-hellman-group1-sha1, diffie-hellman-group14-sha1
+    # diffie-hellman-group14-sha256, diffie-hellman-group16-sha512, diffie-hellman-group18-sha512
+    # diffie-hellman-group-exchange-sha1, diffie-hellman-group-exchange-sha256
+    # ecdh-sha2-nistp256, ecdh-sha2-nistp384, ecdh-sha2-nistp521
+
+    # Expected: SHA-1 is not used
+    kexalgorithms_regex="^\s*kexalgorithms\s+(\S+,)*(diffie-hellman-group1-sha1|diffie-hellman-group14-sha1|diffie-hellman-group-exchange-sha1)(,\S+)*\s*$"
+
+    ciphers_status=1 # pass
+    macs_status=1 # pass
+    kexalgorithms_status=1 # pass
+    IFS=" " read -r -a config_files <<< "$(get_all_sshd_config_files)"
+    for file in "${config_files[@]}"; do
+      if { ${SUDO_CMD} sshd -T -f "${file}" | grep -E "${ciphers_regex}"; } &>/dev/null; then
+        debug "'${file}' enables the use of weak ciphers algorithms."
+        ciphers_status=0 # fail
+      fi
+      if { ${SUDO_CMD} sshd -T -f "${file}" | grep -E "${macs_regex}" ; } &>/dev/null; then
+        debug "'${file}' enables the use of weak macs algorithms."
+        macs_status=0 # fail
+      fi
+      if { ${SUDO_CMD} sshd -T -f "${file}" | grep -E "${kexalgorithms_regex}" ; } &>/dev/null; then
+        debug "'${file}' enables the use of weak key exchange algorithms."
+        kexalgorithms_status=0 # fail
+      fi
+    done
+
+    (( ${ciphers_status:-0} && ${macs_status:-0} && ${kexalgorithms_status:-0} )) && STATUS=RESULT_CHECK_PASS
+
+  else
+    STATUS=RESULT_CHECK_NA
+  fi
+
+  printf "RULE_ID: %s\nHOSTNAME: %s\nDATE: %s\n\n%s\n" "${RULE_ID}" "${HOSTNAME}" "${DATE}" "${STATUS}" | encrypt_output
+verification_type: CHECK_REGEX
+expected: ^\s*(RESULT_CHECK_PASS|RESULT_CHECK_NA)
+recommendation: |
+  Nous recommandons de modifier la configuration du service SSH afin d'utiliser uniquement des algorithmes robustes permettant d'assurer la sécurité du canal de communication.
+
+  Pour cela, le _playbook_ Ansible suivant peut être utilisé :
+  [source%linenums,yaml]
+  [options="nowrap"]
+  ----
+  - name: Use strong algorithms only
+    hosts: all
+    become: true
+
+    ansible.builtin.lineinfile:
+      path: "{{ item }}"
+      regexp: "^\s*Ciphers"
+      line: "Ciphers aes256-ctr,aes192-ctr,aes128-ctr"
+    with_items:
+      - /etc/ssh/sshd_config
+    notify:
+      - Restart SSH service
+
+    ansible.builtin.lineinfile:
+      path: "{{ item }}"
+      regexp: "^\s*MACs"
+      # openssh-server version < 6.3
+      # line: "MACs hmac-sha2-512,hmac-sha2-256,hmac-sha1"
+      # openssh-server version < 5.9
+      # line: "MACs hmac-sha1"
+      line: "MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com"
+    with_items:
+      - /etc/ssh/sshd_config
+    notify:
+      - Restart SSH service
+
+    ansible.builtin.lineinfile:
+      path: "{{ item }}"
+      regexp: "^\s*KexAlgorithms"
+      line: "KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
+    with_items:
+      - /etc/ssh/sshd_config
+    notify:
+      - Restart SSH service
+
+    handlers:
+      - name Restart SSH service
+        become: true
+        ansible.builtin.service:
+          name: ssh
+          state: restarted
+  ----
+
+  Voir aussi :
+
+  - https://www.man7.org/linux/man-pages/man5/sshd_config.5.html
+  - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/lineinfile_module.html
+
+level: minimal
+severity: high
+references:
+  - https://www.ssi.gouv.fr/guide/recommandations-de-securite-relatives-a-un-systeme-gnulinux/
+  - https://www.ssi.gouv.fr/guide/recommandations-pour-un-usage-securise-dopenssh/
+  - https://www.ssi.gouv.fr/administration/reglementation/confiance-numerique/le-referentiel-general-de-securite-rgs/
