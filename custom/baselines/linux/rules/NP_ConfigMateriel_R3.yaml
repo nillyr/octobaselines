@@ -1,3 +1,9 @@
+# @copyright Copyright (c) 2021 Nicolas GRELLETY
+# @license https://opensource.org/licenses/GPL-3.0 GNU GPLv3
+# @link https://gitlab.internal.lan/octo-project/octobaselines
+# @link https://github.com/nillyr/octobaselines
+# @since 1.0.0b
+
 id: NP_ConfigMateriel_R3
 title: Activation du bit de protection NX/XD
 description: |

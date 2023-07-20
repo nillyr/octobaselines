@@ -1,3 +1,9 @@
+# @copyright Copyright (c) 2021 Nicolas GRELLETY
+# @license https://opensource.org/licenses/GPL-3.0 GNU GPLv3
+# @link https://gitlab.internal.lan/octo-project/octobaselines
+# @link https://github.com/nillyr/octobaselines
+# @since 1.0.0b
+
 id: NT_OpenSSH_R17
 title: Authentification d'un utilisateur
 description: |

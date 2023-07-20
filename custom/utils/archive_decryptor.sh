@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# @copyright Copyright (c) 2021 Nicolas GRELLETY
+# @license https://opensource.org/licenses/GPL-3.0 GNU GPLv3
+# @link https://gitlab.internal.lan/octo-project/octobaselines
+# @link https://github.com/nillyr/octobaselines
+# @since 1.0.0b
+
 usage() {
     echo "Usage: bash $0 <unpacked archive path> <RSA private key path>" >&2
     exit 1
