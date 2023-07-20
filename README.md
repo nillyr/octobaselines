@@ -29,4 +29,4 @@ Copyright (c) 2021 Nicolas GRELLETY
 
 This software is licensed under GNU GPLv3 license. See `LICENSE` file in the root folder of the project.
 
-- Icons made by [Freepik](https://www.freepik.com "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
+Icons made by [Freepik](https://www.freepik.com "Freepik") from [www.flaticon.com](https://www.flaticon.com/ "Flaticon")
