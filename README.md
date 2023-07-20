@@ -13,7 +13,7 @@ Submodule of the octoconf project.
 
 ## Usage
 
-See [octoconf](https://github.com/nillyr/octoconf "octoconf") for the usage instructions.
+See [octoconf](https://gitlab.internal.lan/octo-project/octoconf "octoconf") for the usage instructions.
 
 ## Maintainer
 
