@@ -7,21 +7,25 @@
 
 Submodule of the octoconf project.
 
+| :boominformation_source: Information |
+|:-------------------------------------------------------------|
+| This repository is mirrored with a personnal GitLab instance |
+
 ## Usage
 
 See [octoconf](https://github.com/nillyr/octoconf "octoconf") for the usage instructions.
 
 ## Maintainer
 
-- [Nicolas GRELLETY](https://github.com/nillyr)
+- Nicolas GRELLETY
 
 ## Authors
 
-- [Nicolas GRELLETY](https://github.com/nillyr)
+- Nicolas GRELLETY
 
 ## Copyright and license
 
-Copyright (c) 2021-2023 Nicolas GRELLETY
+Copyright (c) 2021 Nicolas GRELLETY
 
 This software is licensed under GNU GPLv3 license. See `LICENSE` file in the root folder of the project.
 
