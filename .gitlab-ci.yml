@@ -11,13 +11,6 @@ lint:yaml:
     - yamllint -c ./.yamllint.yml baselines
   rules:
     - changes:
-        - .vscode/**
-        - .github/**
-        - .gitlab/**
-        - resources/**
-        - CHANGELOG.md
-        - README.md
-        - SECURITY.md
-        - LICENSE
-      when: never
-    - when: always
+        - baselines/**
+      when: always
+    - when: never
