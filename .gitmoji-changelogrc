@@ -1,0 +1,7 @@
+{
+    "project": {
+        "name": "octobaselines",
+        "description": "Submodule of the octoconf tool.",
+        "version": "1.0.0"
+    }
+}
