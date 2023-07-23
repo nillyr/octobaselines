@@ -1,0 +1,23 @@
+stages:
+  - lint
+
+lint:yaml:
+  image: python:3.8-slim-bullseye
+  stage: lint
+  script:
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install yamllint
+    - yamllint -c ./.yamllint.yml baselines
+  rules:
+    - changes:
+        - .vscode/**
+        - .github/**
+        - .gitlab/**
+        - resources/**
+        - CHANGELOG.md
+        - README.md
+        - SECURITY.md
+        - LICENSE
+      when: never
+    - when: always
