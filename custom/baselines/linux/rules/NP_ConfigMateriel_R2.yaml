@@ -2,7 +2,7 @@
 # @license https://opensource.org/licenses/GPL-3.0 GNU GPLv3
 # @link https://gitlab.internal.lan/octo-project/octobaselines
 # @link https://github.com/nillyr/octobaselines
-# @since 1.0.0b
+# @since 0.1.0
 
 id: NP_ConfigMateriel_R2
 title: Utilisation d'un système en 64 bits
