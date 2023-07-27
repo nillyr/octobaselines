@@ -15,6 +15,17 @@ Submodule of the octoconf project.
 
 See [octoconf](https://gitlab.internal.lan/octo-project/octoconf "octoconf") ([GitHub link](https://github.com/nillyr/octoconf)) for the usage instructions.
 
+## Baselines development
+
+The `template` directory contains the required files to create new baselines.
+
+```bash
+python3 venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pre-commit install
+```
+
 ## Maintainer
 
 - Nicolas GRELLETY
