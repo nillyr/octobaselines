@@ -12,5 +12,3 @@ lint:yaml:
   rules:
     - changes:
         - baselines/**
-      when: always
-    - when: never
