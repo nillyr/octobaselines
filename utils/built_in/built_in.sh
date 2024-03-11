@@ -1,0 +1,3 @@
+# shellchek shell=bash
+
+# TODO :)
